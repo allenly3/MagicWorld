@@ -15,6 +15,7 @@ public class MagicWorld extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		System.out.print("abc");
 	}
 
 	@Override

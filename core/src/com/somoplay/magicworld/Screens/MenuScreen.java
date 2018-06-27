@@ -1,9 +1,13 @@
 package com.somoplay.magicworld.Screens;
 
 import com.badlogic.gdx.Screen;
+import com.somoplay.magicworld.MagicWorld;
 
 public class MenuScreen implements Screen
 {
+    public MenuScreen(MagicWorld game){
+
+    }
     public void show() {
 
     }

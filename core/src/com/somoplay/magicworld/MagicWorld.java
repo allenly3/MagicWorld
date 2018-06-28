@@ -15,8 +15,13 @@ public class MagicWorld extends Game {
 	public static float screenWidth,screenHeight;// get screen width and height from user device
 	public MenuScreen menuScreen;
 
+	public static final float PPM = 100;
+	public static SpriteBatch batch;
+
 
 	public void create () {
+	    batch = new SpriteBatch();
+
 		screenWidth=Gdx.graphics.getWidth();
 		screenHeight=Gdx.graphics.getHeight();
 

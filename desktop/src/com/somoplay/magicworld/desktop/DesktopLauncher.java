@@ -7,6 +7,7 @@ import com.somoplay.magicworld.MagicWorld;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
 		new LwjglApplication(new MagicWorld(), config);
 	}
 }

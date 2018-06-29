@@ -15,12 +15,7 @@ public class LoadResource
         assetManager.load("images/start.jpg",Texture.class);
         assetManager.load("images/runnerright.png",Texture.class);
         assetManager.load("images/rightstop.png",Texture.class);
-        assetManager.load("imamges/leftstop.png",Texture.class);
-
-
-
-
-
+        assetManager.load("images/leftstop.png",Texture.class);
 
         assetManager.finishLoading();
     }

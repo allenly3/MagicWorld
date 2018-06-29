@@ -87,11 +87,12 @@ public class MenuScreen implements Screen
             public boolean touchDown(InputEvent event, float x, float y,int pointer, int button)
             {
 
-                //GameScreen.level=0;
+                PlayScreen.level=0;
 
-//                GameScreen g=new GameScreen(game);
-//                game.setScreen(g);
+                PlayScreen ps=new PlayScreen(game);
+                game.setScreen(ps);
                 System.out.println("level 1");
+                stage.getActors().clear();
                 return  true;
             }
         });
@@ -100,11 +101,12 @@ public class MenuScreen implements Screen
             public boolean touchDown(InputEvent event, float x, float y,int pointer, int button)
             {
 
-//                GameScreen.level=1;
-//
-//                GameScreen g=new GameScreen(game);
-//                game.setScreen(g);
+                PlayScreen.level=1;
+
+                PlayScreen ps=new PlayScreen(game);
+                game.setScreen(ps);
                 System.out.println("level 2");
+                stage.getActors().clear();
                 return  true;
             }
         });
@@ -112,11 +114,12 @@ public class MenuScreen implements Screen
             public boolean touchDown(InputEvent event, float x, float y,int pointer, int button)
             {
 
-//                GameScreen.level=1;
-//
-//                GameScreen g=new GameScreen(game);
-//                game.setScreen(g);
+                PlayScreen.level=2;
+
+                PlayScreen ps=new PlayScreen(game);
+                game.setScreen(ps);
                 System.out.println("level 3");
+                stage.getActors().clear();
                 return  true;
             }
         });
@@ -124,11 +127,12 @@ public class MenuScreen implements Screen
             public boolean touchDown(InputEvent event, float x, float y,int pointer, int button)
             {
 
-//                GameScreen.level=0;
-//
-//                GameScreen g=new GameScreen(game);
-//                game.setScreen(g);
+                PlayScreen.level=3;
+
+                PlayScreen ps=new PlayScreen(game);
+                game.setScreen(ps);
                 System.out.println("level 4");
+                stage.getActors().clear();
                 return  true;
             }
         });

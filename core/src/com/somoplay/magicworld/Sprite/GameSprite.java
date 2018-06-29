@@ -10,8 +10,8 @@ public abstract class GameSprite { //this class is a frame to create every Anima
 
     protected Body body;
     protected Animation <TextureRegion> animation;
-    protected float width;
-    protected float height;
+    public  float width=100;
+    public   float height=100;
 
     public GameSprite(Body body)
     {
@@ -35,8 +35,8 @@ public abstract class GameSprite { //this class is a frame to create every Anima
     {
         batch.begin();
         batch.draw(animation.getKeyFrame(delta,true),
-                body.getPosition().x*100-width/2,
-                body.getPosition().y*100-height/2 );
+                body.getPosition().x -width/2,
+                body.getPosition().y -height/2 );
         batch.end();
     }
 

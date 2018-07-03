@@ -20,6 +20,9 @@ import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Sprite.Player;
 import com.somoplay.magicworld.WorldCreator;
 
+import static com.somoplay.magicworld.MagicWorld.screenHeight;
+import static com.somoplay.magicworld.MagicWorld.screenWidth;
+
 public class PlayScreen implements Screen {
 
     World world;
@@ -57,7 +60,7 @@ public class PlayScreen implements Screen {
         this.game = game;
         cam = new OrthographicCamera();
 
-        viewport = new FitViewport(800/MagicWorld.PPM, 480/MagicWorld.PPM, cam);
+        viewport = new FitViewport(screenWidth/MagicWorld.PPM, screenHeight/MagicWorld.PPM, cam);
         world = new World(new Vector2(0, -10), true);
         //world.setContactListener(new WorldContactListener(this));
         renderer = new Box2DDebugRenderer();
@@ -65,7 +68,6 @@ public class PlayScreen implements Screen {
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("level_01.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / MagicWorld.PPM);
-        cam.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         creator = new WorldCreator(this);
         player = new Player(this);

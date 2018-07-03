@@ -16,8 +16,8 @@ public abstract class GameSprite{ //this class is a frame to create every Animat
 
     public  Body body;
     protected Animation <TextureRegion> animation;
-    public  float width=100;
-    public   float height=100;
+    public  float width ;
+    public   float height ;
     SpriteBatch batch;
     BodyDef bodyDef;
     World world;

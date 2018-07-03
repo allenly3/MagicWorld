@@ -12,6 +12,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import static com.somoplay.magicworld.Resource.Constant.RATE;
+
 public abstract class GameSprite { //this class is a frame to create every Animation
 
     public  Body body;
@@ -27,8 +29,8 @@ public abstract class GameSprite { //this class is a frame to create every Anima
     public void setAnimation(float delay,TextureRegion[] reg)
     {
         animation=new Animation(delay,reg);
-        width=reg[0].getRegionWidth(); // get this data to fix rigid position
-        height=reg[0].getRegionHeight();// get this data to fix rigid position
+        width=reg[0].getRegionWidth()/RATE; // get this data to fix rigid position
+        height=reg[0].getRegionHeight()/RATE;// get this data to fix rigid position
     }
 
     public void update(float delta)

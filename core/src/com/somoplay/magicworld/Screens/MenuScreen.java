@@ -53,12 +53,13 @@ public class MenuScreen implements Screen
         for(int i=0;i<4;i++)
         {
             imageMenu[i]=new Image(tr[i][0]);
+            imageMenu[i].setSize(game.screenWidth/2.5f,game.screenHeight/2.5f);
 
         }
-        imageMenu[0].setPosition(40,game.screenHeight/2+10);
+        imageMenu[0].setPosition(game.screenWidth*0.06f,game.screenHeight/2+10);
         imageMenu[1].setPosition(game.screenWidth/2+10,game.screenHeight/2+10);
-        imageMenu[2].setPosition(40,20);
-        imageMenu[3].setPosition(game.screenWidth/2+10,20);
+        imageMenu[2].setPosition(game.screenWidth*0.06f,game.screenHeight*0.05f);
+        imageMenu[3].setPosition(game.screenWidth/2+10,game.screenHeight*0.05f);
 
 
 //        stage.addActor(imageMenu[2]);

@@ -15,6 +15,10 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.Resource.LoadResource;
 
+import static com.somoplay.magicworld.MagicWorld.screenHeight;
+import static com.somoplay.magicworld.MagicWorld.screenWidth;
+import static com.somoplay.magicworld.Resource.Constant.RATE;
+
 public class Protagonist extends GameSprite {
 
     public   int state=2;
@@ -27,7 +31,7 @@ public class Protagonist extends GameSprite {
         batch=new SpriteBatch();
         box2DDebugRenderer=new Box2DDebugRenderer();
         camera=new OrthographicCamera();
-        camera.setToOrtho(false,512,512);
+        camera.setToOrtho(false,screenWidth/RATE,screenHeight/RATE);
         world=new World(new Vector2(0,-9.81f),true);
         bodyDef=new BodyDef();
         body= world.createBody(bodyDef);
@@ -36,11 +40,11 @@ public class Protagonist extends GameSprite {
 
         FixtureDef fixturedef=new FixtureDef();
 
-        bodyDef.position.set(160,200);
+        bodyDef.position.set(100/RATE ,100/RATE );
         bodyDef.type= BodyDef.BodyType.StaticBody;
         body=world.createBody(bodyDef);
 
-        shape.setAsBox(50,50);
+        shape.setAsBox(5/RATE ,15/RATE );
         fixturedef.shape=shape;
         body.createFixture(fixturedef);
         //System.out.println(protagonist.width+" "+protagonist.height);
@@ -95,8 +99,8 @@ public class Protagonist extends GameSprite {
     public Animation setAnimation(TextureRegion[] reg,float delay,Animation ani)
     {
         ani=new Animation(delay,reg);
-        width=reg[0].getRegionWidth();
-        height=reg[0].getRegionHeight();
+        width=reg[0].getRegionWidth()/RATE;
+        height=reg[0].getRegionHeight()/RATE;
         return ani;
 
     }
@@ -114,10 +118,13 @@ public class Protagonist extends GameSprite {
         batch.begin();
 
             batch.draw(rightMoving.getKeyFrame(delta, true),
-             body.getPosition().x - width / 2,
-             body.getPosition().y - height / 2);
+             body.getPosition().x - width/ 2,
+             body.getPosition().y - height/ 2,width,height);
+            System.out.println(width+" "+height);
+            System.out.println(body.getPosition().x+" "+body.getPosition().y);
         batch.end();
         }
+
         if(state==2)
         {
 
@@ -126,7 +133,7 @@ public class Protagonist extends GameSprite {
 
             batch.draw(rightStop.getKeyFrame(delta, true),
                     body.getPosition().x - width / 2,
-                    body.getPosition().y - height / 2);
+                    body.getPosition().y - height / 2,width,height);
             batch.end();
         }
         if(state==3)
@@ -137,7 +144,7 @@ public class Protagonist extends GameSprite {
 
             batch.draw(leftMoving.getKeyFrame(delta, true),
                     body.getPosition().x - width / 2,
-                    body.getPosition().y - height / 2);
+                    body.getPosition().y - height / 2,width,height);
             batch.end();
         }
         if(state==4)
@@ -148,7 +155,7 @@ public class Protagonist extends GameSprite {
 
             batch.draw(leftStop.getKeyFrame(delta, true),
                     body.getPosition().x - width / 2,
-                    body.getPosition().y - height / 2);
+                    body.getPosition().y - height / 2,width,height);
             batch.end();
         }
     }

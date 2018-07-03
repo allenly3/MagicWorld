@@ -17,6 +17,11 @@ public class LoadResource
         assetManager.load("images/rightstop.png",Texture.class);
         assetManager.load("images/leftstop.png",Texture.class);
 
+
+
+
+
+
         assetManager.finishLoading();
     }
 

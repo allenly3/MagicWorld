@@ -20,14 +20,9 @@ public class PlayScreen implements Screen {
 
     public static int level=0;
     MagicWorld game;
-    Body body;
-    World world;
-    BodyDef bodyDef;
-    SpriteBatch batch;
-    OrthographicCamera camera;
-    Box2DDebugRenderer box2DDebugRenderer;
     Protagonist  protagonist;
     float statetime=0;
+    SpriteBatch batch;
 
 
     public PlayScreen(MagicWorld game){
@@ -36,28 +31,8 @@ public class PlayScreen implements Screen {
     }
     public void init()
     {
-        //batch=new SpriteBatch();
-        box2DDebugRenderer=new Box2DDebugRenderer();
-        camera=new OrthographicCamera();
-        camera.setToOrtho(false,512,512);
-        world=new World(new Vector2(0,-9.81f),true);
-        bodyDef=new BodyDef();
-        body= world.createBody(bodyDef);
-
-        PolygonShape shape=new PolygonShape();
-
-        FixtureDef fixturedef=new FixtureDef();
-
-        bodyDef.position.set(160,200);
-        bodyDef.type= BodyDef.BodyType.StaticBody;
-        body=world.createBody(bodyDef);
-
-        shape.setAsBox(50,50);
-        fixturedef.shape=shape;
-        body.createFixture(fixturedef);
-        protagonist=new Protagonist(body);
-        //System.out.println(protagonist.width+" "+protagonist.height);
-
+        batch=new SpriteBatch();
+        protagonist=new Protagonist();
     }
 
 
@@ -69,11 +44,8 @@ public class PlayScreen implements Screen {
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        world.step(0.08f,6,2);
-        box2DDebugRenderer.render(world,camera.combined);
-        statetime=statetime+delta;
-        batch.setProjectionMatrix(camera.combined);
 
+        statetime=statetime+delta;
         protagonist.render(batch,statetime);
 
 

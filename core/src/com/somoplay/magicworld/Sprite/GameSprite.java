@@ -1,23 +1,28 @@
 package com.somoplay.magicworld.Sprite;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 
 public abstract class GameSprite { //this class is a frame to create every Animation
 
-    protected Body body;
+    public  Body body;
     protected Animation <TextureRegion> animation;
     public  float width=100;
     public   float height=100;
-
-    public GameSprite(Body body)
-    {
-        this.body=body;
-    }
-
+    SpriteBatch batch;
+    OrthographicCamera camera;
+    Box2DDebugRenderer box2DDebugRenderer;
+    World world;
+    BodyDef bodyDef;
 
     public void setAnimation(float delay,TextureRegion[] reg)
     {
@@ -34,6 +39,7 @@ public abstract class GameSprite { //this class is a frame to create every Anima
     public void render(SpriteBatch batch,float delta)
     {
         batch.begin();
+
         batch.draw(animation.getKeyFrame(delta,true),
                 body.getPosition().x -width/2,
                 body.getPosition().y -height/2 );

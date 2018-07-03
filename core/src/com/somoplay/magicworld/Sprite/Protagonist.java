@@ -1,11 +1,18 @@
 package com.somoplay.magicworld.Sprite;
 
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.Resource.LoadResource;
 
 public class Protagonist extends GameSprite {
@@ -15,8 +22,35 @@ public class Protagonist extends GameSprite {
     public Texture txRightMove,txRightStop,txLeftMove,txLeftStop;
     Animation<TextureRegion> rightMoving,rightStop,leftMoving,leftStop;
 
-    public Protagonist(Body body) {
-        super(body);
+
+    public Protagonist( ) {
+        batch=new SpriteBatch();
+        box2DDebugRenderer=new Box2DDebugRenderer();
+        camera=new OrthographicCamera();
+        camera.setToOrtho(false,512,512);
+        world=new World(new Vector2(0,-9.81f),true);
+        bodyDef=new BodyDef();
+        body= world.createBody(bodyDef);
+
+        PolygonShape shape=new PolygonShape();
+
+        FixtureDef fixturedef=new FixtureDef();
+
+        bodyDef.position.set(160,200);
+        bodyDef.type= BodyDef.BodyType.StaticBody;
+        body=world.createBody(bodyDef);
+
+        shape.setAsBox(50,50);
+        fixturedef.shape=shape;
+        body.createFixture(fixturedef);
+        //System.out.println(protagonist.width+" "+protagonist.height);
+
+        init();
+
+    }
+    public void init()
+    {
+
         //-----------------Right side running------------------------------
         txRightMove = LoadResource.assetManager.get("images/runnerright.png" );
         TextureRegion[] tr1 = new TextureRegion[12];
@@ -28,7 +62,7 @@ public class Protagonist extends GameSprite {
             }
         }
         rightMoving=setAnimation(tr1,1/12f,rightMoving);
-          a=0;
+        a=0;
         //-----------------Left side running------------------------------
         txLeftMove = LoadResource.assetManager.get("images/runnerleft.png");
         TextureRegion[] tr2 = new TextureRegion[12];
@@ -58,7 +92,6 @@ public class Protagonist extends GameSprite {
     }
 
 
-
     public Animation setAnimation(TextureRegion[] reg,float delay,Animation ani)
     {
         ani=new Animation(delay,reg);
@@ -69,6 +102,11 @@ public class Protagonist extends GameSprite {
     }
     public void render(SpriteBatch batch, float delta)
     {
+
+        world.step(0.08f,6,2);
+        box2DDebugRenderer.render(world,camera.combined);
+
+        batch.setProjectionMatrix(camera.combined);
         if(state==1)
         {
 

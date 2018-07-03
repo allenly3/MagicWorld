@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.somoplay.magicworld.MagicWorld;
+import com.somoplay.magicworld.Sprite.Player;
 import com.somoplay.magicworld.WorldCreator;
 
 public class PlayScreen implements Screen {
@@ -26,6 +27,8 @@ public class PlayScreen implements Screen {
     Viewport viewport;
     Box2DDebugRenderer renderer;
 
+    public static int level=0;
+
     private MagicWorld game;
 
     //private Controller controller;
@@ -34,7 +37,7 @@ public class PlayScreen implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
 
-    //public Player player;
+    public Player player;
 
     private WorldCreator creator;
 
@@ -43,6 +46,7 @@ public class PlayScreen implements Screen {
     // private HUD hud;
     private float deathTimer = 0;
 
+    private float statetime;
     //private Bullet bullet;
     //public ArrayList<Bullet> bullets;
 
@@ -64,6 +68,7 @@ public class PlayScreen implements Screen {
         cam.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         creator = new WorldCreator(this);
+        player = new Player(this);
 
         manager = new AssetManager();
 
@@ -72,6 +77,7 @@ public class PlayScreen implements Screen {
     }
     @Override
     public void show() {
+        Gdx.input.setCatchBackKey(true);
 
     }
 
@@ -92,18 +98,48 @@ public class PlayScreen implements Screen {
         game.batch.begin();
         game.batch.end();
 
+        statetime=statetime+delta;
+        player.render(game.batch,statetime);
+
         stage.draw();
         stage.act();
 
     }
-    public void handleInput(){
+
+
+    public void handleInput(float delta) {
+
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            player.state = 3;
+
+            player.getBody().setLinearVelocity(-1, player.getBody().getLinearVelocity().y);
+        }
+
+
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            player.state = 1;
+
+            player.getBody().setLinearVelocity(1, player.getBody().getLinearVelocity().y);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            player.state = 2;
+
+            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            player.state = 4;
+
+            player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
+        }
 
     }
 
+
     public void update(float dt){
-        handleInput();
+        handleInput(dt);
         world.step(1/60f, 6, 2);
-        cam.position.set(0,0 ,0 );
+        cam.position.set(player.body.getPosition().x,player.body.getPosition().y ,0 );
         cam.update();
 
         // if it touches a ground tile, then dissappear, if it touches a enemy, dissappear and apply damage.

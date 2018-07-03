@@ -13,9 +13,11 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Resource.LoadResource;
+import com.somoplay.magicworld.Screens.PlayScreen;
 
-public class Protagonist extends GameSprite {
+public class Player extends GameSprite {
 
     public   int state=2;
 
@@ -23,12 +25,9 @@ public class Protagonist extends GameSprite {
     Animation<TextureRegion> rightMoving,rightStop,leftMoving,leftStop;
 
 
-    public Protagonist( ) {
+    public Player(PlayScreen screen) {
+        super(screen);
         batch=new SpriteBatch();
-        box2DDebugRenderer=new Box2DDebugRenderer();
-        camera=new OrthographicCamera();
-        camera.setToOrtho(false,512,512);
-        world=new World(new Vector2(0,-9.81f),true);
         bodyDef=new BodyDef();
         body= world.createBody(bodyDef);
 
@@ -36,11 +35,11 @@ public class Protagonist extends GameSprite {
 
         FixtureDef fixturedef=new FixtureDef();
 
-        bodyDef.position.set(160,200);
-        bodyDef.type= BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(160/ MagicWorld.PPM,200/MagicWorld.PPM);
+        bodyDef.type= BodyDef.BodyType.DynamicBody;
         body=world.createBody(bodyDef);
 
-        shape.setAsBox(50,50);
+        shape.setAsBox(20/MagicWorld.PPM,20/MagicWorld.PPM);
         fixturedef.shape=shape;
         body.createFixture(fixturedef);
         //System.out.println(protagonist.width+" "+protagonist.height);
@@ -95,27 +94,22 @@ public class Protagonist extends GameSprite {
     public Animation setAnimation(TextureRegion[] reg,float delay,Animation ani)
     {
         ani=new Animation(delay,reg);
-        width=reg[0].getRegionWidth();
-        height=reg[0].getRegionHeight();
+        width=reg[0].getRegionWidth()/100;
+        height=reg[0].getRegionHeight()/100;
         return ani;
 
     }
     public void render(SpriteBatch batch, float delta)
     {
 
-        world.step(0.08f,6,2);
-        box2DDebugRenderer.render(world,camera.combined);
-
-        batch.setProjectionMatrix(camera.combined);
         if(state==1)
         {
-
 
         batch.begin();
 
             batch.draw(rightMoving.getKeyFrame(delta, true),
-             body.getPosition().x - width / 2,
-             body.getPosition().y - height / 2);
+             body.getPosition().x - 0.5f / 2,
+             body.getPosition().y - 0.5f / 2, 0.5f, 0.5f);
         batch.end();
         }
         if(state==2)
@@ -125,19 +119,18 @@ public class Protagonist extends GameSprite {
             batch.begin();
 
             batch.draw(rightStop.getKeyFrame(delta, true),
-                    body.getPosition().x - width / 2,
-                    body.getPosition().y - height / 2);
+                    body.getPosition().x - 0.5f / 2,
+                    body.getPosition().y - 0.5f / 2, 0.5f, 0.5f);
             batch.end();
         }
         if(state==3)
         {
 
-
             batch.begin();
 
             batch.draw(leftMoving.getKeyFrame(delta, true),
-                    body.getPosition().x - width / 2,
-                    body.getPosition().y - height / 2);
+                    body.getPosition().x - 0.5f / 2,
+                    body.getPosition().y - 0.5f / 2,0.5f, 0.5f);
             batch.end();
         }
         if(state==4)
@@ -147,8 +140,8 @@ public class Protagonist extends GameSprite {
             batch.begin();
 
             batch.draw(leftStop.getKeyFrame(delta, true),
-                    body.getPosition().x - width / 2,
-                    body.getPosition().y - height / 2);
+                    body.getPosition().x - 0.5f/ 2,
+                    body.getPosition().y - 0.5f/ 2, 0.5f, 0.5f);
             batch.end();
         }
     }

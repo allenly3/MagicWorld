@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.somoplay.magicworld.MagicWorld;
-//import com.somoplay.magicworld.WorldCreator;
+import com.somoplay.magicworld.WorldCreator;
 
 public class PlayScreen implements Screen {
 
@@ -36,7 +36,7 @@ public class PlayScreen implements Screen {
 
     //public Player player;
 
-    //private WorldCreator creator;
+    private WorldCreator creator;
 
     private AssetManager manager;
     private Music music;
@@ -63,7 +63,7 @@ public class PlayScreen implements Screen {
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / MagicWorld.PPM);
         cam.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
-        //creator = new WorldCreator(this);
+        creator = new WorldCreator(this);
 
         manager = new AssetManager();
 

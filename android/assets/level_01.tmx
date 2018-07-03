@@ -2,7 +2,6 @@
 <map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="120" height="30" tilewidth="32" tileheight="32" infinite="0" nextobjectid="259">
  <tileset firstgid="1" source="Game Boy Advance - Kirby Nightmare in Dream Land - Beam Kirby.tsx"/>
  <tileset firstgid="401" source="JnRTiles.tsx"/>
- <tileset firstgid="419" source="../../../../Users/Hongbo/Downloads/GrassCliffMid.tsx"/>
  <layer name="Background" width="120" height="30">
   <data encoding="base64" compression="zlib">
    eJzt2kEOhDAIhWG9/2qu4ElduJkYVJDXFMz/JSZdaIeCLKZ2WQAAAPy2VX+hht869gKgR28BvdHDQE/0LtDbV3uY/979sN8S02WtXeLEwVsv6ppXMYcVY0IeddWqks8qcUCLuo5HjoH+6GNUwbv4XuXcVY7tinXOUHH2cFQuZuQ485uRZ9V71NE98cjZ02yM1vPntVtjT37+77ma0ztPZOyJSVXfyDwz6mvN54357j51f7wdWzE9rXHUd6pZ38Ey86ri8q7RO87kbgcq2HyM

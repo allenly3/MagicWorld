@@ -11,16 +11,19 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.Screens.PlayScreen;
+import com.somoplay.magicworld.Sprite.Soldier;
 
 import java.util.ArrayList;
 
 public class WorldCreator {
 
+    ArrayList<Soldier> soldiers;
+
     public WorldCreator(PlayScreen screen){
         World world = screen.getWorld();
         Map map = screen.getMap();
 
-        // soldiers = new ArrayList<Soldier>();
+        soldiers = new ArrayList<Soldier>();
 
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -57,11 +60,15 @@ public class WorldCreator {
             body.createFixture(fdef);
         }
 
-        /*Create Soldiers
+        //Create Soldiers
         for (MapObject object : map.getLayers().get("Soldier").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            soldiers.add(new Soldier(screen, rect.getX() / NewMario.PPM, rect.getY() / NewMario.PPM));
+            soldiers.add(new Soldier(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
 
-        }*/
+        }
+    }
+
+    public ArrayList<Soldier> getSoldiers() {
+        return soldiers;
     }
 }

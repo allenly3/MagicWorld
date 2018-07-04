@@ -19,7 +19,9 @@ import com.somoplay.magicworld.Screens.PlayScreen;
 
 public class Player extends GameSprite {
 
-    public   int state=2;
+    public int state=2;
+    public float health = 100;
+    private boolean destroyed = false;
 
     public Texture txRightMove,txRightStop,txLeftMove,txLeftStop;
     Animation<TextureRegion> rightMoving,rightStop,leftMoving,leftStop;
@@ -41,8 +43,8 @@ public class Player extends GameSprite {
 
         shape.setAsBox(20/MagicWorld.PPM,20/MagicWorld.PPM);
         fixturedef.shape=shape;
-        body.createFixture(fixturedef);
-        //System.out.println(protagonist.width+" "+protagonist.height);
+        fixture = body.createFixture(fixturedef);
+        fixture.setUserData(this);
 
         init();
 
@@ -146,6 +148,20 @@ public class Player extends GameSprite {
         }
     }
 
+    public void onHit(Enemy enemy){
+        if(health > 0) {
+            health -= 50;
+        }
+        System.out.println("Player Health: " + health);
+    }
 
+    public float getHealth(){ return health;}
 
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public void setDestroyed(boolean destroyed) {
+        this.destroyed = destroyed;
+    }
 }

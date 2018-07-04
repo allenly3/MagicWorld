@@ -8,17 +8,24 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.somoplay.magicworld.MagicWorld;
+import com.somoplay.magicworld.Sprite.Bullet;
 import com.somoplay.magicworld.Sprite.Player;
+import com.somoplay.magicworld.Sprite.Soldier;
+import com.somoplay.magicworld.WorldContactListener;
 import com.somoplay.magicworld.WorldCreator;
+
+import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
 
@@ -39,6 +46,7 @@ public class PlayScreen implements Screen {
 
     public Player player;
 
+    private ArrayList<Bullet> bullets;
     private WorldCreator creator;
 
     private AssetManager manager;
@@ -47,8 +55,7 @@ public class PlayScreen implements Screen {
     private float deathTimer = 0;
 
     private float statetime;
-    //private Bullet bullet;
-    //public ArrayList<Bullet> bullets;
+    private Bullet bullet;
 
     private Stage stage;
     //private HealthBar healthBar;
@@ -59,7 +66,7 @@ public class PlayScreen implements Screen {
 
         viewport = new FitViewport(800/MagicWorld.PPM, 480/MagicWorld.PPM, cam);
         world = new World(new Vector2(0, -10), true);
-        //world.setContactListener(new WorldContactListener(this));
+        world.setContactListener(new WorldContactListener(this));
         renderer = new Box2DDebugRenderer();
 
         mapLoader = new TmxMapLoader();
@@ -70,6 +77,7 @@ public class PlayScreen implements Screen {
         creator = new WorldCreator(this);
         player = new Player(this);
 
+        bullets = new ArrayList<Bullet>();
         manager = new AssetManager();
 
         stage = new Stage();
@@ -144,7 +152,45 @@ public class PlayScreen implements Screen {
 
         // if it touches a ground tile, then dissappear, if it touches a enemy, dissappear and apply damage.
         // get the size of it correct and the spawn location right as well.
+        for(Bullet bullet: bullets){
+            if(bullet.destroyed == false) {
+                bullet.update(dt);
+            }
+        }
 
+        for (Soldier soldier: creator.getSoldiers()){
+            if(soldier.health <= 0 && !soldier.destroyed){
+                world.destroyBody(soldier.body);
+                soldier.destroyed = true;
+            }
+
+            if(soldier.destroyed == false){
+                soldier.update(dt);
+                if(soldier.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
+                    soldier.body.setActive(true);
+                }
+            }
+
+        }
+        deathTimer += dt;
+
+        if(player.getHealth() <= 0 && !player.isDestroyed()){
+            world.destroyBody(player.body);
+            player.setDestroyed(true);
+            deathTimer = 0;
+        }
+
+        if(player.body.getPosition().y < - 0.175 && !player.isDestroyed()){
+            world.destroyBody(player.body);
+            player.setDestroyed(true);
+            deathTimer = 1;
+        }
+
+        if(deathTimer >= 1.5 && player.isDestroyed()){
+            game.setScreen(new MenuScreen(game));
+            //music.stop();
+            dispose();
+        }
         mapRenderer.setView(cam);
     }
 
@@ -177,6 +223,11 @@ public class PlayScreen implements Screen {
 
     public World getWorld() {
         return world;
+    }
+
+    public TiledMapTileLayer.Cell getCell(Body body){
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
+        return layer.getCell((int)(body.getPosition().x *MagicWorld.PPM / 32), (int)(body.getPosition().y * MagicWorld.PPM / 32));
     }
 
 }

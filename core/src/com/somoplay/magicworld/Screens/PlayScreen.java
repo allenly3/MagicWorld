@@ -141,7 +141,9 @@ public class PlayScreen implements Screen {
     public void update(float dt){
         handleInput(dt);
         world.step(1/60f, 6, 2);
-        cam.position.set(player.body.getPosition().x,player.body.getPosition().y ,0 );
+
+            cam.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
+
         cam.update();
 
         // if it touches a ground tile, then dissappear, if it touches a enemy, dissappear and apply damage.

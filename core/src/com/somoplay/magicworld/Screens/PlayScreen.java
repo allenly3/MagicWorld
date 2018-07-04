@@ -107,6 +107,9 @@ public class PlayScreen implements Screen {
 
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
+        for(Bullet bullet : bullets) {
+            bullet.render(game.batch);
+        }
         game.batch.end();
 
         statetime=statetime+delta;
@@ -136,9 +139,12 @@ public class PlayScreen implements Screen {
 
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
 
-            player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
+            if(player.isDestroyed() == false) {
+                bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y));
+                bullets.add(bullet);
+            }
         }
 
     }

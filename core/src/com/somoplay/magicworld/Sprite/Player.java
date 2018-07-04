@@ -19,7 +19,7 @@ import com.somoplay.magicworld.Screens.PlayScreen;
 
 public class Player extends GameSprite {
 
-    public int state=2;
+    public int state=1;
     public float health = 100;
     private boolean destroyed = false;
 

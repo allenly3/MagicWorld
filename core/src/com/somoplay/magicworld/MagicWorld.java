@@ -33,9 +33,6 @@ public class MagicWorld extends Game {
 		//setScreen(playScreen);
 
 	}
-	public SpriteBatch getBatch() {
-		return batch;
-	}
 
 	@Override
 	public void dispose () {

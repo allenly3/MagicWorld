@@ -135,7 +135,7 @@ public class PlayScreen implements Screen {
 
             player.getBody().setLinearVelocity(1, player.getBody().getLinearVelocity().y);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) && player.getBody().getLinearVelocity().y == 0) {
 
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
         }

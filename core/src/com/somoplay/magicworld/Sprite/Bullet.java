@@ -55,7 +55,7 @@ public class Bullet{
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(10/ MagicWorld.PPM,10/MagicWorld.PPM);
+        shape.setAsBox(16/ MagicWorld.PPM,16/MagicWorld.PPM);
 
         fdef.shape = shape;
         fdef.isSensor = true;

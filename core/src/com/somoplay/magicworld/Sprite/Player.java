@@ -148,9 +148,9 @@ public class Player extends GameSprite {
         }
     }
 
-    public void onHit(Enemy enemy){
+    public void onHit(int value){
         if(health > 0) {
-            health -= 50;
+            health -= value;
         }
         System.out.println("Player Health: " + health);
     }

@@ -69,7 +69,18 @@ public class WorldContactListener implements ContactListener {
             ((Player)a.getUserData()).onHit((Enemy)b.getUserData());
             ((Soldier)b.getUserData()).hitPlayer();
             //screen.setHealth(0.5f);
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "NextLevelLoader") {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            screen.nextLevel();
+        } else if(contact.getFixtureA().getUserData() == "NextLevelLoader" && contact.getFixtureB().getUserData() instanceof Player) {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            screen.nextLevel();
         }
+
     }
 
     @Override

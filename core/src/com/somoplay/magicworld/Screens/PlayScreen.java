@@ -142,7 +142,7 @@ public class PlayScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
 
             if(player.isDestroyed() == false) {
-                bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y));
+                bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y), player.state);
                 bullets.add(bullet);
             }
         }
@@ -236,4 +236,10 @@ public class PlayScreen implements Screen {
         return layer.getCell((int)(body.getPosition().x *MagicWorld.PPM / 32), (int)(body.getPosition().y * MagicWorld.PPM / 32));
     }
 
+    public Player getPlayer(){return player;}
+
+    public void nextLevel(){
+        game.setScreen(new MenuScreen(game));
+        dispose();
+    }
 }

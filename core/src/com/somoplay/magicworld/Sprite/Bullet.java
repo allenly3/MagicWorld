@@ -30,9 +30,12 @@ public class Bullet{
     private World world;
     private Body bulletBody;
 
-    public Bullet(PlayScreen screen, Vector2 position){
+    private int state;
+
+    public Bullet(PlayScreen screen, Vector2 position, int state){
         this.position = position;
         this.screen = screen;
+        this.state = state;
 
         world = screen.getWorld();
         if(texture == null){
@@ -52,7 +55,7 @@ public class Bullet{
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(16/ MagicWorld.PPM,16/MagicWorld.PPM);
+        shape.setAsBox(10/ MagicWorld.PPM,10/MagicWorld.PPM);
 
         fdef.shape = shape;
         fdef.isSensor = true;
@@ -65,7 +68,8 @@ public class Bullet{
     }
 
     public void update(float dt){
-        bulletBody.setLinearVelocity(2, 0);
+        if(state == 1){ bulletBody.setLinearVelocity(2, 0);}
+        else if (state == 3){ bulletBody.setLinearVelocity(-2,0);}
         if(toBeDestroyed && !destroyed){
             world.destroyBody(bulletBody);
             destroyed = true;

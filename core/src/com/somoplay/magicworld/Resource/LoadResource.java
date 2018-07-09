@@ -4,6 +4,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
+import javax.xml.soap.Text;
+
 public class LoadResource
 {
     public static AssetManager assetManager;
@@ -23,6 +25,7 @@ public class LoadResource
         assetManager.load("images/buttonRight.png",Texture.class);
         assetManager.load("images/buttonA.png",Texture.class);
         assetManager.load("images/buttonB.png",Texture.class);
+        assetManager.load("images/blt.png", Texture.class);
 
 
 

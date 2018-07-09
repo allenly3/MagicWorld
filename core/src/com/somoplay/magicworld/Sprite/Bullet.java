@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.MagicWorld;
+import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
 
 
@@ -39,8 +40,8 @@ public class Bullet{
 
         world = screen.getWorld();
         if(texture == null){
-            texture = new Texture("red.jpg");
-            region = new TextureRegion(texture, 0,0,32,32);
+            texture = LoadResource.assetManager.get("images/blt.png");
+            region = new TextureRegion(texture );
         }
 
         defineBullet();
@@ -64,7 +65,7 @@ public class Bullet{
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(16/ MagicWorld.PPM,16/MagicWorld.PPM);
+        shape.setAsBox(8/ MagicWorld.PPM,8/MagicWorld.PPM);
 
         fdef.shape = shape;
         fdef.isSensor = true;
@@ -83,7 +84,7 @@ public class Bullet{
     }
     public void render(SpriteBatch batch){
         if(!destroyed)
-            batch.draw(region, bulletBody.getPosition().x - 16/ MagicWorld.PPM , bulletBody.getPosition().y - 16/ MagicWorld.PPM, 32/MagicWorld.PPM,32/MagicWorld.PPM);
+            batch.draw(region, bulletBody.getPosition().x - 8/ MagicWorld.PPM , bulletBody.getPosition().y - 8/ MagicWorld.PPM, 16/MagicWorld.PPM,16/MagicWorld.PPM);
     }
 
     public void update(float dt){

@@ -206,7 +206,7 @@ public class PlayScreen implements Screen {
 
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
         }
-        if (firing) {
+        if (firing ) {
 
             if(player.isDestroyed() == false) {
                 bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y) );
@@ -272,7 +272,8 @@ public class PlayScreen implements Screen {
 
         });
 //---------------------------button B----------------------
-        buttonB.addListener(new InputListener(){
+        buttonB.addListener(
+                new InputListener(){
             public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
                 firing= false;
@@ -286,6 +287,8 @@ public class PlayScreen implements Screen {
             }
 
         });
+
+
 
 
     }

@@ -16,11 +16,12 @@ import com.somoplay.magicworld.Screens.PlayScreen;
 public abstract class GameSprite{ //this class is a frame to create every Animation
 
     public  Body body;
+    public  BodyDef bodyDef;
     protected Animation <TextureRegion> animation;
     public  float width ;
     public   float height ;
     SpriteBatch batch;
-    BodyDef bodyDef;
+
     Fixture fixture;
     World world;
 

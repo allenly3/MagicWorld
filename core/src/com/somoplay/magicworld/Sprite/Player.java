@@ -27,17 +27,21 @@ public class Player extends GameSprite {
     Animation<TextureRegion> rightMoving,rightStop,leftMoving,leftStop;
 
 
+
+
     public Player(PlayScreen screen) {
         super(screen);
         batch=new SpriteBatch();
-        bodyDef=new BodyDef();
+         bodyDef=new BodyDef();
         body= world.createBody(bodyDef);
 
         PolygonShape shape=new PolygonShape();
 
         FixtureDef fixturedef=new FixtureDef();
+      //fixturedef.friction=0;
 
         bodyDef.position.set(160/ MagicWorld.PPM,200/MagicWorld.PPM);
+
         bodyDef.type= BodyDef.BodyType.DynamicBody;
         body=world.createBody(bodyDef);
 

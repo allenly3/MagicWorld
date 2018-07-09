@@ -63,8 +63,10 @@ public class WorldCreator {
         //Create Soldiers
         for (MapObject object : map.getLayers().get("Soldier").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            System.out.println(rect.getX()+" "+rect.getY());
             soldiers.add(new Soldier(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
-
+            //getX() : the x-coordinate of the bottom left corner
+            //getY();the y-coordinate of the bottom left corner
         }
     }
 

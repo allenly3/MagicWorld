@@ -11,7 +11,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.somoplay.magicworld.MagicWorld;
@@ -19,14 +21,17 @@ import com.somoplay.magicworld.Resource.LoadResource;
 
 public class MenuScreen implements Screen
 {
-    Texture tStart,tMenu,tLevel;
+    Texture tStart,tMenu,tbg;
     Viewport viewport;
     MagicWorld game;
-    Image imageStart,imageMenu[];
+    Image imageStart,imageMenu[],background;
     Stage stage;
     Body body;
     LoadResource loadResource;
     public static boolean debug=true;
+
+
+
 
     public MenuScreen(MagicWorld game)
     {
@@ -43,6 +48,7 @@ public class MenuScreen implements Screen
         stage=new Stage(viewport);
         tStart=loadResource.assetManager.get("images/start.jpg");
         tMenu=loadResource.assetManager.get("images/menu.png");
+
 
         TextureRegion tr[][]=TextureRegion.split(tMenu,256,172);
 
@@ -66,9 +72,14 @@ public class MenuScreen implements Screen
 //        stage.addActor(imageMenu[1]);
 //        stage.addActor(imageMenu[3]);
 //        stage.addActor(imageMenu[0]);
+        tbg=loadResource.assetManager.get("images/bg1.png");
+        background=new Image(tbg);
+         background.setSize(game.screenWidth,game.screenHeight);
+
 
         initListener();
         Gdx.input.setInputProcessor(stage);
+
 
     }
     public void initListener()
@@ -89,11 +100,13 @@ public class MenuScreen implements Screen
             {
 
                 PlayScreen.level=0;
-
+                stage.getActors().clear();
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
+                Gdx.input.setInputProcessor(ps.controlStrage);
                 System.out.println("level 1");
-                stage.getActors().clear();
+
+
                 return  true;
             }
         });
@@ -103,11 +116,12 @@ public class MenuScreen implements Screen
             {
 
                 PlayScreen.level=1;
-
+                stage.getActors().clear();
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
+                Gdx.input.setInputProcessor(ps.controlStrage);
                 System.out.println("level 2");
-                stage.getActors().clear();
+
                 return  true;
             }
         });
@@ -116,11 +130,12 @@ public class MenuScreen implements Screen
             {
 
                 PlayScreen.level=2;
-
+                stage.getActors().clear();
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
+                Gdx.input.setInputProcessor(ps.controlStrage);
                 System.out.println("level 3");
-                stage.getActors().clear();
+
                 return  true;
             }
         });
@@ -129,11 +144,12 @@ public class MenuScreen implements Screen
             {
 
                 PlayScreen.level=3;
-
+                stage.getActors().clear();
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
+                Gdx.input.setInputProcessor(ps.controlStrage);
                 System.out.println("level 4");
-                stage.getActors().clear();
+
                 return  true;
             }
         });
@@ -165,10 +181,12 @@ public class MenuScreen implements Screen
             {
             //stage.getActors().clear();
             // System.out.println(stage.getActors());
+                stage.addActor(background);
 
             for (int i = 0; i < imageMenu.length; i++) {
                 stage.addActor(imageMenu[i]);
             }
+
         }
     }
 

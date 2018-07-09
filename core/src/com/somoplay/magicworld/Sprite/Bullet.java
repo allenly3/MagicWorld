@@ -30,9 +30,12 @@ public class Bullet{
     private World world;
     private Body bulletBody;
 
+
+
     public Bullet(PlayScreen screen, Vector2 position){
         this.position = position;
         this.screen = screen;
+
 
         world = screen.getWorld();
         if(texture == null){
@@ -45,7 +48,16 @@ public class Bullet{
     }
     public void defineBullet(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(screen.player.body.getPosition().x + 0.16f, screen.player.body.getPosition().y + 0.16f);
+
+        if(screen.player.state==1||screen.player.state==2) {
+            bdef.position.set(screen.player.body.getPosition().x + 0.16f, screen.player.body.getPosition().y + 0.10f);
+
+        }
+        if(screen.player.state==3||screen.player.state==4) {
+            bdef.position.set(screen.player.body.getPosition().x - 0.10f, screen.player.body.getPosition().y + 0.10f);
+
+        }
+
         bdef.type = BodyDef.BodyType.DynamicBody;
         bulletBody = world.createBody(bdef);
         bulletBody.setGravityScale(0);
@@ -58,6 +70,16 @@ public class Bullet{
         fdef.isSensor = true;
         bulletBody.createFixture(fdef).setUserData(this);
 
+        if(screen.player.state==1||screen.player.state==2) {
+
+            bulletBody.setLinearVelocity(2, 0);
+        }
+        if(screen.player.state==3||screen.player.state==4) {
+
+            bulletBody.setLinearVelocity(-2, 0);
+        }
+
+
     }
     public void render(SpriteBatch batch){
         if(!destroyed)
@@ -65,7 +87,12 @@ public class Bullet{
     }
 
     public void update(float dt){
-        bulletBody.setLinearVelocity(2, 0);
+//        if(screen.player.state==1||screen.player.state==2) {
+//            bulletBody.setLinearVelocity(2, 0);
+//        }
+//        if(screen.player.state==3||screen.player.state==4) {
+//            bulletBody.setLinearVelocity(-2, 0);
+//        }
         if(toBeDestroyed && !destroyed){
             world.destroyBody(bulletBody);
             destroyed = true;
@@ -77,6 +104,7 @@ public class Bullet{
     }
 
     public void setToDestroy(){
+
         toBeDestroyed = true;
     }
 

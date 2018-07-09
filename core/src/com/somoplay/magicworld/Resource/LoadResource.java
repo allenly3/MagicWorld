@@ -1,6 +1,7 @@
 package com.somoplay.magicworld.Resource;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 
 public class LoadResource
@@ -16,7 +17,7 @@ public class LoadResource
         assetManager.load("images/runnerright.png",Texture.class);
         assetManager.load("images/rightstop.png",Texture.class);
         assetManager.load("images/leftstop.png",Texture.class);
-
+        assetManager.load("Background.mp3", Music.class);
 
 
 

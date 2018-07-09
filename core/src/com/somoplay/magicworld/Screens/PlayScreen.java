@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.somoplay.magicworld.MagicWorld;
+import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Sprite.Bullet;
 import com.somoplay.magicworld.Sprite.Player;
 import com.somoplay.magicworld.Sprite.Soldier;
@@ -52,7 +53,7 @@ public class PlayScreen implements Screen {
     private ArrayList<Bullet> bullets;
     private WorldCreator creator;
 
-    private AssetManager manager;
+    private LoadResource loadResource;
     private Music music;
     // private HUD hud;
     private float deathTimer = 0;
@@ -81,9 +82,13 @@ public class PlayScreen implements Screen {
         player = new Player(this);
 
         bullets = new ArrayList<Bullet>();
-        manager = new AssetManager();
+        loadResource = new LoadResource();
+
 
         stage = new Stage();
+        music = loadResource.assetManager.get("Background.mp3", Music.class);
+        music.play();
+        music.setLooping(true);
 
     }
     @Override
@@ -224,7 +229,7 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
         map.dispose();
-        manager.dispose();
+        music.dispose();
     }
 
     public World getWorld() {

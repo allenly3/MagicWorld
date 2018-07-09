@@ -57,7 +57,7 @@ public class WorldCreator {
 
             shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
             fdef.shape = shape;
-            body.createFixture(fdef);
+            body.createFixture(fdef).setUserData("Ground");
         }
 
         //Create Soldiers

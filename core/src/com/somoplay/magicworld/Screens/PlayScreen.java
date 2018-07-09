@@ -202,7 +202,7 @@ public class PlayScreen implements Screen {
 
             player.getBody().setLinearVelocity(2, player.getBody().getLinearVelocity().y);
         }
-        if (jumping) {
+        if (jumping&&WorldContactListener.counter>0) {
 
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
         }

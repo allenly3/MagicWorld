@@ -37,7 +37,7 @@ public class PlayScreen implements Screen {
     Viewport viewport;
     Box2DDebugRenderer renderer;
 
-    public static int level=0;
+    public static int level=1;
 
     private MagicWorld game;
 
@@ -73,7 +73,7 @@ public class PlayScreen implements Screen {
         renderer = new Box2DDebugRenderer();
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("level_01.tmx");
+        map = mapLoader.load("level_0"+Integer.toString(level)+".tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / MagicWorld.PPM);
 
 

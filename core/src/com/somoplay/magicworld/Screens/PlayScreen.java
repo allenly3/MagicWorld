@@ -1,9 +1,7 @@
 package com.somoplay.magicworld.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,14 +16,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -39,7 +34,6 @@ import com.somoplay.magicworld.WorldCreator;
 
 import java.util.ArrayList;
 
-import static com.somoplay.magicworld.MagicWorld.batch;
 import static com.somoplay.magicworld.MagicWorld.screenHeight;
 import static com.somoplay.magicworld.MagicWorld.screenWidth;
 
@@ -81,7 +75,7 @@ public class PlayScreen implements Screen {
     public ImageButton buttonLeft,buttonRight,buttonA,buttonB;
 
     public Stage stage;
-    public Stage controlStrage;
+    public Stage controlStage;
 
 
     //private HealthBar healthBar;
@@ -116,7 +110,7 @@ public class PlayScreen implements Screen {
 
 
 
-        controlStrage=new Stage();
+        controlStage =new Stage();
         //---------------setup button-----------------
         btLeft=LoadResource.assetManager.get("images/buttonLeft.png");
         btRight=LoadResource.assetManager.get("images/buttonRight.png");
@@ -127,27 +121,29 @@ public class PlayScreen implements Screen {
         TextureRegionDrawable down=new TextureRegionDrawable(TextureRegion.split(btLeft,99,145)[0][0]);
         buttonLeft=new ImageButton(up,down);
         buttonLeft.setPosition(10,5);
-        controlStrage.addActor(buttonLeft);
+        controlStage.addActor(buttonLeft);
         //button right------------
          up=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][0]);
          down=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][1]);
         buttonRight=new ImageButton(up,down);
         buttonRight.setPosition(100,5);
-        controlStrage.addActor(buttonRight);
+        controlStage.addActor(buttonRight);
 //----------------button A----------
         up=new TextureRegionDrawable(TextureRegion.split(btA   ,99,150)[0][0]);
         down=new TextureRegionDrawable(TextureRegion.split(btA,99,150)[0][1]);
         buttonA=new ImageButton(up,down);
         buttonA.setPosition(450,5);
-        controlStrage.addActor(buttonA);
+        controlStage.addActor(buttonA);
     //-------------button B-------------
         up=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][0]);
        down=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][1]);
         buttonB=new ImageButton(up,down);
         buttonB.setPosition(540,40);
-        controlStrage.addActor(buttonB);
+        controlStage.addActor(buttonB);
 
-
+        music = loadResource.assetManager.get("Background.mp3", Music.class);
+        music.play();
+        music.setLooping(true);
 
     }
     @Override
@@ -172,8 +168,8 @@ public class PlayScreen implements Screen {
         mapRenderer.render();
         renderer.render(world, cam.combined);
 
-        controlStrage.draw();
-        controlStrage.act();
+        controlStage.draw();
+        controlStage.act();
 
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
@@ -218,7 +214,7 @@ public class PlayScreen implements Screen {
 // --------------button Right-----
         buttonRight.addListener(new InputListener(){
 
-            public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
                 player.state = 2;
                 movingR = false;
@@ -243,15 +239,12 @@ public class PlayScreen implements Screen {
             {
                 player.state = 4;
                 movingL= false;
-//              player.getBody().setLinearVelocity(0, 0);
                 super.touchUp(event,x,y,pointer,button);
             }
             public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
             {
                 player.state = 3;
                 movingL=true;
-                // player.body.applyForce(2f,0f,0,0,true);
-//                player.bodyDef.linearVelocity.set(20f,0f);
                 return true;
             }
 
@@ -345,7 +338,7 @@ public class PlayScreen implements Screen {
 
         if(deathTimer >= 1.5 && player.isDestroyed()){
             game.setScreen(new MenuScreen(game));
-            //music.stop();
+            music.stop();
             dispose();
         }
         mapRenderer.setView(cam);

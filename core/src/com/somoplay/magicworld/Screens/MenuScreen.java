@@ -2,8 +2,6 @@ package com.somoplay.magicworld.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,9 +9,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.somoplay.magicworld.MagicWorld;
@@ -100,10 +96,10 @@ public class MenuScreen implements Screen
             {
 
                 PlayScreen.level=1;
-
+                stage.getActors().clear();
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
-                Gdx.input.setInputProcessor(ps.controlStrage);
+                Gdx.input.setInputProcessor(ps.controlStage);
                 System.out.println("level 1");
 
 
@@ -116,10 +112,10 @@ public class MenuScreen implements Screen
             {
 
                 PlayScreen.level=2;
-
+                stage.getActors().clear();
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
-                Gdx.input.setInputProcessor(ps.controlStrage);
+                Gdx.input.setInputProcessor(ps.controlStage);
                 System.out.println("level 2");
 
                 return  true;
@@ -130,10 +126,10 @@ public class MenuScreen implements Screen
             {
 
                 PlayScreen.level=3;
-
+                stage.getActors().clear();
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
-                Gdx.input.setInputProcessor(ps.controlStrage);
+                Gdx.input.setInputProcessor(ps.controlStage);
                 System.out.println("level 3");
 
                 return  true;
@@ -144,10 +140,10 @@ public class MenuScreen implements Screen
             {
 
                 PlayScreen.level=4;
-
+                stage.getActors().clear();
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
-                Gdx.input.setInputProcessor(ps.controlStrage);
+                Gdx.input.setInputProcessor(ps.controlStage);
                 System.out.println("level 4");
 
                 return  true;

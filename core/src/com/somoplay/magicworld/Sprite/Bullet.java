@@ -36,7 +36,6 @@ public class Bullet{
     public Bullet(PlayScreen screen, Vector2 position){
         this.position = position;
         this.screen = screen;
-        this.state = state;
 
 
         world = screen.getWorld();

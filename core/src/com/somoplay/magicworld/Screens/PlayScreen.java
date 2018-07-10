@@ -1,6 +1,7 @@
 package com.somoplay.magicworld.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -146,74 +147,7 @@ public class PlayScreen implements Screen {
         music.play();
         music.setLooping(true);
 
-    }
-    @Override
-    public void show() {
-        Gdx.input.setCatchBackKey(true);
-
-    }
-
-    public TiledMap getMap() {
-        return map;
-    }
-
-    @Override
-    public void render(float delta) {
-        update(Gdx.graphics.getDeltaTime());
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        stage.draw();
-        stage.act();
-
-        mapRenderer.render();
-        renderer.render(world, cam.combined);
-
-        controlStage.draw();
-        controlStage.act();
-
-        game.batch.setProjectionMatrix(cam.combined);
-        game.batch.begin();
-        for(Bullet bullet : bullets) {
-            bullet.render(game.batch);
-        }
-        game.batch.end();
-
-        statetime=statetime+delta;
-        player.render(game.batch,statetime);
-
-
-
-    }
-
-
-    public void handleInput(float delta) {
-
-
-        if (movingL) {
-            player.state = 3;
-            player.getBody().setLinearVelocity(-2, player.getBody().getLinearVelocity().y);
-        }
-
-
-        if (movingR) {
-            player.state = 1;
-
-            player.getBody().setLinearVelocity(2, player.getBody().getLinearVelocity().y);
-        }
-        if (jumping && player.getBody().getLinearVelocity().y == 0) {
-
-            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
-        }
-        if (firing && timeSinceLastFire >= 0.5f) {
-
-            if(player.isDestroyed() == false) {
-                bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y) );
-                bullets.add(bullet);
-                timeSinceLastFire = 0;
-            }
-        }
-
+        //----listener
 
 // --------------button Right-----
         buttonRight.addListener(new InputListener(){
@@ -222,14 +156,14 @@ public class PlayScreen implements Screen {
             {
                 player.state = 2;
                 movingR = false;
-
+             //    player.getBody().setLinearVelocity(0, 0);
                 super.touchUp(event,x,y,pointer,button);
             }
             public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
             {
                 player.state = 1;
                 movingR=true;
-               // player.body.applyForce(2f,0f,0,0,true);
+                // player.body.applyForce(2f,0f,0,0,true);
 //                player.bodyDef.linearVelocity.set(20f,0f);
                 return true;
             }
@@ -242,6 +176,7 @@ public class PlayScreen implements Screen {
             public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
                 player.state = 4;
+  //               player.getBody().setLinearVelocity(0, 0);
                 movingL= false;
                 super.touchUp(event,x,y,pointer,button);
             }
@@ -286,6 +221,76 @@ public class PlayScreen implements Screen {
             }
 
         });
+
+    }
+    @Override
+    public void show() {
+        Gdx.input.setCatchBackKey(true);
+
+    }
+
+    public TiledMap getMap() {
+        return map;
+    }
+
+    @Override
+    public void render(float delta) {
+        update(Gdx.graphics.getDeltaTime());
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.draw();
+        stage.act();
+
+        mapRenderer.render();
+        renderer.render(world, cam.combined);
+
+        controlStage.draw();
+        controlStage.act();
+
+        game.batch.setProjectionMatrix(cam.combined);
+        game.batch.begin();
+        for(Bullet bullet : bullets) {
+            bullet.render(game.batch);
+        }
+        game.batch.end();
+
+        statetime=statetime+delta;
+        player.render(game.batch,statetime);
+
+
+
+    }
+
+
+    public void handleInput(float delta) {
+
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {//--movingL
+            player.state = 3;
+            player.getBody().setLinearVelocity(-2, player.getBody().getLinearVelocity().y);
+        }
+
+
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {//---nmovingR
+            player.state = 1;
+
+            player.getBody().setLinearVelocity(2, player.getBody().getLinearVelocity().y);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)&& player.getBody().getLinearVelocity().y == 0) {// --jumping
+
+            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
+        }
+        if (firing && timeSinceLastFire >= 0.5f) {
+
+            if(player.isDestroyed() == false) {
+                bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y) );
+                bullets.add(bullet);
+                timeSinceLastFire = 0;
+            }
+        }
+
+
         timeSinceLastFire += delta;
     }
 

@@ -68,6 +68,7 @@ public class PlayScreen implements Screen {
     private float deathTimer = 0;
 
     private float statetime;
+    private float timeSinceLastFire = 1.5f;
     private Bullet bullet;
 
     Texture tbg,btLeft,btRight,btA,btB;
@@ -204,13 +205,16 @@ public class PlayScreen implements Screen {
 
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
         }
-        if (firing ) {
+        if (firing && timeSinceLastFire >= 0.5f) {
 
             if(player.isDestroyed() == false) {
                 bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y) );
                 bullets.add(bullet);
+                timeSinceLastFire = 0;
             }
         }
+
+
 // --------------button Right-----
         buttonRight.addListener(new InputListener(){
 
@@ -218,7 +222,7 @@ public class PlayScreen implements Screen {
             {
                 player.state = 2;
                 movingR = false;
- //               player.getBody().setLinearVelocity(0, 0);
+
                 super.touchUp(event,x,y,pointer,button);
             }
             public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
@@ -282,7 +286,7 @@ public class PlayScreen implements Screen {
             }
 
         });
-
+        timeSinceLastFire += delta;
     }
 
 

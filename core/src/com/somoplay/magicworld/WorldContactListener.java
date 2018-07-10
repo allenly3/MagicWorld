@@ -59,7 +59,7 @@ public class WorldContactListener implements ContactListener {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 
-            ((Player)a.getUserData()).onHit((Enemy)b.getUserData());
+            ((Player)a.getUserData()).onHit(50);
             ((Soldier)b.getUserData()).hitPlayer();
             //screen.setHealth(0.5f);
 
@@ -67,22 +67,33 @@ public class WorldContactListener implements ContactListener {
             a = contact.getFixtureB();
             b = contact.getFixtureA();
 
-            ((Player)a.getUserData()).onHit((Enemy)b.getUserData());
+            ((Player)a.getUserData()).onHit(50);
             ((Soldier)b.getUserData()).hitPlayer();
             //screen.setHealth(0.5f);
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "NextLevelLoader") {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            screen.nextLevel();
+        } else if(contact.getFixtureA().getUserData() == "NextLevelLoader" && contact.getFixtureB().getUserData() instanceof Player) {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            screen.nextLevel();
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Spike") {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Player)a.getUserData()).onHit(100);
+
+        } else if(contact.getFixtureA().getUserData() == "Spike" && contact.getFixtureB().getUserData() instanceof Player) {
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Player)a.getUserData()).onHit(100);
         }
 
-        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Ground"){
 
-            counter++;
-
-        } else if(contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() instanceof Player){
-
-            counter++;
-
-        }
-
-        System.out.println(counter);
     }
 
     @Override

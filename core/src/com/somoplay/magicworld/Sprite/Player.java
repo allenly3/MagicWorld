@@ -19,7 +19,7 @@ import com.somoplay.magicworld.Screens.PlayScreen;
 
 public class Player extends GameSprite {
 
-    public int state=2;
+    public int state=1;
     public float health = 100;
     private boolean destroyed = false;
 
@@ -153,9 +153,9 @@ public class Player extends GameSprite {
         }
     }
 
-    public void onHit(Enemy enemy){
+    public void onHit(int value){
         if(health > 0) {
-            health -= 50;
+            health -= value;
         }
         System.out.println("Player Health: " + health);
     }

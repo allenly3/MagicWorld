@@ -28,6 +28,7 @@ public class LoadResource
         assetManager.load("images/buttonB.png",Texture.class);
         assetManager.load("images/blt.png", Texture.class);
         assetManager.load("Background.mp3", Music.class);
+        assetManager.load("images/door.jpg",Texture.class);
 
 
 

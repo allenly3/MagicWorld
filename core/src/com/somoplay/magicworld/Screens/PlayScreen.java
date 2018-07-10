@@ -1,6 +1,7 @@
 package com.somoplay.magicworld.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -145,6 +146,79 @@ public class PlayScreen implements Screen {
         music.play();
         music.setLooping(true);
 
+
+        //-------------------listener
+        buttonRight.addListener(new InputListener(){
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button)
+            {
+                player.state = 2;
+                movingR = false;
+                //               player.getBody().setLinearVelocity(0, 0);
+                super.touchUp(event,x,y,pointer,button);
+            }
+            public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
+            {
+                player.state = 1;
+                movingR=true;
+                // player.body.applyForce(2f,0f,0,0,true);
+//                player.bodyDef.linearVelocity.set(20f,0f);
+                return true;
+            }
+
+        });
+
+//---------------------------------button Left-----
+        buttonLeft.addListener(new InputListener(){
+
+            public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
+            {
+                player.state = 4;
+                movingL= false;
+                super.touchUp(event,x,y,pointer,button);
+            }
+            public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
+            {
+                player.state = 3;
+                movingL=true;
+                return true;
+            }
+
+        });
+
+        //---------------------------------button A----
+        buttonA.addListener(new InputListener(){
+            public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
+            {
+
+                jumping= false;
+                super.touchUp(event,x,y,pointer,button);
+            }
+
+            public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
+            {
+                jumping=true;
+                return true;
+            }
+
+        });
+//---------------------------button B----------------------
+        buttonB.addListener(new InputListener(){
+            public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
+            {
+
+                firing= false;
+                super.touchUp(event,x,y,pointer,button);
+            }
+
+            public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
+            {
+                firing=true;
+                return true;
+            }
+
+        });
+
     }
     @Override
     public void show() {
@@ -212,77 +286,6 @@ public class PlayScreen implements Screen {
                 bullets.add(bullet);
             }
         }
-// --------------button Right-----
-        buttonRight.addListener(new InputListener(){
-
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button)
-            {
-                player.state = 2;
-                movingR = false;
- //               player.getBody().setLinearVelocity(0, 0);
-                super.touchUp(event,x,y,pointer,button);
-            }
-            public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
-            {
-                player.state = 1;
-                movingR=true;
-               // player.body.applyForce(2f,0f,0,0,true);
-//                player.bodyDef.linearVelocity.set(20f,0f);
-                return true;
-            }
-
-        });
-
-//---------------------------------button Left-----
-        buttonLeft.addListener(new InputListener(){
-
-            public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
-            {
-                player.state = 4;
-                movingL= false;
-                super.touchUp(event,x,y,pointer,button);
-            }
-            public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
-            {
-                player.state = 3;
-                movingL=true;
-                return true;
-            }
-
-        });
-
-        //---------------------------------button A----
-        buttonA.addListener(new InputListener(){
-            public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
-            {
-
-                jumping= false;
-                super.touchUp(event,x,y,pointer,button);
-            }
-
-            public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
-            {
-                jumping=true;
-                return true;
-            }
-
-        });
-//---------------------------button B----------------------
-        buttonB.addListener(new InputListener(){
-            public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
-            {
-
-                firing= false;
-                super.touchUp(event,x,y,pointer,button);
-            }
-
-            public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
-            {
-                firing=true;
-                return true;
-            }
-
-        });
 
     }
 

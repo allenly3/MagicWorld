@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -272,10 +273,10 @@ public class PlayScreen implements Screen {
 
         });
 //---------------------------button B----------------------
-        buttonB.addListener(
-                new InputListener(){
+        buttonB.addListener(new InputListener(){
             public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
+
                 firing= false;
                 super.touchUp(event,x,y,pointer,button);
             }
@@ -287,9 +288,6 @@ public class PlayScreen implements Screen {
             }
 
         });
-
-
-
 
     }
 

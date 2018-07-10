@@ -53,7 +53,7 @@ public class PlayScreen implements Screen {
 
 
 
-    public static int level=0;
+    public static int level=1;
 
     private MagicWorld game;
 
@@ -68,7 +68,7 @@ public class PlayScreen implements Screen {
     private ArrayList<Bullet> bullets;
     private WorldCreator creator;
 
-    private AssetManager manager;
+    private LoadResource loadResource;
     private Music music;
     // private HUD hud;
     private float deathTimer = 0;
@@ -97,7 +97,7 @@ public class PlayScreen implements Screen {
         renderer = new Box2DDebugRenderer();
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("level_01.tmx");
+        map = mapLoader.load("level_0"+Integer.toString(level)+".tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / MagicWorld.PPM);
 
 
@@ -105,7 +105,8 @@ public class PlayScreen implements Screen {
         player = new Player(this);
 
         bullets = new ArrayList<Bullet>();
-        manager = new AssetManager();
+        loadResource = new LoadResource();
+
 
         tbg= LoadResource.assetManager.get("images/bg1.png");
         background=new Image(tbg);
@@ -203,7 +204,7 @@ public class PlayScreen implements Screen {
 
             player.getBody().setLinearVelocity(2, player.getBody().getLinearVelocity().y);
         }
-        if (jumping&&WorldContactListener.counter>0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) && player.getBody().getLinearVelocity().y == 0) {
 
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
         }
@@ -374,7 +375,7 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
         map.dispose();
-        manager.dispose();
+        music.dispose();
     }
 
     public World getWorld() {
@@ -386,4 +387,10 @@ public class PlayScreen implements Screen {
         return layer.getCell((int)(body.getPosition().x *MagicWorld.PPM / 32), (int)(body.getPosition().y * MagicWorld.PPM / 32));
     }
 
+    public Player getPlayer(){return player;}
+
+    public void nextLevel(){
+        game.setScreen(new MenuScreen(game));
+        dispose();
+    }
 }

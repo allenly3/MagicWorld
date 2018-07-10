@@ -99,8 +99,8 @@ public class MenuScreen implements Screen
             public boolean touchDown(InputEvent event, float x, float y,int pointer, int button)
             {
 
-                PlayScreen.level=0;
-                stage.getActors().clear();
+                PlayScreen.level=1;
+
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
                 Gdx.input.setInputProcessor(ps.controlStrage);
@@ -115,8 +115,8 @@ public class MenuScreen implements Screen
             public boolean touchDown(InputEvent event, float x, float y,int pointer, int button)
             {
 
-                PlayScreen.level=1;
-                stage.getActors().clear();
+                PlayScreen.level=2;
+
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
                 Gdx.input.setInputProcessor(ps.controlStrage);
@@ -129,8 +129,8 @@ public class MenuScreen implements Screen
             public boolean touchDown(InputEvent event, float x, float y,int pointer, int button)
             {
 
-                PlayScreen.level=2;
-                stage.getActors().clear();
+                PlayScreen.level=3;
+
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
                 Gdx.input.setInputProcessor(ps.controlStrage);
@@ -143,8 +143,8 @@ public class MenuScreen implements Screen
             public boolean touchDown(InputEvent event, float x, float y,int pointer, int button)
             {
 
-                PlayScreen.level=3;
-                stage.getActors().clear();
+                PlayScreen.level=4;
+
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
                 Gdx.input.setInputProcessor(ps.controlStrage);

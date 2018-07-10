@@ -16,7 +16,6 @@ public class Soldier extends Enemy {
     public Soldier(PlayScreen screen, float x, float y){
         super(screen, x, y);
 
-
     }
     @Override
     protected void defineEnemy() {

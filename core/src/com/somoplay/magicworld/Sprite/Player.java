@@ -27,17 +27,21 @@ public class Player extends GameSprite {
     Animation<TextureRegion> rightMoving,rightStop,leftMoving,leftStop;
 
 
+
+
     public Player(PlayScreen screen) {
         super(screen);
         batch=new SpriteBatch();
-        bodyDef=new BodyDef();
+         bodyDef=new BodyDef();
         body= world.createBody(bodyDef);
 
         PolygonShape shape=new PolygonShape();
 
         FixtureDef fixturedef=new FixtureDef();
+      //fixturedef.friction=0;
 
         bodyDef.position.set(160/ MagicWorld.PPM,200/MagicWorld.PPM);
+
         bodyDef.type= BodyDef.BodyType.DynamicBody;
         body=world.createBody(bodyDef);
 
@@ -96,8 +100,9 @@ public class Player extends GameSprite {
     public Animation setAnimation(TextureRegion[] reg,float delay,Animation ani)
     {
         ani=new Animation(delay,reg);
-        width=reg[0].getRegionWidth()/100;
-        height=reg[0].getRegionHeight()/100;
+        width=reg[0].getRegionWidth()/100f;
+        height=reg[0].getRegionHeight()/100f;
+
         return ani;
 
     }
@@ -110,8 +115,8 @@ public class Player extends GameSprite {
         batch.begin();
 
             batch.draw(rightMoving.getKeyFrame(delta, true),
-             body.getPosition().x - 0.5f / 2,
-             body.getPosition().y - 0.5f / 2, 0.5f, 0.5f);
+             body.getPosition().x - 0.5f / 2f,
+             body.getPosition().y - 0.5f / 2f, 0.5f, 0.5f);
         batch.end();
         }
         if(state==2)
@@ -121,8 +126,8 @@ public class Player extends GameSprite {
             batch.begin();
 
             batch.draw(rightStop.getKeyFrame(delta, true),
-                    body.getPosition().x - 0.5f / 2,
-                    body.getPosition().y - 0.5f / 2, 0.5f, 0.5f);
+                    body.getPosition().x - 0.326f / 2f,
+                    body.getPosition().y - 0.49f / 2f, 0.326f, 0.49f);
             batch.end();
         }
         if(state==3)
@@ -131,8 +136,8 @@ public class Player extends GameSprite {
             batch.begin();
 
             batch.draw(leftMoving.getKeyFrame(delta, true),
-                    body.getPosition().x - 0.5f / 2,
-                    body.getPosition().y - 0.5f / 2,0.5f, 0.5f);
+                    body.getPosition().x - 0.5f / 2f,
+                    body.getPosition().y - 0.5f / 2f,0.5f, 0.5f);
             batch.end();
         }
         if(state==4)
@@ -142,8 +147,8 @@ public class Player extends GameSprite {
             batch.begin();
 
             batch.draw(leftStop.getKeyFrame(delta, true),
-                    body.getPosition().x - 0.5f/ 2,
-                    body.getPosition().y - 0.5f/ 2, 0.5f, 0.5f);
+                    body.getPosition().x - 0.326f/ 2f,
+                    body.getPosition().y - 0.49f/ 2f, 0.326f, 0.49f);
             batch.end();
         }
     }

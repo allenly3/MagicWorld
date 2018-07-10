@@ -20,6 +20,7 @@ public class Soldier extends Enemy {
     @Override
     protected void defineEnemy() {
         BodyDef bdef = new BodyDef();
+
         bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
 
@@ -27,7 +28,7 @@ public class Soldier extends Enemy {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(16/ MagicWorld.PPM,24/MagicWorld.PPM);
+        shape.setAsBox(16/ MagicWorld.PPM,32/MagicWorld.PPM);
         fdef.shape = shape;
 
         body.createFixture(fdef).setUserData(this);

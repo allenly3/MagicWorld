@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.MagicWorld;
+import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
 
 
@@ -30,17 +31,18 @@ public class Bullet{
     private World world;
     private Body bulletBody;
 
-    private int state;
 
-    public Bullet(PlayScreen screen, Vector2 position, int state){
+
+    public Bullet(PlayScreen screen, Vector2 position){
         this.position = position;
         this.screen = screen;
         this.state = state;
 
+
         world = screen.getWorld();
         if(texture == null){
-            texture = new Texture("red.jpg");
-            region = new TextureRegion(texture, 0,0,32,32);
+            texture = LoadResource.assetManager.get("images/blt.png");
+            region = new TextureRegion(texture );
         }
 
         defineBullet();
@@ -48,28 +50,51 @@ public class Bullet{
     }
     public void defineBullet(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(screen.player.body.getPosition().x + 0.16f, screen.player.body.getPosition().y + 0.16f);
+
+        if(screen.player.state==1||screen.player.state==2) {
+            bdef.position.set(screen.player.body.getPosition().x + 0.16f, screen.player.body.getPosition().y + 0.10f);
+
+        }
+        if(screen.player.state==3||screen.player.state==4) {
+            bdef.position.set(screen.player.body.getPosition().x - 0.10f, screen.player.body.getPosition().y + 0.10f);
+
+        }
+
         bdef.type = BodyDef.BodyType.DynamicBody;
         bulletBody = world.createBody(bdef);
         bulletBody.setGravityScale(0);
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(16/ MagicWorld.PPM,16/MagicWorld.PPM);
+        shape.setAsBox(8/ MagicWorld.PPM,8/MagicWorld.PPM);
 
         fdef.shape = shape;
         fdef.isSensor = true;
         bulletBody.createFixture(fdef).setUserData(this);
 
+        if(screen.player.state==1||screen.player.state==2) {
+
+            bulletBody.setLinearVelocity(2, 0);
+        }
+        if(screen.player.state==3||screen.player.state==4) {
+
+            bulletBody.setLinearVelocity(-2, 0);
+        }
+
+
     }
     public void render(SpriteBatch batch){
         if(!destroyed)
-            batch.draw(region, bulletBody.getPosition().x - 16/ MagicWorld.PPM , bulletBody.getPosition().y - 16/ MagicWorld.PPM, 32/MagicWorld.PPM,32/MagicWorld.PPM);
+            batch.draw(region, bulletBody.getPosition().x - 8/ MagicWorld.PPM , bulletBody.getPosition().y - 8/ MagicWorld.PPM, 16/MagicWorld.PPM,16/MagicWorld.PPM);
     }
 
     public void update(float dt){
-        if(state == 1){ bulletBody.setLinearVelocity(2, 0);}
-        else if (state == 3){ bulletBody.setLinearVelocity(-2,0);}
+//        if(screen.player.state==1||screen.player.state==2) {
+//            bulletBody.setLinearVelocity(2, 0);
+//        }
+//        if(screen.player.state==3||screen.player.state==4) {
+//            bulletBody.setLinearVelocity(-2, 0);
+//        }
         if(toBeDestroyed && !destroyed){
             world.destroyBody(bulletBody);
             destroyed = true;
@@ -81,6 +106,7 @@ public class Bullet{
     }
 
     public void setToDestroy(){
+
         toBeDestroyed = true;
     }
 

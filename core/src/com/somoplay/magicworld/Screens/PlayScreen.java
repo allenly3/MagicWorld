@@ -193,18 +193,19 @@ public class PlayScreen implements Screen {
     public void handleInput(float delta) {
 
 
-        if (movingL) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {//movingL------------
             player.state = 3;
             player.getBody().setLinearVelocity(-2, player.getBody().getLinearVelocity().y);
         }
 
 
-        if (movingR) {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {// movingR----------------
             player.state = 1;
 
             player.getBody().setLinearVelocity(2, player.getBody().getLinearVelocity().y);
         }
-        if (jumping && player.getBody().getLinearVelocity().y == 0) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && player.getBody().getLinearVelocity().y == 0)//------jumping
+        {
 
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
         }

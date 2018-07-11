@@ -28,9 +28,7 @@ public class MagicWorld extends Game {
 		screenHeight=Gdx.graphics.getHeight();
 
 		menuScreen=new MenuScreen(this);
-		playScreen=new PlayScreen(this);
 		setScreen(menuScreen);
-		//setScreen(playScreen);
 
 	}
 

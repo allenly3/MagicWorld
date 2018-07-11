@@ -59,17 +59,19 @@ public class WorldCreator {
 
             shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
             fdef.shape = shape;
-            body.createFixture(fdef).setUserData("Ground");
+            Fixture fixture = body.createFixture(fdef);
+            fixture.setUserData("Ground");
+
         }
 
         //Create Soldiers
         for (MapObject object : map.getLayers().get("Soldier").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            System.out.println(rect.getX()+" "+rect.getY());
             soldiers.add(new Soldier(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
             //getX() : the x-coordinate of the bottom left corner
             //getY();the y-coordinate of the bottom left corner
         }
+
         //Create NextLevelLoader
         for (MapObject object : map.getLayers().get("NextLevelLoader").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();

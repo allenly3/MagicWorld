@@ -1,5 +1,6 @@
 package com.somoplay.magicworld;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -91,25 +92,24 @@ public class WorldContactListener implements ContactListener {
             b = contact.getFixtureA();
 
             ((Player)a.getUserData()).onHit(100);
+        } else if(contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "leftSide") {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            b.getBody().applyLinearImpulse(new Vector2(-1,6),b.getBody().getWorldCenter(),true);
+        } else if(contact.getFixtureA().getUserData() == "leftSide" && contact.getFixtureB().getUserData() == "Ground") {
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            b.getBody().applyLinearImpulse(new Vector2(-1,6),b.getBody().getWorldCenter(),true);
         }
+
 
 
     }
 
     @Override
     public void endContact(Contact contact) {
-
-        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Ground"){
-
-            counter--;
-
-        } else if(contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() instanceof Player){
-
-            counter--;
-
-        }
-
-        System.out.println(counter);
 
     }
 

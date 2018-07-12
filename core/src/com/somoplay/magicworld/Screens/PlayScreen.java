@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -22,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -78,6 +81,7 @@ public class PlayScreen implements Screen {
 
     public Stage stage;
     public Stage controlStage;
+    Label label;
 
 
     //private HealthBar healthBar;
@@ -107,8 +111,14 @@ public class PlayScreen implements Screen {
         tbg= LoadResource.assetManager.get("images/bg1.png");
         background=new Image(tbg);
         background.setSize(screenWidth,screenHeight);
+
+        Label.LabelStyle fontstyle=new Label.LabelStyle(new BitmapFont(Gdx.files.internal("mwfont.fnt")), Color.WHITE);
+        label=new Label(Integer.toString(WorldContactListener.score),fontstyle);
+        label.setPosition(screenWidth*0.10f,screenHeight*0.87f);
+
         stage = new Stage();
         stage.addActor(background);
+        stage.addActor(label);
 
 
 
@@ -239,6 +249,8 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+        label.setText(Integer.toString(WorldContactListener.score));
         stage.draw();
         stage.act();
 
@@ -277,11 +289,13 @@ public class PlayScreen implements Screen {
 
             player.getBody().setLinearVelocity(2, player.getBody().getLinearVelocity().y);
         }
+
         if (Gdx.input.isKeyPressed(Input.Keys.UP)&& player.getBody().getLinearVelocity().y == 0) {// --jumping
 
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
         }
-        if (firing && timeSinceLastFire >= 0.5f) {
+
+        if (firing && timeSinceLastFire >= 0.3f) {
 
             if(player.isDestroyed() == false) {
                 bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y) );
@@ -292,6 +306,7 @@ public class PlayScreen implements Screen {
 
 
         timeSinceLastFire += delta;
+//        System.out.println(delta);
     }
 
 

@@ -15,7 +15,8 @@ import com.somoplay.magicworld.Sprite.Soldier;
 public class WorldContactListener implements ContactListener {
 
     PlayScreen screen;
-    public static int counter=0;
+    public static int score=0;
+
 
     public WorldContactListener(PlayScreen screen){
         this.screen = screen;
@@ -31,7 +32,7 @@ public class WorldContactListener implements ContactListener {
 
             screen.getCell(b.getBody()).setTile(null);
             b.setUserData(null);
-            //screen.addScore(100);
+           score+=100;
 
         } else if(contact.getFixtureA().getUserData() == "Coin" && contact.getFixtureB().getUserData() instanceof Player){
             a = contact.getFixtureB();
@@ -39,7 +40,7 @@ public class WorldContactListener implements ContactListener {
 
             screen.getCell(b.getBody()).setTile(null);
             b.setUserData(null);
-            //screen.addScore(100);
+            score+=100;
 
         } else if(contact.getFixtureA().getUserData() instanceof Bullet && contact.getFixtureB().getUserData() instanceof Soldier) {
             a = contact.getFixtureA();
@@ -54,6 +55,7 @@ public class WorldContactListener implements ContactListener {
 
             ((Enemy)b.getUserData()).onHit((Bullet)a.getUserData());
             ((Bullet) a.getUserData()).setToDestroy();
+
 
         } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() instanceof Soldier){
             a = contact.getFixtureA();
@@ -98,18 +100,6 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-
-        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Ground"){
-
-            counter--;
-
-        } else if(contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() instanceof Player){
-
-            counter--;
-
-        }
-
-        System.out.println(counter);
 
     }
 

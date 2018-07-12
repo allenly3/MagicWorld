@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
+import com.somoplay.magicworld.WorldContactListener;
 
 
 import java.util.ArrayList;
@@ -97,6 +98,7 @@ public class Bullet{
         if(toBeDestroyed && !destroyed){
             world.destroyBody(bulletBody);
             destroyed = true;
+
         }
     }
 
@@ -107,6 +109,7 @@ public class Bullet{
     public void setToDestroy(){
 
         toBeDestroyed = true;
+
     }
 
 }

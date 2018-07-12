@@ -3,6 +3,7 @@ package com.somoplay.magicworld.Resource;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
 import javax.xml.soap.Text;
@@ -29,6 +30,10 @@ public class LoadResource
         assetManager.load("images/blt.png", Texture.class);
         assetManager.load("Background.mp3", Music.class);
         assetManager.load("images/door.jpg",Texture.class);
+        assetManager.load("images/empty.jpg",Texture.class);
+        assetManager.load("images/full.jpg",Texture.class);
+        assetManager.load("mwfont.png",Texture.class);
+        assetManager.load("mwfont.fnt", BitmapFont.class);
 
 
 

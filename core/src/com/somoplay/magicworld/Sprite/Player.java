@@ -17,11 +17,15 @@ import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
 
+import static com.somoplay.magicworld.MagicWorld.screenHeight;
+import static com.somoplay.magicworld.MagicWorld.screenWidth;
+
 public class Player extends GameSprite {
 
     public int state=1;
-    public float health = 100;
+    public int health = 100;
     private boolean destroyed = false;
+    protected HealthBar healthbar;
 
     public Texture txRightMove,txRightStop,txLeftMove,txLeftStop;
     Animation<TextureRegion> rightMoving,rightStop,leftMoving,leftStop;
@@ -31,6 +35,7 @@ public class Player extends GameSprite {
 
     public Player(PlayScreen screen) {
         super(screen);
+
         batch=new SpriteBatch();
          bodyDef=new BodyDef();
         body= world.createBody(bodyDef);
@@ -51,6 +56,10 @@ public class Player extends GameSprite {
         fixture.setUserData(this);
 
         init();
+
+        healthbar=new HealthBar(this);
+
+
 
     }
     public void init()
@@ -151,6 +160,17 @@ public class Player extends GameSprite {
                     body.getPosition().y - 0.49f/ 2f, 0.326f, 0.49f);
             batch.end();
         }
+        //-------profile and health bar
+        batch.begin();
+        batch.draw(healthbar.profile,body.getPosition().x-screenWidth/100/2f ,body.getPosition().y+screenHeight/100/2-0.65f ,0.6f,0.6f);
+       batch.draw(healthbar.emptytx,body.getPosition().x-screenWidth/100/2f+0.65f ,body.getPosition().y+screenHeight/100/2-0.65f ,2f,0.2f);
+        healthbar.blood.setRegionWidth(health*3);
+        batch.draw(healthbar.blood,body.getPosition().x-screenWidth/100/2f+0.65f ,body.getPosition().y+screenHeight/100/2-0.65f,health/50,0.2f );
+
+        batch.end();
+
+
+
     }
 
     public void onHit(int value){

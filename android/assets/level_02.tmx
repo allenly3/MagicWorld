@@ -39,4 +39,5 @@
    <polygon points="0,0 32,0 16,-32"/>
   </object>
  </objectgroup>
+ <objectgroup name="HealthUp"/>
 </map>

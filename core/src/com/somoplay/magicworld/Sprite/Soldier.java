@@ -2,6 +2,8 @@ package com.somoplay.magicworld.Sprite;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.somoplay.magicworld.MagicWorld;
@@ -12,6 +14,7 @@ public class Soldier extends Enemy {
 
     public float health = 100;
     public boolean destroyed = false;
+    private boolean behindPlayer = false;
 
     public Soldier(PlayScreen screen, float x, float y){
         super(screen, x, y);
@@ -31,9 +34,20 @@ public class Soldier extends Enemy {
         shape.setAsBox(16/ MagicWorld.PPM,32/MagicWorld.PPM);
         fdef.shape = shape;
 
-        body.createFixture(fdef).setUserData(this);
-        body.setGravityScale(10);
+        Fixture fixture = body.createFixture(fdef);
+        fixture.setUserData(this);
 
+        EdgeShape leftSide = new EdgeShape();
+        leftSide.set(new Vector2(-18/MagicWorld.PPM,-10/MagicWorld.PPM), new Vector2(-18/MagicWorld.PPM,20/MagicWorld.PPM));
+        fdef.shape = leftSide;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("leftSide");
+
+        EdgeShape rightSide = new EdgeShape();
+        rightSide.set(new Vector2(18/MagicWorld.PPM,-10/MagicWorld.PPM), new Vector2(18/MagicWorld.PPM,20/MagicWorld.PPM));
+        fdef.shape = rightSide;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("rightSide");
     }
 
     @Override
@@ -44,12 +58,28 @@ public class Soldier extends Enemy {
         System.out.println(health);
     }
 
+    public void jump(){
+        body.applyLinearImpulse(new Vector2(-1,2),body.getWorldCenter(),true);
+    }
+
     @Override
     public void update(float dt){
-        body.setLinearVelocity(new Vector2(-1,0));
+        if(!behindPlayer){
+        body.setLinearVelocity(new Vector2(-1,body.getLinearVelocity().y));}
+        else if (behindPlayer){
+            body.setLinearVelocity(new Vector2(1,body.getLinearVelocity().y));
+        }
+
+        if(body.getPosition().x + 1.5f <= screen.player.body.getPosition().x){
+            behindPlayer = true;
+        } else if (body.getPosition().x >= screen.player.body.getPosition().x + 1.5f){
+            behindPlayer = false;
+        }
+
+
     }
 
     public void hitPlayer(){
-        body.applyLinearImpulse(60f,0,body.getWorldCenter().x,body.getWorldCenter().y,true);
+        //body.applyLinearImpulse(60f,0,body.getWorldCenter().x,body.getWorldCenter().y,true);
     }
 }

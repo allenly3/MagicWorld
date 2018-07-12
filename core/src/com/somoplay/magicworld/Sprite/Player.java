@@ -37,13 +37,12 @@ public class Player extends GameSprite {
         super(screen);
 
         batch=new SpriteBatch();
-         bodyDef=new BodyDef();
+        bodyDef=new BodyDef();
         body= world.createBody(bodyDef);
 
         PolygonShape shape=new PolygonShape();
 
         FixtureDef fixturedef=new FixtureDef();
-      //fixturedef.friction=0;
 
         bodyDef.position.set(160/ MagicWorld.PPM,200/MagicWorld.PPM);
 
@@ -178,6 +177,10 @@ public class Player extends GameSprite {
             health -= value;
         }
         System.out.println("Player Health: " + health);
+    }
+
+    public void addHealth(float value){
+        health += value;
     }
 
     public float getHealth(){ return health;}

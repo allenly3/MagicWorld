@@ -29,7 +29,7 @@ public class WorldCreator {
     public WorldCreator(PlayScreen screen){
         World world = screen.getWorld();
         Map map = screen.getMap();
-     
+
 
 
         soldiers = new ArrayList<Soldier>();

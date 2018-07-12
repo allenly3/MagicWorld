@@ -1,5 +1,6 @@
 package com.somoplay.magicworld;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
 import com.somoplay.magicworld.Sprite.Soldier;
 
@@ -21,9 +23,14 @@ public class WorldCreator {
 
     ArrayList<Soldier> soldiers;
 
+
+
+
     public WorldCreator(PlayScreen screen){
         World world = screen.getWorld();
         Map map = screen.getMap();
+     
+
 
         soldiers = new ArrayList<Soldier>();
 

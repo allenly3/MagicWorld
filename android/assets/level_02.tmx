@@ -40,4 +40,5 @@
   </object>
  </objectgroup>
  <objectgroup name="HealthUp"/>
+ <objectgroup name="Gunner"/>
 </map>

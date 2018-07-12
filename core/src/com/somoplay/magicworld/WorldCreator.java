@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
+import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Soldier;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 public class WorldCreator {
 
     ArrayList<Soldier> soldiers;
-
+    ArrayList<Gunner> gunners;
 
 
 
@@ -33,6 +34,7 @@ public class WorldCreator {
 
 
         soldiers = new ArrayList<Soldier>();
+        gunners = new ArrayList<Gunner>();
 
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -91,8 +93,14 @@ public class WorldCreator {
         for (MapObject object : map.getLayers().get("Soldier").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             soldiers.add(new Soldier(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
-            //getX() : the x-coordinate of the bottom left corner
-            //getY();the y-coordinate of the bottom left corner
+
+        }
+
+        //Create Gunner
+        for (MapObject object : map.getLayers().get("Gunner").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            gunners.add(new Gunner(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
+
         }
 
         //Create NextLevelLoader
@@ -138,4 +146,6 @@ public class WorldCreator {
     public ArrayList<Soldier> getSoldiers() {
         return soldiers;
     }
+
+    public ArrayList<Gunner> getGunners() { return gunners; }
 }

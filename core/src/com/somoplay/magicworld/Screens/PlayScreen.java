@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Sprite.Bullet;
+import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
 import com.somoplay.magicworld.Sprite.Soldier;
 import com.somoplay.magicworld.WorldContactListener;
@@ -342,6 +343,21 @@ public class PlayScreen implements Screen {
                 soldier.update(dt);
                 if(soldier.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
                     soldier.body.setActive(true);
+                }
+            }
+
+        }
+
+        for (Gunner gunner: creator.getGunners()){
+            if(gunner.health <= 0 && !gunner.destroyed){
+                world.destroyBody(gunner.body);
+                gunner.destroyed = true;
+            }
+
+            if(gunner.destroyed == false){
+                gunner.update(dt);
+                if(gunner.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
+                    gunner.body.setActive(true);
                 }
             }
 

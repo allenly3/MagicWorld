@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="120" height="30" tilewidth="32" tileheight="32" infinite="0" nextobjectid="269">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="120" height="30" tilewidth="32" tileheight="32" infinite="0" nextobjectid="272">
  <tileset firstgid="1" source="Game Boy Advance - Kirby Nightmare in Dream Land - Beam Kirby.tsx"/>
  <tileset firstgid="401" source="JnRTiles.tsx"/>
  <layer name="Background" width="120" height="30">
@@ -9,6 +9,9 @@
  </layer>
  <objectgroup name="HealthUp">
   <object id="268" x="704" y="832" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="Gunner">
+  <object id="271" x="992" y="896" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Ground">
   <object id="103" x="0" y="928" width="384" height="32"/>

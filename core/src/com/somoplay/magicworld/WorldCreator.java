@@ -48,6 +48,22 @@ public class WorldCreator {
             fixture.setSensor(true);
         }
 
+        //Create HealthUp
+        for (MapObject object : map.getLayers().get("HealthUp").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
+            fdef.shape = shape;
+            Fixture fixture = body.createFixture(fdef);
+            fixture.setUserData("HealthUp");
+            fixture.setSensor(true);
+        }
+
         //Create Ground
         for (MapObject object : map.getLayers().get("Ground").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();

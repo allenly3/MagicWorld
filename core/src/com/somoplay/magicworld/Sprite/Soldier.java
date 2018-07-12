@@ -38,11 +38,16 @@ public class Soldier extends Enemy {
         fixture.setUserData(this);
 
         EdgeShape leftSide = new EdgeShape();
-        leftSide.set(new Vector2(-18/MagicWorld.PPM,10/MagicWorld.PPM), new Vector2(-18/MagicWorld.PPM,32/MagicWorld.PPM));
+        leftSide.set(new Vector2(-18/MagicWorld.PPM,-10/MagicWorld.PPM), new Vector2(-18/MagicWorld.PPM,20/MagicWorld.PPM));
         fdef.shape = leftSide;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("leftSide");
 
+        EdgeShape rightSide = new EdgeShape();
+        rightSide.set(new Vector2(18/MagicWorld.PPM,-10/MagicWorld.PPM), new Vector2(18/MagicWorld.PPM,20/MagicWorld.PPM));
+        fdef.shape = rightSide;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("rightSide");
     }
 
     @Override

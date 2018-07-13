@@ -57,10 +57,10 @@ public class Soldier extends Enemy {
         }
         System.out.println(health);
     }
-
-    public void jump(){
-        body.applyLinearImpulse(new Vector2(-1,2),body.getWorldCenter(),true);
-    }
+//
+//    public void jump(){
+//        body.applyLinearImpulse(new Vector2(-1,2),body.getWorldCenter(),true);
+//    }
 
     @Override
     public void update(float dt){

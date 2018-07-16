@@ -15,7 +15,6 @@ public class MagicWorld extends Game {
 
 	public static float screenWidth,screenHeight;// get screen width and height from user device
 	public MenuScreen menuScreen;
-	public PlayScreen playScreen;
 
 	public static final float PPM = 100;
 	public static SpriteBatch batch;

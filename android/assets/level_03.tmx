@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="120" height="12" tilewidth="32" tileheight="32" infinite="0" nextobjectid="26">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="120" height="12" tilewidth="32" tileheight="32" infinite="0" nextobjectid="37">
  <tileset firstgid="1" source="JnRTiles.tsx"/>
+ <tileset firstgid="19" source="health.tsx"/>
  <layer name="Background" width="120" height="12">
   <data encoding="base64" compression="zlib">
-   eJzt08EJACAIQFEdof2X7S4iaogQ/0FgHVIyRQAAwM/OdgEYpdsFAEhjXjFJhT82wb6pJuJuHnsf/eyL+ubtvXMvrvSE/tVocr3miOJsDcxn3QWaDwA/
+   eJzt00sKACAIQEE9Q/e/a3uR8IMI8QYCa5GSKQIAAH52tgvAKN0uAEAY84pJKvyxCfZNNRBX89j76Gfdq2/e3jvv9pf+5WhwdXO84mgNzGfeBbP7AEA=
   </data>
  </layer>
  <objectgroup name="Ground">
@@ -14,8 +15,7 @@
   <object id="7" x="1760" y="256" width="64" height="32"/>
   <object id="8" x="1632" y="288" width="64" height="32"/>
   <object id="9" x="1504" y="288" width="64" height="32"/>
-  <object id="10" x="1056" y="320" width="32" height="64"/>
-  <object id="11" x="1088" y="352" width="320" height="32"/>
+  <object id="11" x="1056" y="352" width="352" height="32"/>
   <object id="13" x="1408" y="320" width="32" height="64"/>
   <object id="14" x="992" y="288" width="32" height="96"/>
   <object id="15" x="896" y="288" width="32" height="96"/>
@@ -29,9 +29,10 @@
   <object id="25" x="864" y="128" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Gunner"/>
- <objectgroup name="Soldier">
-  <object id="20" x="1376" y="288" width="32" height="32"/>
-  <object id="21" x="1312" y="288" width="32" height="32"/>
+ <objectgroup name="Soldier"/>
+ <objectgroup name="CeilingTrap">
+  <object id="34" x="1088" y="256" width="128" height="32"/>
+  <object id="35" x="1248" y="256" width="128" height="32"/>
  </objectgroup>
  <objectgroup name="Spike"/>
  <objectgroup name="NextLevelLoader">

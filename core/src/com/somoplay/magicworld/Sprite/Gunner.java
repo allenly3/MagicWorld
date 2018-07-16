@@ -1,19 +1,29 @@
 package com.somoplay.magicworld.Sprite;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.somoplay.magicworld.MagicWorld;
+import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
 
 public class Gunner extends Enemy {
 
+    private static Texture texture;
+    private static TextureRegion region;
+
     public float health = 100;
+    private float timeSinceLastFire = 0;
     public boolean destroyed = false;
     private boolean behindPlayer = false;
+
+    private Body bulletBody;
 
     public Gunner(PlayScreen screen, float x, float y) {
         super(screen, x, y);
@@ -21,6 +31,12 @@ public class Gunner extends Enemy {
 
     @Override
     protected void defineEnemy() {
+
+        if(texture == null){
+            texture = LoadResource.assetManager.get("images/blt.png");
+            region = new TextureRegion(texture);
+        }
+
         BodyDef bdef = new BodyDef();
 
         bdef.position.set(getX(), getY());
@@ -48,10 +64,20 @@ public class Gunner extends Enemy {
 
     @Override
     public void update(float dt) {
-        if(!behindPlayer){
-            body.setLinearVelocity(new Vector2(-1,body.getLinearVelocity().y));}
-        else if (behindPlayer){
-            body.setLinearVelocity(new Vector2(1,body.getLinearVelocity().y));
+
+        if(Math.abs(screen.player.getPosition().x - body.getPosition().x) <= 200/MagicWorld.PPM){
+            body.setLinearVelocity(0,0);
+            if(timeSinceLastFire >= 0.8f){
+                fire();
+                timeSinceLastFire = 0;
+            }
+        } else {
+            if (!behindPlayer) {
+                body.setLinearVelocity(new Vector2(-1, body.getLinearVelocity().y));
+            } else if (behindPlayer) {
+                body.setLinearVelocity(new Vector2(1, body.getLinearVelocity().y));
+            }
+
         }
 
         if(body.getPosition().x + 1.5f <= screen.player.body.getPosition().x){
@@ -60,6 +86,28 @@ public class Gunner extends Enemy {
             behindPlayer = false;
         }
 
+        timeSinceLastFire += dt;
+    }
 
+    public void fire(){
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(body.getPosition());
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        bulletBody = world.createBody(bdef);
+        bulletBody.setGravityScale(0);
+
+        FixtureDef fdef = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(8/ MagicWorld.PPM,8/MagicWorld.PPM);
+
+        fdef.shape = shape;
+        fdef.isSensor = true;
+        bulletBody.createFixture(fdef).setUserData("EnemyBullet");
+
+        if(behindPlayer){
+            bulletBody.setLinearVelocity(2,0);
+        } else if(!behindPlayer){
+            bulletBody.setLinearVelocity(-2,0);
+        }
     }
 }

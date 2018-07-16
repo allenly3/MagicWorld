@@ -136,8 +136,8 @@ public class PlayScreen implements Screen {
         buttonLeft.setPosition(10,5);
         controlStage.addActor(buttonLeft);
         //button right------------
-         up=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][0]);
-         down=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][1]);
+        up=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][0]);
+        down=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][1]);
         buttonRight=new ImageButton(up,down);
         buttonRight.setPosition(100,5);
         controlStage.addActor(buttonRight);
@@ -310,19 +310,16 @@ public class PlayScreen implements Screen {
 //        System.out.println(delta);
     }
 
-
-
     public void update(float dt){
         handleInput(dt);
         world.step(1/60f, 6, 2);
         cam.position.set(player.body.getPosition().x,player.body.getPosition().y ,0 );
         cam.update();
 
-        // if it touches a ground tile, then dissappear, if it touches a enemy, dissappear and apply damage.
+        // if it touches a ground tile, then disappear, if it touches a enemy, dissappear and apply damage.
         // get the size of it correct and the spawn location right as well.
         for(Bullet bullet: bullets){
             if(bullet.destroyed == false) {
-
 
                 if (bullet.getBody().getPosition().x - player.body.getPosition().x > 3 || bullet.getBody().getPosition().x - player.body.getPosition().x < -3) {
 

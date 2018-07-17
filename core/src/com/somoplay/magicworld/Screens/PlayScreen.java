@@ -47,7 +47,7 @@ public class PlayScreen implements Screen {
     OrthographicCamera cam;
     Viewport viewport;
     Box2DDebugRenderer renderer;
-    SpriteBatch batch;
+    public SpriteBatch batch;
 
 
 
@@ -132,25 +132,25 @@ public class PlayScreen implements Screen {
         TextureRegionDrawable up=new TextureRegionDrawable(TextureRegion.split(btLeft,99,145)[0][1]);
         TextureRegionDrawable down=new TextureRegionDrawable(TextureRegion.split(btLeft,99,145)[0][0]);
         buttonLeft=new ImageButton(up,down);
-        buttonLeft.setPosition(10,5);
+        buttonLeft.setPosition(screenWidth*0.02f,screenHeight*0.01f);
         controlStage.addActor(buttonLeft);
         //button right------------
          up=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][0]);
          down=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][1]);
         buttonRight=new ImageButton(up,down);
-        buttonRight.setPosition(100,5);
+        buttonRight.setPosition(screenWidth*0.02f+90,screenHeight*0.01f);
         controlStage.addActor(buttonRight);
 //----------------button A----------
         up=new TextureRegionDrawable(TextureRegion.split(btA   ,99,150)[0][0]);
         down=new TextureRegionDrawable(TextureRegion.split(btA,99,150)[0][1]);
         buttonA=new ImageButton(up,down);
-        buttonA.setPosition(450,5);
+        buttonA.setPosition(screenWidth*0.70f,screenHeight*0.01f);
         controlStage.addActor(buttonA);
     //-------------button B-------------
         up=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][0]);
        down=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][1]);
         buttonB=new ImageButton(up,down);
-        buttonB.setPosition(540,40);
+        buttonB.setPosition(screenWidth*0.70f+90,screenHeight*0.078f);
         controlStage.addActor(buttonB);
 
         music = loadResource.assetManager.get("Background.mp3", Music.class);
@@ -245,7 +245,9 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        update(Gdx.graphics.getDeltaTime());
+//        update(Gdx.graphics.getDeltaTime());
+        handleInput(delta);
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -256,7 +258,7 @@ public class PlayScreen implements Screen {
 
         mapRenderer.render();
         renderer.render(world, cam.combined);
-
+        update(delta);
         controlStage.draw();
         controlStage.act();
 
@@ -265,10 +267,13 @@ public class PlayScreen implements Screen {
         for(Bullet bullet : bullets) {
             bullet.render(game.batch);
         }
-        game.batch.end();
 
+
+        game.batch.end();
         statetime=statetime+delta;
         player.render(game.batch,statetime);
+
+
 
 
 
@@ -312,7 +317,7 @@ public class PlayScreen implements Screen {
 
 
     public void update(float dt){
-        handleInput(dt);
+
         world.step(1/60f, 6, 2);
         cam.position.set(player.body.getPosition().x,player.body.getPosition().y ,0 );
         cam.update();
@@ -340,6 +345,20 @@ public class PlayScreen implements Screen {
 
             if(soldier.destroyed == false){
                 soldier.update(dt);
+//                if(soldier.soldierstate=)
+                game.batch.begin();
+                if(soldier.soldierstate==1) {
+                    game.batch.draw(soldier.soldierleft.getKeyFrame(statetime * 0.4f, true),
+                            soldier.body.getPosition().x - 0.16f,
+                            soldier.body.getPosition().y - 0.32f, 0.35f, 0.65f);
+                }
+                else if(soldier.soldierstate==0)
+                {
+                    game.batch.draw(soldier.soldierright.getKeyFrame(statetime * 0.4f, true),
+                            soldier.body.getPosition().x - 0.16f,
+                            soldier.body.getPosition().y - 0.32f, 0.35f, 0.65f);
+                }
+                game.batch.end();
                 if(soldier.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
                     soldier.body.setActive(true);
                 }

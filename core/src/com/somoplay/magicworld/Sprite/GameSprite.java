@@ -13,7 +13,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.Screens.PlayScreen;
 
 
-public abstract class GameSprite{ //this class is a frame to create every Animation
+public abstract class GameSprite
+{ //this class is a frame to create every Animation
 
     public  Body body;
     public  BodyDef bodyDef;

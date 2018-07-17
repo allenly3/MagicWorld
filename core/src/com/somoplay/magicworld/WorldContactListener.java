@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.somoplay.magicworld.Screens.PlayScreen;
 import com.somoplay.magicworld.Sprite.Bullet;
 import com.somoplay.magicworld.Sprite.Enemy;
+import com.somoplay.magicworld.Sprite.EnemyBullet;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
 import com.somoplay.magicworld.Sprite.Soldier;
@@ -138,6 +139,19 @@ public class WorldContactListener implements ContactListener {
             screen.getCell(b.getBody()).setTile(null);
             b.setUserData(null);
             ((Player)a.getUserData()).addHealth(50);
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() instanceof EnemyBullet){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Player)a.getUserData()).onHit(50);
+            ((EnemyBullet)b.getUserData()).setToDestroy();
+
+        } else if(contact.getFixtureA().getUserData() instanceof EnemyBullet && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Player)a.getUserData()).onHit(50);
+            ((EnemyBullet)b.getUserData()).setToDestroy();
         }
 
 

@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Sprite.Bullet;
+import com.somoplay.magicworld.Sprite.EnemyBullet;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
 import com.somoplay.magicworld.Sprite.Soldier;
@@ -65,12 +66,14 @@ public class PlayScreen implements Screen {
     public Player player;
     boolean movingR,movingL,jumping,firing;
     private ArrayList<Bullet> bullets;
+    private ArrayList<EnemyBullet> enemyBullets;
     private WorldCreator creator;
 
     private LoadResource loadResource;
     private Music music;
     // private HUD hud;
     private float deathTimer = 0;
+    private float ceilingTimer = 0;
 
     private float statetime;
     private float timeSinceLastFire = 1.5f;
@@ -84,8 +87,7 @@ public class PlayScreen implements Screen {
     public Stage controlStage;
     Label label;
 
-
-    //private HealthBar healthBar;
+    private float ceilingTrapHeight;
 
     public PlayScreen(MagicWorld game){
         this.game = game;
@@ -106,8 +108,10 @@ public class PlayScreen implements Screen {
         player = new Player(this);
 
         bullets = new ArrayList<Bullet>();
+        enemyBullets = new ArrayList<EnemyBullet>();
         loadResource = new LoadResource();
 
+        //ceilingTrapHeight = creator.getCeilingTraps().get(0).getPosition().y;
 
         tbg= LoadResource.assetManager.get("images/bg1.png");
         background=new Image(tbg);
@@ -251,6 +255,7 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
+
         label.setText(Integer.toString(WorldContactListener.score));
         stage.draw();
         stage.act();
@@ -307,7 +312,7 @@ public class PlayScreen implements Screen {
 
 
         timeSinceLastFire += delta;
-//        System.out.println(delta);
+
     }
 
     public void update(float dt){
@@ -327,6 +332,18 @@ public class PlayScreen implements Screen {
                 }
 
                 bullet.update(dt);
+            }
+        }
+
+        for(EnemyBullet eb: enemyBullets){
+            if(eb.destroyed == false) {
+
+                if (Math.abs(eb.getBody().getPosition().x - player.getPosition().x) >= 3) {
+
+                    eb.setToDestroy();
+                }
+
+                eb.update(dt);
             }
         }
 
@@ -359,7 +376,20 @@ public class PlayScreen implements Screen {
             }
 
         }
+
+        /*for(Body body1 : creator.getCeilingTraps()){
+            if(ceilingTimer >= 2.5f) {
+                body1.setLinearVelocity(0, -1);
+                ceilingTimer = 0;
+            } else if (body1.getPosition().y < ceilingTrapHeight){
+                body1.setLinearVelocity(0,1);
+            } else {
+                body1.setLinearVelocity(0,0);
+            }
+        }*/
+
         deathTimer += dt;
+        ceilingTimer += dt;
 
         if(player.getHealth() <= 0 && !player.isDestroyed()){
             world.destroyBody(player.body);
@@ -422,5 +452,9 @@ public class PlayScreen implements Screen {
     public void nextLevel(){
         game.setScreen(new MenuScreen(game));
         dispose();
+    }
+
+    public ArrayList<EnemyBullet> getEnemyBullets() {
+        return enemyBullets;
     }
 }

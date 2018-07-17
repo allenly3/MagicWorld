@@ -1,25 +1,19 @@
 package com.somoplay.magicworld.Sprite;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
-import com.somoplay.magicworld.WorldContactListener;
 
-
-import java.util.ArrayList;
-
-public class Bullet{
+public class EnemyBullet {
 
     private static Texture texture;
     private static TextureRegion region;
@@ -34,7 +28,7 @@ public class Bullet{
 
 
 
-    public Bullet(PlayScreen screen, Vector2 position){
+    public EnemyBullet(PlayScreen screen, Vector2 position){
         this.position = position;
         this.screen = screen;
 
@@ -45,21 +39,12 @@ public class Bullet{
             region = new TextureRegion(texture );
         }
 
-        defineBullet();
+        defineEnemyBullet();
 
     }
-    public void defineBullet(){
+    public void defineEnemyBullet(){
         BodyDef bdef = new BodyDef();
-
-        if(screen.player.state==1||screen.player.state==2) {
-            bdef.position.set(screen.player.body.getPosition().x + 0.16f, screen.player.body.getPosition().y + 0.10f);
-
-        }
-        if(screen.player.state==3||screen.player.state==4) {
-            bdef.position.set(screen.player.body.getPosition().x - 0.10f, screen.player.body.getPosition().y + 0.10f);
-
-        }
-
+        bdef.position.set(position);
         bdef.type = BodyDef.BodyType.DynamicBody;
         bulletBody = world.createBody(bdef);
         bulletBody.setGravityScale(0);
@@ -71,17 +56,6 @@ public class Bullet{
         fdef.shape = shape;
         fdef.isSensor = true;
         bulletBody.createFixture(fdef).setUserData(this);
-
-        if(screen.player.state==1||screen.player.state==2) {
-
-            bulletBody.setLinearVelocity(2, 0);
-        }
-        if(screen.player.state==3||screen.player.state==4) {
-
-            bulletBody.setLinearVelocity(-2, 0);
-        }
-
-
     }
     public void render(SpriteBatch batch){
         if(!destroyed)
@@ -101,9 +75,7 @@ public class Bullet{
     }
 
     public void setToDestroy(){
-
         toBeDestroyed = true;
-
     }
 
 }

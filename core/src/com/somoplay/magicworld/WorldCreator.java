@@ -169,4 +169,8 @@ try {
     }
 
     public ArrayList<Gunner> getGunners() { return gunners; }
+
+    public ArrayList<Body> getCeilingTraps() {
+        return ceilingTraps;
+    }
 }

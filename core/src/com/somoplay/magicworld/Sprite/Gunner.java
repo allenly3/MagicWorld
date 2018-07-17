@@ -3,15 +3,14 @@ package com.somoplay.magicworld.Sprite;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
+
 
 public class Gunner extends Enemy {
 
@@ -22,8 +21,6 @@ public class Gunner extends Enemy {
     private float timeSinceLastFire = 0;
     public boolean destroyed = false;
     private boolean behindPlayer = false;
-
-    private Body bulletBody;
 
     public Gunner(PlayScreen screen, float x, float y) {
         super(screen, x, y);
@@ -90,24 +87,11 @@ public class Gunner extends Enemy {
     }
 
     public void fire(){
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(body.getPosition());
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        bulletBody = world.createBody(bdef);
-        bulletBody.setGravityScale(0);
-
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8/ MagicWorld.PPM,8/MagicWorld.PPM);
-
-        fdef.shape = shape;
-        fdef.isSensor = true;
-        bulletBody.createFixture(fdef).setUserData("EnemyBullet");
-
+        screen.getEnemyBullets().add(new EnemyBullet(screen, body.getPosition()));
         if(behindPlayer){
-            bulletBody.setLinearVelocity(2,0);
+            screen.getEnemyBullets().get(screen.getEnemyBullets().size() - 1).getBody().setLinearVelocity(2,0);
         } else if(!behindPlayer){
-            bulletBody.setLinearVelocity(-2,0);
+            screen.getEnemyBullets().get(screen.getEnemyBullets().size() - 1).getBody().setLinearVelocity(-2,0);
         }
     }
 }

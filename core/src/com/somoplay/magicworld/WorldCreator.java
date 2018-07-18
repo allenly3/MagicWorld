@@ -133,6 +133,21 @@ public class WorldCreator {
             fixture.setSensor(true);
         }
 
+
+            for (MapObject object : map.getLayers().get("Slider").getObjects().getByType(RectangleMapObject.class)) {
+                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
+                body = world.createBody(bdef);
+
+                shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
+                fdef.shape = shape;
+                Fixture fixture = body.createFixture(fdef);
+                fixture.setUserData("Slider");
+                fixture.setSensor(true);
+
+
+        }
+
     }
 
     public ArrayList<Soldier> getSoldiers() {

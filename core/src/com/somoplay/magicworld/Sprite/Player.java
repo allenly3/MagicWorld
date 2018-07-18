@@ -25,6 +25,7 @@ import static com.somoplay.magicworld.MagicWorld.screenWidth;
 public class Player extends GameSprite {
 
     public int state=1;
+    public boolean onsld=false;
     public float health = 100;
     public float healthcopy=health;
     private boolean destroyed = false;
@@ -183,6 +184,11 @@ public class Player extends GameSprite {
        healthbar.blood.setRegionWidth(( int)(healthcopy)*3);
         batch.draw(healthbar.blood,body.getPosition().x-screenWidth/100/2f+0.65f ,body.getPosition().y+screenHeight/100/2-0.65f,healthcopy/50f,0.2f );
 
+        if(onsld)
+        {
+          body.setLinearVelocity(new Vector2(body.getLinearVelocity().y-2,body.getLinearVelocity().y));
+//            body.applyForceToCenter(-5,0,true);
+        }
         slowdown();
         batch.end();
 

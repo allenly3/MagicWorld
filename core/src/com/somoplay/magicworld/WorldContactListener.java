@@ -87,13 +87,13 @@ public class WorldContactListener implements ContactListener {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 
-            ((Player)a.getUserData()).onHit(100);
+            ((Player)a.getUserData()).onHit(20);
 
         } else if(contact.getFixtureA().getUserData() == "Spike" && contact.getFixtureB().getUserData() instanceof Player) {
             a = contact.getFixtureB();
             b = contact.getFixtureA();
 
-            ((Player)a.getUserData()).onHit(100);
+            ((Player)a.getUserData()).onHit(20);
         } else if(contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "leftSide") {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
@@ -140,13 +140,43 @@ public class WorldContactListener implements ContactListener {
         }
 
 
+        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+            ((Player)a.getUserData()).onsld=true;
+
+
+
+        } else if(contact.getFixtureA().getUserData() == "Slider" && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Player)b.getUserData()).onsld=true;
+
+        }
+
+
 
 
     }
 
     @Override
     public void endContact(Contact contact) {
+        Fixture a, b;
+        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+            ((Player)a.getUserData()).onsld=false;
 
+
+        } else if(contact.getFixtureA().getUserData() == "Slider" && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Player)b.getUserData()).onsld=false;
+
+
+        }
     }
 
     @Override

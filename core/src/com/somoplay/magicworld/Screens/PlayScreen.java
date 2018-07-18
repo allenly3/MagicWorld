@@ -374,12 +374,14 @@ public class PlayScreen implements Screen {
             world.destroyBody(player.body);
             player.setDestroyed(true);
             deathTimer = 0;
+            WorldContactListener.score=0;
         }
 
         if(player.body.getPosition().y < - 0.175 && !player.isDestroyed()){
             world.destroyBody(player.body);
             player.setDestroyed(true);
             deathTimer = 1;
+            WorldContactListener.score=0;
         }
 
         if(deathTimer >= 1.5 && player.isDestroyed()){

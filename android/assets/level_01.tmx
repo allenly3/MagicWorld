@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="120" height="30" tilewidth="32" tileheight="32" infinite="0" nextobjectid="269">
+<map version="1.0" tiledversion="2018.06.01" orientation="orthogonal" renderorder="right-down" width="120" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="269">
  <tileset firstgid="1" source="Game Boy Advance - Kirby Nightmare in Dream Land - Beam Kirby.tsx"/>
  <tileset firstgid="401" source="JnRTiles.tsx"/>
- <layer name="Background" width="120" height="30">
+ <layer id="1" name="Background" width="120" height="30">
   <data encoding="base64" compression="zlib">
    eJzt2kEOhDAIQFG9/8oj6ElduDENKhSagvkvMWkm2qEgC6vLAgAAoHes8Qdy2NaxB4B49BZQGz0M1ETvArX9tYd59q6H/RabKmutEicu2npRV7+MOcwYE/yoa6ws+cwSB2JR1/HIMVAffYwsuBf7Zc5d5tieSN8Ztr/tHesalYsZOfb8p+Xa6D1q65645dtTb4zS9e3apbEmP/dznubUzmMZa2KKqq9lnhn1lebTxvx2XnR/9I6lmL7WOOo91az3YJ55o+LSrlE79uTuBLJjfS4=
   </data>
  </layer>
- <objectgroup name="HealthUp">
+ <objectgroup id="8" name="Slider"/>
+ <objectgroup id="2" name="HealthUp">
   <object id="268" x="704" y="832" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="Ground">
+ <objectgroup id="3" name="Ground">
   <object id="103" x="0" y="928" width="384" height="32"/>
   <object id="111" x="384" y="864" width="352" height="32"/>
   <object id="113" x="736" y="928" width="416" height="32"/>
@@ -66,7 +67,7 @@
   <object id="247" x="704" y="896" width="32" height="64"/>
   <object id="255" x="1120" y="832" width="32" height="96"/>
  </objectgroup>
- <objectgroup name="Coin">
+ <objectgroup id="4" name="Coin">
   <object id="163" x="416" y="832" width="32" height="32"/>
   <object id="164" x="576" y="832" width="32" height="32"/>
   <object id="166" x="768" y="864" width="32" height="32"/>
@@ -97,11 +98,11 @@
   <object id="224" x="2112" y="128" width="32" height="32"/>
   <object id="225" x="2144" y="128" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="Soldier">
+ <objectgroup id="5" name="Soldier">
   <object id="258" x="1088" y="864" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="NextLevelLoader">
+ <objectgroup id="6" name="NextLevelLoader">
   <object id="259" x="1120" y="768" width="32" height="64"/>
  </objectgroup>
- <objectgroup name="Spike"/>
+ <objectgroup id="7" name="Spike"/>
 </map>

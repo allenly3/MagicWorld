@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -129,10 +130,12 @@ public class PlayScreen implements Screen {
         btA=LoadResource.assetManager.get("images/buttonA.png");
         btB=LoadResource.assetManager.get("images/buttonB.png");
         //------button left
+
         TextureRegionDrawable up=new TextureRegionDrawable(TextureRegion.split(btLeft,99,145)[0][1]);
         TextureRegionDrawable down=new TextureRegionDrawable(TextureRegion.split(btLeft,99,145)[0][0]);
         buttonLeft=new ImageButton(up,down);
         buttonLeft.setPosition(screenWidth*0.02f,screenHeight*0.01f);
+
         controlStage.addActor(buttonLeft);
         //button right------------
          up=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][0]);
@@ -283,19 +286,19 @@ public class PlayScreen implements Screen {
     public void handleInput(float delta) {
 
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {//--movingL
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)||movingL) {//--movingL
             player.state = 3;
             player.getBody().setLinearVelocity(-2, player.getBody().getLinearVelocity().y);
         }
 
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {//---nmovingR
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)||movingR) {//---nmovingR
             player.state = 1;
 
             player.getBody().setLinearVelocity(2, player.getBody().getLinearVelocity().y);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)&& player.getBody().getLinearVelocity().y == 0) {// --jumping
+        if ((Gdx.input.isKeyPressed(Input.Keys.UP)||jumping)&& player.getBody().getLinearVelocity().y == 0) {// --jumping
 
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
         }
@@ -389,7 +392,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height);
+        viewport.update((int)screenWidth, (int)screenHeight);
 
     }
 

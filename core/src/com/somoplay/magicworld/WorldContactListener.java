@@ -96,35 +96,33 @@ public class WorldContactListener implements ContactListener {
             b = contact.getFixtureA();
 
             ((Player)a.getUserData()).onHit(100);
-        } else if(contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "leftSide") {
+        } else if((contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "SoldierLeftSide") ||
+                (contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "SoldierRightSide")) {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
-
-            if(b.getBody().getLinearVelocity().y == 0) {
-                b.getBody().applyLinearImpulse(new Vector2(-1, 6), b.getBody().getWorldCenter(), true);
+            if(b.getUserData() == "SoldierLeftSide") {
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(-1, 6), b.getBody().getWorldCenter(), true);
+                }
+            } else{
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(1, 6), b.getBody().getWorldCenter(), true);
+                }
             }
-        } else if(contact.getFixtureA().getUserData() == "leftSide" && contact.getFixtureB().getUserData() == "Ground") {
+        } else if((contact.getFixtureA().getUserData() == "SoldierLeftSide" && contact.getFixtureB().getUserData() == "Ground") ||
+                (contact.getFixtureA().getUserData() == "SoldierRightSide" && contact.getFixtureB().getUserData() == "Ground")){
             a = contact.getFixtureB();
             b = contact.getFixtureA();
 
-            if(b.getBody().getLinearVelocity().y == 0) {
-                b.getBody().applyLinearImpulse(new Vector2(-1, 6), b.getBody().getWorldCenter(), true);
+            if(b.getUserData() == "SoldierLeftSide") {
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(-1, 6), b.getBody().getWorldCenter(), true);
+                }
+            } else{
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(1, 6), b.getBody().getWorldCenter(), true);
+                }
             }
-        } else if(contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "rightSide") {
-            a = contact.getFixtureA();
-            b = contact.getFixtureB();
-
-            if(b.getBody().getLinearVelocity().y == 0) {
-                b.getBody().applyLinearImpulse(new Vector2(1, 6), b.getBody().getWorldCenter(), true);
-            }
-        } else if(contact.getFixtureA().getUserData() == "rightSide" && contact.getFixtureB().getUserData() == "Ground") {
-            a = contact.getFixtureB();
-            b = contact.getFixtureA();
-
-            if(b.getBody().getLinearVelocity().y == 0) {
-                b.getBody().applyLinearImpulse(new Vector2(1, 6), b.getBody().getWorldCenter(), true);
-            }
-
         } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() =="HealthUp") {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
@@ -143,6 +141,7 @@ public class WorldContactListener implements ContactListener {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 
+
             ((Player)a.getUserData()).onHit(50);
             ((EnemyBullet)b.getUserData()).setToDestroy();
 
@@ -152,9 +151,20 @@ public class WorldContactListener implements ContactListener {
 
             ((Player)a.getUserData()).onHit(50);
             ((EnemyBullet)b.getUserData()).setToDestroy();
+        } else if((contact.getFixtureA().getUserData() == "GunnerLeftSide" && contact.getFixtureB().getUserData() == "Ground") ||
+        (contact.getFixtureA().getUserData() == "GunnerRightSide" && contact.getFixtureB().getUserData() == "Ground")){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Gunner)b.getBody().getUserData()).reverseVelocity(true,false);
+
+        } else if((contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "GunnerLeftSide") ||
+        (contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "GunnerRightSide")){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Gunner) b.getBody().getUserData()).reverseVelocity(true,false);
         }
-
-
 
 
     }

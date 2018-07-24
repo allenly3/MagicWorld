@@ -30,6 +30,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Resource.LoadResource;
+import com.somoplay.magicworld.Sprite.Ally;
+import com.somoplay.magicworld.Sprite.AllyBullet;
 import com.somoplay.magicworld.Sprite.Bullet;
 import com.somoplay.magicworld.Sprite.EnemyBullet;
 import com.somoplay.magicworld.Sprite.Gunner;
@@ -52,7 +54,6 @@ public class PlayScreen implements Screen {
     SpriteBatch batch;
 
 
-
     public static int level=1;
 
     private MagicWorld game;
@@ -67,6 +68,7 @@ public class PlayScreen implements Screen {
     boolean movingR,movingL,jumping,firing;
     private ArrayList<Bullet> bullets;
     private ArrayList<EnemyBullet> enemyBullets;
+    private ArrayList<AllyBullet> allyBullets;
     private WorldCreator creator;
 
     private LoadResource loadResource;
@@ -109,6 +111,8 @@ public class PlayScreen implements Screen {
 
         bullets = new ArrayList<Bullet>();
         enemyBullets = new ArrayList<EnemyBullet>();
+        allyBullets = new ArrayList<AllyBullet>();
+
         loadResource = new LoadResource();
 
         //ceilingTrapHeight = creator.getCeilingTraps().get(0).getPosition().y;
@@ -255,7 +259,6 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-
         label.setText(Integer.toString(WorldContactListener.score));
         stage.draw();
         stage.act();
@@ -290,7 +293,7 @@ public class PlayScreen implements Screen {
         }
 
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {//---nmovingR
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {//---movingR
             player.state = 1;
 
             player.getBody().setLinearVelocity(2, player.getBody().getLinearVelocity().y);
@@ -306,6 +309,9 @@ public class PlayScreen implements Screen {
             if(player.isDestroyed() == false) {
                 bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y) );
                 bullets.add(bullet);
+                for(Ally ally: creator.getAllies()){
+                    ally.fire();
+                }
                 timeSinceLastFire = 0;
             }
         }
@@ -321,7 +327,7 @@ public class PlayScreen implements Screen {
         cam.position.set(player.body.getPosition().x,player.body.getPosition().y ,0 );
         cam.update();
 
-        // if it touches a ground tile, then disappear, if it touches a enemy, dissappear and apply damage.
+        // if it touches a ground tile, then disappear, if it touches a enemy, disappears and apply damage.
         // get the size of it correct and the spawn location right as well.
         for(Bullet bullet: bullets){
             if(bullet.destroyed == false) {
@@ -347,6 +353,17 @@ public class PlayScreen implements Screen {
             }
         }
 
+        for(AllyBullet ab: allyBullets){
+            if(ab.destroyed == false) {
+
+                if (Math.abs(ab.getBody().getPosition().x - player.getPosition().x) >= 3) {
+
+                    ab.setToDestroy();
+                }
+
+                ab.update(dt);
+            }
+        }
         for (Soldier soldier: creator.getSoldiers()){
             if(soldier.health <= 0 && !soldier.destroyed){
                 world.destroyBody(soldier.body);
@@ -375,6 +392,10 @@ public class PlayScreen implements Screen {
                 }
             }
 
+        }
+
+        for(Ally ally: creator.getAllies()){
+            ally.update(dt);
         }
 
         /*for(Body body1 : creator.getCeilingTraps()){
@@ -456,5 +477,9 @@ public class PlayScreen implements Screen {
 
     public ArrayList<EnemyBullet> getEnemyBullets() {
         return enemyBullets;
+    }
+
+    public ArrayList<AllyBullet> getAllyBullets() {
+        return allyBullets;
     }
 }

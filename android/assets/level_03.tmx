@@ -38,4 +38,5 @@
  <objectgroup name="NextLevelLoader">
   <object id="6" x="1792" y="192" width="32" height="64"/>
  </objectgroup>
+ <objectgroup name="Ally"/>
 </map>

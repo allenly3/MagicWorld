@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.somoplay.magicworld.Screens.PlayScreen;
+import com.somoplay.magicworld.Sprite.Ally;
 import com.somoplay.magicworld.Sprite.Bullet;
 import com.somoplay.magicworld.Sprite.Enemy;
 import com.somoplay.magicworld.Sprite.EnemyBullet;
@@ -164,6 +165,43 @@ public class WorldContactListener implements ContactListener {
             b = contact.getFixtureB();
 
             ((Gunner) b.getBody().getUserData()).reverseVelocity(true,false);
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() instanceof Ally){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Ally)b.getUserData()).follow();
+        } else if(contact.getFixtureA().getUserData() instanceof Ally && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Ally)b.getUserData()).follow();
+        } else if((contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "AllyLeftSide") ||
+                (contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "AllyRightSide")) {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+            if(b.getUserData() == "AllyLeftSide") {
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(-1, 4.5f), b.getBody().getWorldCenter(), true);
+                }
+            } else{
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(1, 4.5f), b.getBody().getWorldCenter(), true);
+                }
+            }
+        } else if((contact.getFixtureA().getUserData() == "AllyLeftSide" && contact.getFixtureB().getUserData() == "Ground") ||
+                (contact.getFixtureA().getUserData() == "AllyRightSide" && contact.getFixtureB().getUserData() == "Ground")){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            if(b.getUserData() == "AllyLeftSide") {
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(-1, 4.5f), b.getBody().getWorldCenter(), true);
+                }
+            } else{
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(1, 4.5f), b.getBody().getWorldCenter(), true);
+                }
+            }
         }
 
 

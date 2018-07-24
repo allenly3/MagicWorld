@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
+import com.somoplay.magicworld.Sprite.Ally;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Soldier;
 
@@ -25,17 +26,17 @@ public class WorldCreator {
     ArrayList<Soldier> soldiers;
     ArrayList<Gunner> gunners;
     ArrayList<Body> ceilingTraps;
-
+    ArrayList<Ally> allies;
 
 
     public WorldCreator(PlayScreen screen){
         World world = screen.getWorld();
         Map map = screen.getMap();
-     
 
 
         soldiers = new ArrayList<Soldier>();
         gunners = new ArrayList<Gunner>();
+        allies = new ArrayList<Ally>();
         ceilingTraps = new ArrayList<Body>();
 
         BodyDef bdef = new BodyDef();
@@ -105,6 +106,13 @@ public class WorldCreator {
 
         }
 
+        //Create Ally
+        for (MapObject object : map.getLayers().get("Ally").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            allies.add(new Ally(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
+
+        }
+
         //Create NextLevelLoader
         for (MapObject object : map.getLayers().get("NextLevelLoader").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -155,7 +163,7 @@ try {
         shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
         fdef.shape = shape;
         Fixture fixture = body.createFixture(fdef);
-        fixture.setUserData("CelingTrap");
+        fixture.setUserData("CeilingTrap");
 
         ceilingTraps.add(body);
 
@@ -172,5 +180,9 @@ try {
 
     public ArrayList<Body> getCeilingTraps() {
         return ceilingTraps;
+    }
+
+    public ArrayList<Ally> getAllies() {
+        return allies;
     }
 }

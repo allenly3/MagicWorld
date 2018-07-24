@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="120" height="12" tilewidth="32" tileheight="32" infinite="0" nextobjectid="24">
+ <tileset firstgid="1" source="JnRTiles.tsx"/>
+ <layer name="Background" width="120" height="12">
+  <data encoding="base64" compression="zlib">
+   eJzt0rEKACAIBcD8/59uCYK20obiDsSmp4StAQAAAFAlRq3v3QymzH/E0m/N38k/uYufbyKSVZVxc8eKHV7VAZdgAEc=
+  </data>
+ </layer>
+ <objectgroup name="Ground">
+  <object id="2" x="0" y="320" width="32" height="32"/>
+  <object id="3" x="0" y="352" width="512" height="32"/>
+  <object id="4" x="480" y="320" width="32" height="32"/>
+  <object id="5" x="544" y="320" width="32" height="32"/>
+  <object id="6" x="544" y="352" width="512" height="32"/>
+  <object id="7" x="1024" y="320" width="32" height="32"/>
+  <object id="8" x="1120" y="288" width="64" height="32"/>
+  <object id="9" x="1216" y="288" width="64" height="32"/>
+  <object id="10" x="1312" y="320" width="32" height="32"/>
+  <object id="15" x="1312" y="352" width="800" height="32"/>
+  <object id="17" x="1664" y="288" width="32" height="64"/>
+  <object id="18" x="1696" y="320" width="32" height="32"/>
+  <object id="19" x="2080" y="320" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="Coin"/>
+ <objectgroup name="Spike"/>
+ <objectgroup name="Soldier">
+  <object id="22" x="1568" y="320" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="Gunner">
+  <object id="23" x="1856" y="320" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="HealthUp"/>
+ <objectgroup name="CeilingTrap"/>
+ <objectgroup name="NextLevelLoader"/>
+ <objectgroup name="Ally">
+  <object id="21" x="768" y="320" width="32" height="32"/>
+ </objectgroup>
+</map>

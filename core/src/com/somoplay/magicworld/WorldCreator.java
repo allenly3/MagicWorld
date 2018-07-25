@@ -1,6 +1,10 @@
 package com.somoplay.magicworld;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -22,6 +26,9 @@ import java.util.ArrayList;
 public class WorldCreator {
 
     ArrayList<Soldier> soldiers;
+    Texture tx;
+    ParticleEffect effect;
+
 
 
 
@@ -29,6 +36,12 @@ public class WorldCreator {
     public WorldCreator(PlayScreen screen){
         World world = screen.getWorld();
         Map map = screen.getMap();
+
+        tx=LoadResource.assetManager.get("images/door.jpg");
+
+
+
+
 
 
 
@@ -110,6 +123,13 @@ public class WorldCreator {
 
             fixture.setUserData("NextLevelLoader");
             fixture.setSensor(true);
+
+
+
+
+
+
+
         }
 
         //Create Spikes
@@ -149,6 +169,8 @@ public class WorldCreator {
         }
 
     }
+
+
 
     public ArrayList<Soldier> getSoldiers() {
         return soldiers;

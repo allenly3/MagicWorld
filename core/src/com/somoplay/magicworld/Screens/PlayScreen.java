@@ -75,11 +75,12 @@ public class PlayScreen implements Screen {
     private Music music;
     // private HUD hud;
     private float deathTimer = 0;
-    private float ceilingTimer = 0;
+    private int trapIndex = 0;
 
     private float statetime;
     private float timeSinceLastFire = 1.5f;
     private Bullet bullet;
+    private ArrayList<Float> ceilingTrapHeights;
 
     Texture tbg,btLeft,btRight,btA,btB;
     Image background;
@@ -89,7 +90,6 @@ public class PlayScreen implements Screen {
     public Stage controlStage;
     Label label;
 
-    private float ceilingTrapHeight;
 
     public PlayScreen(MagicWorld game){
         this.game = game;
@@ -115,7 +115,10 @@ public class PlayScreen implements Screen {
 
         loadResource = new LoadResource();
 
-        //ceilingTrapHeight = creator.getCeilingTraps().get(0).getPosition().y;
+        ceilingTrapHeights = new ArrayList<Float>();
+        for(Body ct: creator.getCeilingTraps()){
+            ceilingTrapHeights.add(ct.getPosition().y);
+        }
 
         tbg= LoadResource.assetManager.get("images/bg1.png");
         background=new Image(tbg);
@@ -398,19 +401,18 @@ public class PlayScreen implements Screen {
             ally.update(dt);
         }
 
-        /*for(Body body1 : creator.getCeilingTraps()){
-            if(ceilingTimer >= 2.5f) {
-                body1.setLinearVelocity(0, -1);
-                ceilingTimer = 0;
-            } else if (body1.getPosition().y < ceilingTrapHeight){
-                body1.setLinearVelocity(0,1);
-            } else {
-                body1.setLinearVelocity(0,0);
-            }
-        }*/
+        for(Body ct : creator.getCeilingTraps()){
 
+            if(ct.getPosition().y <= (ceilingTrapHeights.get(trapIndex) - 96/MagicWorld.PPM)){
+                ct.setLinearVelocity(0,0.7f);
+                trapIndex++;
+            } else if (ct.getPosition().y >= ceilingTrapHeights.get(trapIndex)){
+                ct.setLinearVelocity(0,-0.7f);
+                trapIndex++;
+            }
+        }
+        trapIndex = 0;
         deathTimer += dt;
-        ceilingTimer += dt;
 
         if(player.getHealth() <= 0 && !player.isDestroyed()){
             world.destroyBody(player.body);

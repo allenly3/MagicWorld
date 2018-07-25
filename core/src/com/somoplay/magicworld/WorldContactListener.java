@@ -202,6 +202,16 @@ public class WorldContactListener implements ContactListener {
                     b.getBody().applyLinearImpulse(new Vector2(1, 4.5f), b.getBody().getWorldCenter(), true);
                 }
             }
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "CeilingTrap"){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Player)a.getUserData()).onHit(100);
+        } else if(contact.getFixtureA().getUserData() == "CeilingTrap" && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Player)a.getUserData()).onHit(100);
         }
 
 

@@ -116,53 +116,50 @@ public class Player extends GameSprite {
     }
     public void render(SpriteBatch batch, float delta)
     {
+        if(health != 0) {
+            if (state == 1) {
 
-        if(state==1)
-        {
+                batch.begin();
 
-        batch.begin();
-
-            batch.draw(rightMoving.getKeyFrame(delta, true),
-             body.getPosition().x - 0.5f / 2f,
-             body.getPosition().y - 0.5f / 2f, 0.5f, 0.5f);
-        batch.end();
-        }
-        if(state==2)
-        {
+                batch.draw(rightMoving.getKeyFrame(delta, true),
+                        body.getPosition().x - 0.5f / 2f,
+                        body.getPosition().y - 0.5f / 2f, 0.5f, 0.5f);
+                batch.end();
+            }
+            if (state == 2) {
 
 
-            batch.begin();
+                batch.begin();
 
-            batch.draw(rightStop.getKeyFrame(delta, true),
-                    body.getPosition().x - 0.326f / 2f,
-                    body.getPosition().y - 0.49f / 2f, 0.326f, 0.49f);
-            batch.end();
-        }
-        if(state==3)
-        {
+                batch.draw(rightStop.getKeyFrame(delta, true),
+                        body.getPosition().x - 0.326f / 2f,
+                        body.getPosition().y - 0.49f / 2f, 0.326f, 0.49f);
+                batch.end();
+            }
+            if (state == 3) {
 
-            batch.begin();
+                batch.begin();
 
-            batch.draw(leftMoving.getKeyFrame(delta, true),
-                    body.getPosition().x - 0.5f / 2f,
-                    body.getPosition().y - 0.5f / 2f,0.5f, 0.5f);
-            batch.end();
-        }
-        if(state==4)
-        {
+                batch.draw(leftMoving.getKeyFrame(delta, true),
+                        body.getPosition().x - 0.5f / 2f,
+                        body.getPosition().y - 0.5f / 2f, 0.5f, 0.5f);
+                batch.end();
+            }
+            if (state == 4) {
 
 
-            batch.begin();
+                batch.begin();
 
-            batch.draw(leftStop.getKeyFrame(delta, true),
-                    body.getPosition().x - 0.326f/ 2f,
-                    body.getPosition().y - 0.49f/ 2f, 0.326f, 0.49f);
-            batch.end();
+                batch.draw(leftStop.getKeyFrame(delta, true),
+                        body.getPosition().x - 0.326f / 2f,
+                        body.getPosition().y - 0.49f / 2f, 0.326f, 0.49f);
+                batch.end();
+            }
         }
         //-------profile and health bar
         batch.begin();
         batch.draw(healthbar.profile,body.getPosition().x-screenWidth/100/2f ,body.getPosition().y+screenHeight/100/2-0.65f ,0.6f,0.6f);
-       batch.draw(healthbar.emptytx,body.getPosition().x-screenWidth/100/2f+0.65f ,body.getPosition().y+screenHeight/100/2-0.65f ,2f,0.2f);
+        batch.draw(healthbar.emptytx,body.getPosition().x-screenWidth/100/2f+0.65f ,body.getPosition().y+screenHeight/100/2-0.65f ,2f,0.2f);
         healthbar.blood.setRegionWidth(health*3);
         batch.draw(healthbar.blood,body.getPosition().x-screenWidth/100/2f+0.65f ,body.getPosition().y+screenHeight/100/2-0.65f,health/50,0.2f );
 

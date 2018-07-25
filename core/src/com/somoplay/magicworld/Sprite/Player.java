@@ -116,7 +116,7 @@ public class Player extends GameSprite {
     }
     public void render(SpriteBatch batch, float delta)
     {
-        if(health != 0) {
+
             if (state == 1) {
 
                 batch.begin();
@@ -155,7 +155,7 @@ public class Player extends GameSprite {
                         body.getPosition().y - 0.49f / 2f, 0.326f, 0.49f);
                 batch.end();
             }
-        }
+
         //-------profile and health bar
         batch.begin();
         batch.draw(healthbar.profile,body.getPosition().x-screenWidth/100/2f ,body.getPosition().y+screenHeight/100/2-0.65f ,0.6f,0.6f);

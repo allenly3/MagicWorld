@@ -51,7 +51,7 @@ public class Soldier extends Enemy {
     }
 
     @Override
-    public void onHit(Bullet bullet) {
+    public void onHit() {
         if(health > 0){
             health -= 25;
         }

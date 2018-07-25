@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -24,8 +25,11 @@ public class Soldier extends Enemy {
     public boolean destroyed = false;
     private boolean behindPlayer = false;
     public float x,y;
+    float statetime;
 
-    Texture txleft[],txright[];
+
+    Texture bar,txright[];
+    public Sprite redbar;
     public Animation<Texture> soldierright;
     public Animation<TextureRegion>  soldierleft;
     public int soldierstate=0;// 0 left,   1 right
@@ -34,6 +38,7 @@ public class Soldier extends Enemy {
         super(screen, x, y);
         this.x=x;
         this.y=y;
+
         defineAnimation();
 
 
@@ -63,6 +68,10 @@ public class Soldier extends Enemy {
             tx[i].flip(true,false);
         }
         soldierleft=new Animation<TextureRegion>(Gdx.graphics.getDeltaTime(),tx);
+
+        bar= LoadResource.assetManager.get("images/empty.jpg");
+        redbar=new Sprite(new TextureRegion(bar));
+        redbar.setColor(1,0,0,1);
 
 
 
@@ -130,6 +139,30 @@ public class Soldier extends Enemy {
         } else if (body.getPosition().x >= screen.player.body.getPosition().x + 1.5f){
             behindPlayer = false;
         }
+
+        redbar.setSize(health/3/MagicWorld.PPM,8/MagicWorld.PPM);
+
+        screen.batch.begin();
+       redbar.setPosition( body.getPosition().x-0.15f, body.getPosition().y+0.3f);
+          redbar.draw(screen.batch);
+
+        if( soldierstate==1) {
+            screen.batch.draw( soldierleft.getKeyFrame(statetime * 0.4f, true),
+                    body.getPosition().x - 0.16f,
+                    body.getPosition().y - 0.32f, 0.35f, 0.65f);
+        }
+        else if( soldierstate==0)
+        {
+          screen.batch.draw( soldierright.getKeyFrame(statetime * 0.4f, true),
+                     body.getPosition().x - 0.16f,
+                     body.getPosition().y - 0.32f, 0.35f, 0.65f);
+        }
+
+
+
+          screen.batch.end();
+        statetime+=dt;
+
 
     }
 

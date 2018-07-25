@@ -49,6 +49,9 @@ public class PlayScreen implements Screen {
     Viewport viewport;
     Box2DDebugRenderer renderer;
     public SpriteBatch batch;
+    public static float velocity=2.5f;
+    public static float friction=0;
+
 
 
 
@@ -91,7 +94,8 @@ public class PlayScreen implements Screen {
         this.game = game;
         cam = new OrthographicCamera();
 
-        batch=new SpriteBatch();
+
+        this.batch=game.batch;
         viewport = new FitViewport(screenWidth/MagicWorld.PPM, screenHeight/MagicWorld.PPM, cam);
         world = new World(new Vector2(0, -10), true);
         world.setContactListener(new WorldContactListener(this));
@@ -140,6 +144,7 @@ public class PlayScreen implements Screen {
         //button right------------
          up=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][0]);
          down=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][1]);
+
         buttonRight=new ImageButton(up,down);
         buttonRight.setPosition(screenWidth*0.02f+90,screenHeight*0.01f);
         controlStage.addActor(buttonRight);
@@ -150,9 +155,14 @@ public class PlayScreen implements Screen {
         buttonA.setPosition(screenWidth*0.70f,screenHeight*0.01f);
         controlStage.addActor(buttonA);
     //-------------button B-------------
-        up=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][0]);
+        TextureRegion ttt=(TextureRegion.split(btB,99,150)[0][0]);
+        Image ttt1=new Image(ttt);
+
+        ttt1.setScale(5);
+        up=(TextureRegionDrawable) ttt1.getDrawable();
        down=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][1]);
         buttonB=new ImageButton(up,down);
+
         buttonB.setPosition(screenWidth*0.70f+90,screenHeight*0.078f);
         controlStage.addActor(buttonB);
 
@@ -165,11 +175,12 @@ public class PlayScreen implements Screen {
 // --------------button Right-----
         buttonRight.addListener(new InputListener(){
 
+
             public void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
                 player.state = 2;
                 movingR = false;
-             //    player.getBody().setLinearVelocity(0, 0);
+           player.getBody().setLinearVelocity(0, 0);
                 super.touchUp(event,x,y,pointer,button);
             }
             public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
@@ -189,7 +200,7 @@ public class PlayScreen implements Screen {
             public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
                 player.state = 4;
-  //               player.getBody().setLinearVelocity(0, 0);
+             player.getBody().setLinearVelocity(0, 0);
                 movingL= false;
                 super.touchUp(event,x,y,pointer,button);
             }
@@ -288,14 +299,14 @@ public class PlayScreen implements Screen {
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)||movingL) {//--movingL
             player.state = 3;
-            player.getBody().setLinearVelocity(-2, player.getBody().getLinearVelocity().y);
+            player.getBody().setLinearVelocity(-(velocity-friction), player.getBody().getLinearVelocity().y);
         }
 
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)||movingR) {//---nmovingR
             player.state = 1;
 
-            player.getBody().setLinearVelocity(2, player.getBody().getLinearVelocity().y);
+            player.getBody().setLinearVelocity((velocity-friction), player.getBody().getLinearVelocity().y);
         }
 
         if ((Gdx.input.isKeyPressed(Input.Keys.UP)||jumping)&& player.getBody().getLinearVelocity().y == 0) {// --jumping
@@ -348,22 +359,10 @@ public class PlayScreen implements Screen {
 
             if(soldier.destroyed == false){
                 soldier.update(dt);
-//                if(soldier.soldierstate=)
-                game.batch.begin();
-                if(soldier.soldierstate==1) {
-                    game.batch.draw(soldier.soldierleft.getKeyFrame(statetime * 0.4f, true),
-                            soldier.body.getPosition().x - 0.16f,
-                            soldier.body.getPosition().y - 0.32f, 0.35f, 0.65f);
-                }
-                else if(soldier.soldierstate==0)
-                {
-                    game.batch.draw(soldier.soldierright.getKeyFrame(statetime * 0.4f, true),
-                            soldier.body.getPosition().x - 0.16f,
-                            soldier.body.getPosition().y - 0.32f, 0.35f, 0.65f);
-                }
-                game.batch.end();
+
                 if(soldier.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
                     soldier.body.setActive(true);
+
                 }
             }
 

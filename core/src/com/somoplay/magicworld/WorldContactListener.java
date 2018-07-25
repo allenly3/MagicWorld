@@ -143,15 +143,20 @@ public class WorldContactListener implements ContactListener {
         if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
-            ((Player)a.getUserData()).onsld=true;
+
+            PlayScreen.friction=1.5f;
+
+
+
 
 
 
         } else if(contact.getFixtureA().getUserData() == "Slider" && contact.getFixtureB().getUserData() instanceof Player){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
+            PlayScreen.friction=1.5f;
 
-            ((Player)b.getUserData()).onsld=true;
+
 
         }
 
@@ -166,14 +171,17 @@ public class WorldContactListener implements ContactListener {
         if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
-            ((Player)a.getUserData()).onsld=false;
+
+            PlayScreen.friction=0;
+
 
 
         } else if(contact.getFixtureA().getUserData() == "Slider" && contact.getFixtureB().getUserData() instanceof Player){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
+            PlayScreen.friction=0;
 
-            ((Player)b.getUserData()).onsld=false;
+
 
 
         }

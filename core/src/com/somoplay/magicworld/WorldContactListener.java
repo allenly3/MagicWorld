@@ -136,7 +136,7 @@ public class WorldContactListener implements ContactListener {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 
-            ((Player)a.getUserData()).onHit(100);
+            ((Player)a.getUserData()).onHit(20);
 
         } else if(contact.getFixtureA().getUserData() == "Spike" && contact.getFixtureB().getUserData() instanceof Player) {
             a = contact.getFixtureB();
@@ -257,15 +257,51 @@ public class WorldContactListener implements ContactListener {
             a = contact.getFixtureB();
             b = contact.getFixtureA();
 
-            ((Player)a.getUserData()).onHit(100);
+        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            PlayScreen.friction=1.5f;
+
+
+
+
+
+
+        } else if(contact.getFixtureA().getUserData() == "Slider" && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+            PlayScreen.friction=1.5f;
+
+
+
         }
+
+
 
 
     }
 
     @Override
     public void endContact(Contact contact) {
+        Fixture a, b;
+        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
 
+            PlayScreen.friction=0;
+
+
+
+        } else if(contact.getFixtureA().getUserData() == "Slider" && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+            PlayScreen.friction=0;
+
+
+
+
+        }
     }
 
     @Override

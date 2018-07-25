@@ -7,8 +7,8 @@ import com.somoplay.magicworld.MagicWorld;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-//		config.width=1000;
-//		config.height=320;
+//		config.width=2500;
+//		config.height=1600;
 
 		new LwjglApplication(new MagicWorld(), config);
 	}

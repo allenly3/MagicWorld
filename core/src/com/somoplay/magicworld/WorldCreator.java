@@ -1,6 +1,10 @@
 package com.somoplay.magicworld;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -128,6 +132,13 @@ public class WorldCreator {
 
             fixture.setUserData("NextLevelLoader");
             fixture.setSensor(true);
+
+
+
+
+
+
+
         }
 
         //Create Spikes
@@ -171,6 +182,8 @@ try {
 
 } catch (Exception e){}
     }
+
+
 
     public ArrayList<Soldier> getSoldiers() {
         return soldiers;

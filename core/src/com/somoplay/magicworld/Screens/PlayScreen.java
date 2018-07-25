@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -51,7 +52,10 @@ public class PlayScreen implements Screen {
     OrthographicCamera cam;
     Viewport viewport;
     Box2DDebugRenderer renderer;
-    SpriteBatch batch;
+    public SpriteBatch batch;
+    public static float velocity=2.5f;
+    public static float friction=0;
+
 
 
     public static int level=1;
@@ -95,7 +99,8 @@ public class PlayScreen implements Screen {
         this.game = game;
         cam = new OrthographicCamera();
 
-        batch=new SpriteBatch();
+
+        this.batch=game.batch;
         viewport = new FitViewport(screenWidth/MagicWorld.PPM, screenHeight/MagicWorld.PPM, cam);
         world = new World(new Vector2(0, -10), true);
         world.setContactListener(new WorldContactListener(this));
@@ -141,28 +146,35 @@ public class PlayScreen implements Screen {
         btA=LoadResource.assetManager.get("images/buttonA.png");
         btB=LoadResource.assetManager.get("images/buttonB.png");
         //------button left
+
         TextureRegionDrawable up=new TextureRegionDrawable(TextureRegion.split(btLeft,99,145)[0][1]);
         TextureRegionDrawable down=new TextureRegionDrawable(TextureRegion.split(btLeft,99,145)[0][0]);
         buttonLeft=new ImageButton(up,down);
-        buttonLeft.setPosition(10,5);
+        buttonLeft.setPosition(screenWidth*0.02f,screenHeight*0.01f);
+
         controlStage.addActor(buttonLeft);
         //button right------------
         up=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][0]);
         down=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][1]);
         buttonRight=new ImageButton(up,down);
-        buttonRight.setPosition(100,5);
+        buttonRight.setPosition(screenWidth*0.02f+90,screenHeight*0.01f);
         controlStage.addActor(buttonRight);
 //----------------button A----------
         up=new TextureRegionDrawable(TextureRegion.split(btA   ,99,150)[0][0]);
         down=new TextureRegionDrawable(TextureRegion.split(btA,99,150)[0][1]);
         buttonA=new ImageButton(up,down);
-        buttonA.setPosition(450,5);
+        buttonA.setPosition(screenWidth*0.70f,screenHeight*0.01f);
         controlStage.addActor(buttonA);
     //-------------button B-------------
-        up=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][0]);
+        TextureRegion ttt=(TextureRegion.split(btB,99,150)[0][0]);
+        Image ttt1=new Image(ttt);
+
+        ttt1.setScale(5);
+        up=(TextureRegionDrawable) ttt1.getDrawable();
        down=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][1]);
         buttonB=new ImageButton(up,down);
-        buttonB.setPosition(540,40);
+
+        buttonB.setPosition(screenWidth*0.70f+90,screenHeight*0.078f);
         controlStage.addActor(buttonB);
 
         music = loadResource.assetManager.get("Background.mp3", Music.class);
@@ -174,11 +186,12 @@ public class PlayScreen implements Screen {
 // --------------button Right-----
         buttonRight.addListener(new InputListener(){
 
+
             public void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
                 player.state = 2;
                 movingR = false;
-             //    player.getBody().setLinearVelocity(0, 0);
+           player.getBody().setLinearVelocity(0, 0);
                 super.touchUp(event,x,y,pointer,button);
             }
             public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
@@ -198,7 +211,7 @@ public class PlayScreen implements Screen {
             public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
                 player.state = 4;
-  //               player.getBody().setLinearVelocity(0, 0);
+             player.getBody().setLinearVelocity(0, 0);
                 movingL= false;
                 super.touchUp(event,x,y,pointer,button);
             }
@@ -257,7 +270,9 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        update(Gdx.graphics.getDeltaTime());
+//        update(Gdx.graphics.getDeltaTime());
+        handleInput(delta);
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -268,7 +283,7 @@ public class PlayScreen implements Screen {
 
         mapRenderer.render();
         renderer.render(world, cam.combined);
-
+        update(delta);
         controlStage.draw();
         controlStage.act();
 
@@ -277,10 +292,13 @@ public class PlayScreen implements Screen {
         for(Bullet bullet : bullets) {
             bullet.render(game.batch);
         }
-        game.batch.end();
 
+
+        game.batch.end();
         statetime=statetime+delta;
         player.render(game.batch,statetime);
+
+
 
 
 
@@ -290,19 +308,19 @@ public class PlayScreen implements Screen {
     public void handleInput(float delta) {
 
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {//--movingL
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)||movingL) {//--movingL
             player.state = 3;
-            player.getBody().setLinearVelocity(-2, player.getBody().getLinearVelocity().y);
+            player.getBody().setLinearVelocity(-(velocity-friction), player.getBody().getLinearVelocity().y);
         }
 
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {//---movingR
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)||movingR) {//---nmovingR
             player.state = 1;
 
-            player.getBody().setLinearVelocity(2, player.getBody().getLinearVelocity().y);
+            player.getBody().setLinearVelocity((velocity-friction), player.getBody().getLinearVelocity().y);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)&& player.getBody().getLinearVelocity().y == 0) {// --jumping
+        if ((Gdx.input.isKeyPressed(Input.Keys.UP)||jumping)&& player.getBody().getLinearVelocity().y == 0) {// --jumping
 
             player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
         }
@@ -325,7 +343,7 @@ public class PlayScreen implements Screen {
     }
 
     public void update(float dt){
-        handleInput(dt);
+
         world.step(1/60f, 6, 2);
         cam.position.set(player.body.getPosition().x,player.body.getPosition().y ,0 );
         cam.update();
@@ -375,8 +393,10 @@ public class PlayScreen implements Screen {
 
             if(soldier.destroyed == false){
                 soldier.update(dt);
+
                 if(soldier.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
                     soldier.body.setActive(true);
+
                 }
             }
 
@@ -418,12 +438,14 @@ public class PlayScreen implements Screen {
             world.destroyBody(player.body);
             player.setDestroyed(true);
             deathTimer = 0;
+            WorldContactListener.score=0;
         }
 
         if(player.body.getPosition().y < - 0.175 && !player.isDestroyed()){
             world.destroyBody(player.body);
             player.setDestroyed(true);
             deathTimer = 1;
+            WorldContactListener.score=0;
         }
 
         if(deathTimer >= 1.5 && player.isDestroyed()){
@@ -436,7 +458,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height);
+        viewport.update((int)screenWidth, (int)screenHeight);
 
     }
 

@@ -1,5 +1,12 @@
 package com.somoplay.magicworld.Sprite;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
@@ -7,17 +14,66 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.somoplay.magicworld.MagicWorld;
+import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
 
 
 public class Soldier extends Enemy {
 
+    SpriteBatch batch;
     public float health = 100;
     public boolean destroyed = false;
     private boolean behindPlayer = false;
+    public float x,y;
+    float statetime;
+
+
+    Texture bar,txright[];
+    public Sprite redbar;
+    public Animation<Texture> soldierright;
+    public Animation<TextureRegion>  soldierleft;
+    public int soldierstate=0;// 0 left,   1 right
 
     public Soldier(PlayScreen screen, float x, float y){
         super(screen, x, y);
+        this.x=x;
+        this.y=y;
+
+        defineAnimation();
+
+
+    }
+
+    public void defineAnimation()
+    {
+        batch=new SpriteBatch();
+        txright=new Texture[11];
+        txright[0]= LoadResource.assetManager.get("enemy/Walking_000.png");
+        txright[1]= LoadResource.assetManager.get("enemy/Walking_003.png");
+        txright[2]= LoadResource.assetManager.get("enemy/Walking_006.png");
+        txright[3]= LoadResource.assetManager.get("enemy/Walking_009.png");
+        txright[4]= LoadResource.assetManager.get("enemy/Walking_012.png");
+        txright[5]= LoadResource.assetManager.get("enemy/Walking_015.png");
+        txright[6]= LoadResource.assetManager.get("enemy/Walking_018.png");
+        txright[7]= LoadResource.assetManager.get("enemy/Walking_021.png");
+        txright[8]= LoadResource.assetManager.get("enemy/Walking_024.png");
+        txright[9]= LoadResource.assetManager.get("enemy/Walking_027.png");
+        txright[10]= LoadResource.assetManager.get("enemy/Walking_030.png");
+
+        soldierright=new Animation<Texture>(Gdx.graphics.getDeltaTime(),txright);
+        TextureRegion tx[]=new TextureRegion[11];
+        for(int i=0;i<11;i++)
+        {
+            tx[i]=new TextureRegion(txright[i]);
+            tx[i].flip(true,false);
+        }
+        soldierleft=new Animation<TextureRegion>(Gdx.graphics.getDeltaTime(),tx);
+
+        bar= LoadResource.assetManager.get("images/empty.jpg");
+        redbar=new Sprite(new TextureRegion(bar));
+        redbar.setColor(1,0,0,1);
+
+
 
     }
     @Override
@@ -25,6 +81,7 @@ public class Soldier extends Enemy {
         BodyDef bdef = new BodyDef();
 
         bdef.position.set(getX(), getY());
+        //System.out.println(getX()+" "+getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
 
         body = world.createBody(bdef);
@@ -65,6 +122,7 @@ public class Soldier extends Enemy {
 
         if(body.getPosition().x + 1.5f <= screen.player.body.getPosition().x){
             behindPlayer = true;
+
         } else if (body.getPosition().x >= screen.player.body.getPosition().x + 1.5f){
             behindPlayer = false;
         }

@@ -1,9 +1,11 @@
 package com.somoplay.magicworld.Sprite;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -23,12 +25,16 @@ import static com.somoplay.magicworld.MagicWorld.screenWidth;
 public class Player extends GameSprite {
 
     public int state=1;
-    public int health = 100;
+
+    public float health = 100;
+    public float healthcopy=health;
     private boolean destroyed = false;
     protected HealthBar healthbar;
 
     public Texture txRightMove,txRightStop,txLeftMove,txLeftStop;
     Animation<TextureRegion> rightMoving,rightStop,leftMoving,leftStop;
+
+
 
 
 
@@ -156,31 +162,64 @@ public class Player extends GameSprite {
                 batch.end();
             }
 
+            batch.draw(leftStop.getKeyFrame(delta, true),
+                    body.getPosition().x - 0.326f/ 2f,
+                    body.getPosition().y - 0.49f/ 2f, 0.326f, 0.49f);
+            batch.end();
+        }
+
         //-------profile and health bar
         batch.begin();
         batch.draw(healthbar.profile,body.getPosition().x-screenWidth/100/2f ,body.getPosition().y+screenHeight/100/2-0.65f ,0.6f,0.6f);
-        batch.draw(healthbar.emptytx,body.getPosition().x-screenWidth/100/2f+0.65f ,body.getPosition().y+screenHeight/100/2-0.65f ,2f,0.2f);
-        healthbar.blood.setRegionWidth(health*3);
-        batch.draw(healthbar.blood,body.getPosition().x-screenWidth/100/2f+0.65f ,body.getPosition().y+screenHeight/100/2-0.65f,health/50,0.2f );
 
+        healthbar.redprofile.setPosition(body.getPosition().x-screenWidth/100/2f ,body.getPosition().y+screenHeight/100/2-0.65f);
+       healthbar.redprofile.setColor(1,0,0,healthbar.opacity);
+        healthbar.redprofile.draw(batch);
+
+        batch.draw(healthbar.emptytx,body.getPosition().x-screenWidth/100/2f+0.65f ,body.getPosition().y+screenHeight/100/2-0.65f ,2f,0.2f);
+
+        healthbar.redhealthbar.setPosition(body.getPosition().x-screenWidth/100/2f+0.65f ,body.getPosition().y+screenHeight/100/2-0.65f );
+        healthbar.redhealthbar.setSize(health/50f,0.2f);
+        healthbar.redhealthbar.setRegionWidth((int)health*3);
+        healthbar.redhealthbar.draw(batch);
+
+       healthbar.blood.setRegionWidth(( int)(healthcopy)*3);
+        batch.draw(healthbar.blood,body.getPosition().x-screenWidth/100/2f+0.65f ,body.getPosition().y+screenHeight/100/2-0.65f,healthcopy/50f,0.2f );
+
+        slowdown();
         batch.end();
 
+    }
+    public void slowdown()
+    {
 
-
+        if(health>healthcopy && health>0)
+        {
+            health-=  Gdx.graphics.getDeltaTime()*150;
+        }
+         if(health<healthcopy)
+        {
+            health+=Gdx.graphics.getDeltaTime()*150;
+        }
+        if(healthbar.opacity>0.05f)
+        {
+            healthbar.opacity-=0.05f;
+        }
     }
 
     public void onHit(int value){
-        if(health > 0) {
-            health -= value;
+        if(healthcopy > 0) {
+            healthcopy -= value;
         }
-        System.out.println("Player Health: " + health);
+        System.out.println("Player Health: " + healthcopy);
+        healthbar.opacity=1;
     }
 
     public void addHealth(float value){
-        health += value;
+        healthcopy += value;
     }
 
-    public float getHealth(){ return health;}
+    public float getHealth(){ return healthcopy;}
 
     public boolean isDestroyed() {
         return destroyed;

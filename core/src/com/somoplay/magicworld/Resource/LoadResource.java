@@ -35,6 +35,19 @@ public class LoadResource
         assetManager.load("mwfont.png",Texture.class);
         assetManager.load("mwfont.fnt", BitmapFont.class);
 
+        assetManager.load("enemy/Walking_000.png",Texture.class);
+        assetManager.load("enemy/Walking_003.png",Texture.class);
+        assetManager.load("enemy/Walking_006.png",Texture.class);
+        assetManager.load("enemy/Walking_009.png",Texture.class);
+        assetManager.load("enemy/Walking_012.png",Texture.class);
+        assetManager.load("enemy/Walking_015.png",Texture.class);
+        assetManager.load("enemy/Walking_018.png",Texture.class);
+        assetManager.load("enemy/Walking_021.png",Texture.class);
+        assetManager.load("enemy/Walking_024.png",Texture.class);
+        assetManager.load("enemy/Walking_027.png",Texture.class);
+        assetManager.load("enemy/Walking_030.png",Texture.class);
+
+
 
 
 

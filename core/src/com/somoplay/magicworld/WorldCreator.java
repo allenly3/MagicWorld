@@ -26,8 +26,10 @@ import java.util.ArrayList;
 public class WorldCreator {
 
     ArrayList<Soldier> soldiers;
-    Texture tx;
+    Sprite door;
+    float doorX,doorY;
     ParticleEffect effect;
+    PlayScreen screen;
 
 
 
@@ -36,8 +38,14 @@ public class WorldCreator {
     public WorldCreator(PlayScreen screen){
         World world = screen.getWorld();
         Map map = screen.getMap();
+        this.screen=screen;
+        Texture tx=LoadResource.assetManager.get("images/door.jpg");
+        door=new Sprite(tx);
+        door.setSize(35/MagicWorld.PPM,55/MagicWorld.PPM);
 
-        tx=LoadResource.assetManager.get("images/door.jpg");
+        effect=new ParticleEffect();
+        effect.load(Gdx.files.internal("images/purplefire.p"),Gdx.files.internal("images/"));
+        effect.scaleEffect(0.002f);
 
 
 
@@ -113,11 +121,14 @@ public class WorldCreator {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
+            doorX= rect.getX() / MagicWorld.PPM;
+            doorY=  rect.getY() / MagicWorld.PPM;
             bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
 
             body = world.createBody(bdef);
 
             shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
+
             fdef.shape = shape;
             Fixture fixture = body.createFixture(fdef);
 
@@ -167,6 +178,20 @@ public class WorldCreator {
 
 
         }
+
+    }
+
+    public void creatorrender()
+    {
+        door.setPosition(doorX,doorY);
+        screen.batch.begin();
+        door.draw(screen.batch);
+
+        effect.setPosition(doorX+0.08f,doorY+0.02f);
+        effect.draw(screen.batch,Gdx.graphics.getDeltaTime());
+        screen.batch.end();
+
+
 
     }
 

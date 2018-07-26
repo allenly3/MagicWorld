@@ -188,6 +188,8 @@ public class Player extends GameSprite {
         batch.end();
 
     }
+
+
     public void slowdown()
     {
 

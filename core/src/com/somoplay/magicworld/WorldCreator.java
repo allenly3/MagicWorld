@@ -134,11 +134,6 @@ public class WorldCreator {
             fixture.setSensor(true);
 
 
-
-
-
-
-
         }
 
         //Create Spikes

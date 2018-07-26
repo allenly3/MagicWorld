@@ -38,6 +38,7 @@ import com.somoplay.magicworld.Sprite.EnemyBullet;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
 import com.somoplay.magicworld.Sprite.Soldier;
+import com.somoplay.magicworld.Stats;
 import com.somoplay.magicworld.WorldContactListener;
 import com.somoplay.magicworld.WorldCreator;
 
@@ -77,8 +78,9 @@ public class PlayScreen implements Screen {
 
     private LoadResource loadResource;
     private Music music;
-    // private HUD hud;
+    private Stats stats;
     private float deathTimer = 0;
+    private float elapsedTime = 0;
     private int trapIndex = 0;
 
     private float statetime;
@@ -136,6 +138,8 @@ public class PlayScreen implements Screen {
         stage = new Stage();
         stage.addActor(background);
         stage.addActor(label);
+
+        stats = new Stats(game.batch);
 
 
 
@@ -270,7 +274,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-//        update(Gdx.graphics.getDeltaTime());
+
         handleInput(delta);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -296,8 +300,9 @@ public class PlayScreen implements Screen {
 
         game.batch.end();
         statetime=statetime+delta;
-        player.render(game.batch,statetime);
-
+        if(!player.isDestroyed()) {
+            player.render(game.batch, statetime);
+        }
 
 
 
@@ -307,36 +312,36 @@ public class PlayScreen implements Screen {
 
     public void handleInput(float delta) {
 
+        if(!player.isDestroyed()) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || movingL) {//--movingL
+                player.state = 3;
+                player.getBody().setLinearVelocity(-(velocity - friction), player.getBody().getLinearVelocity().y);
+            }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)||movingL) {//--movingL
-            player.state = 3;
-            player.getBody().setLinearVelocity(-(velocity-friction), player.getBody().getLinearVelocity().y);
-        }
 
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || movingR) {//---nmovingR
+                player.state = 1;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)||movingR) {//---nmovingR
-            player.state = 1;
+                player.getBody().setLinearVelocity((velocity - friction), player.getBody().getLinearVelocity().y);
+            }
 
-            player.getBody().setLinearVelocity((velocity-friction), player.getBody().getLinearVelocity().y);
-        }
+            if ((Gdx.input.isKeyPressed(Input.Keys.UP) || jumping) && player.getBody().getLinearVelocity().y == 0) {// --jumping
 
-        if ((Gdx.input.isKeyPressed(Input.Keys.UP)||jumping)&& player.getBody().getLinearVelocity().y == 0) {// --jumping
+                player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
+            }
 
-            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
-        }
+            if (firing && timeSinceLastFire >= 0.3f) {
 
-        if (firing && timeSinceLastFire >= 0.3f) {
-
-            if(player.isDestroyed() == false) {
-                bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y) );
-                bullets.add(bullet);
-                for(Ally ally: creator.getAllies()){
-                    ally.fire();
+                if (player.isDestroyed() == false) {
+                    bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y));
+                    bullets.add(bullet);
+                    for (Ally ally : creator.getAllies()) {
+                        ally.fire();
+                    }
+                    timeSinceLastFire = 0;
                 }
-                timeSinceLastFire = 0;
             }
         }
-
 
         timeSinceLastFire += delta;
 
@@ -345,8 +350,10 @@ public class PlayScreen implements Screen {
     public void update(float dt){
 
         world.step(1/60f, 6, 2);
-        cam.position.set(player.body.getPosition().x,player.body.getPosition().y ,0 );
-        cam.update();
+        if(!player.isDestroyed()) {
+            cam.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
+            cam.update();
+        }
 
         // if it touches a ground tile, then disappear, if it touches a enemy, disappears and apply damage.
         // get the size of it correct and the spawn location right as well.
@@ -433,25 +440,30 @@ public class PlayScreen implements Screen {
         }
         trapIndex = 0;
         deathTimer += dt;
-
+        if(!player.isDestroyed()) {
+            elapsedTime += dt;
+        }
         if(player.getHealth() <= 0 && !player.isDestroyed()){
             world.destroyBody(player.body);
             player.setDestroyed(true);
             deathTimer = 0;
-            WorldContactListener.score=0;
+            //WorldContactListener.score=0;
         }
 
         if(player.body.getPosition().y < - 0.175 && !player.isDestroyed()){
             world.destroyBody(player.body);
             player.setDestroyed(true);
             deathTimer = 1;
-            WorldContactListener.score=0;
+            //WorldContactListener.score=0;
         }
 
         if(deathTimer >= 1.5 && player.isDestroyed()){
-            game.setScreen(new MenuScreen(game));
+            //game.setScreen(new MenuScreen(game));
+            stats.setScoreLabel(WorldContactListener.score);
+            stats.setTimeLabel(elapsedTime);
+            displayStats();
             music.stop();
-            dispose();
+            //dispose();
         }
         mapRenderer.setView(cam);
     }
@@ -481,6 +493,7 @@ public class PlayScreen implements Screen {
     public void dispose() {
         map.dispose();
         music.dispose();
+        world.dispose();
     }
 
     public World getWorld() {
@@ -505,5 +518,10 @@ public class PlayScreen implements Screen {
 
     public ArrayList<AllyBullet> getAllyBullets() {
         return allyBullets;
+    }
+
+    public void displayStats(){
+        game.batch.setProjectionMatrix(stats.stage.getCamera().combined);
+        stats.stage.draw();
     }
 }

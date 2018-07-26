@@ -253,11 +253,12 @@ public class WorldContactListener implements ContactListener {
             b = contact.getFixtureB();
 
             ((Player)a.getUserData()).onHit(100);
-        } else if(contact.getFixtureA().getUserData() == "CeilingTrap" && contact.getFixtureB().getUserData() instanceof Player){
+        } else if(contact.getFixtureA().getUserData() == "CeilingTrap" && contact.getFixtureB().getUserData() instanceof Player) {
             a = contact.getFixtureB();
             b = contact.getFixtureA();
 
-        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
+            ((Player)a.getUserData()).onHit(100);
+        }else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 

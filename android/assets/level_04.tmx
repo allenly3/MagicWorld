@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="120" height="12" tilewidth="32" tileheight="32" infinite="0" nextobjectid="24">
+<map version="1.0" tiledversion="2018.06.01" orientation="orthogonal" renderorder="right-down" width="120" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="27">
  <tileset firstgid="1" source="JnRTiles.tsx"/>
- <layer name="Background" width="120" height="12">
+ <tileset firstgid="19" name="snow ground" tilewidth="32" tileheight="32" tilecount="140" columns="14">
+  <image source="C:/Users/Administrator/Desktop/imglib/input/snow ground.jpg" width="450" height="325"/>
+ </tileset>
+ <layer id="1" name="Background" width="120" height="12">
   <data encoding="base64" compression="zlib">
-   eJzt0rEKACAIBcD8/59uCYK20obiDsSmp4StAQAAAFAlRq3v3QymzH/E0m/N38k/uYufbyKSVZVxc8eKHV7VAZdgAEc=
+   eJzt0kEKgDAMBMDm9+qr7UEQAoLR9qDMwNLSQxpCWgMAAABglDiS79UanN7MI9I56/9K/Sd78eediJtZetaeLb1XalxlVI8ze/iqHU5lAd8=
   </data>
  </layer>
- <objectgroup name="Ground">
+ <objectgroup id="2" name="Ground">
   <object id="2" x="0" y="320" width="32" height="32"/>
   <object id="3" x="0" y="352" width="512" height="32"/>
   <object id="4" x="480" y="320" width="32" height="32"/>

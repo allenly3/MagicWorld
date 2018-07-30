@@ -98,40 +98,27 @@ public class Soldier extends Enemy {
         leftSide.set(new Vector2(-18/MagicWorld.PPM,-10/MagicWorld.PPM), new Vector2(-18/MagicWorld.PPM,20/MagicWorld.PPM));
         fdef.shape = leftSide;
         fdef.isSensor = true;
-        body.createFixture(fdef).setUserData("leftSide");
+        body.createFixture(fdef).setUserData("SoldierLeftSide");
 
         EdgeShape rightSide = new EdgeShape();
         rightSide.set(new Vector2(18/MagicWorld.PPM,-10/MagicWorld.PPM), new Vector2(18/MagicWorld.PPM,20/MagicWorld.PPM));
         fdef.shape = rightSide;
         fdef.isSensor = true;
-        body.createFixture(fdef).setUserData("rightSide");
+        body.createFixture(fdef).setUserData("SoldierRightSide");
     }
 
     @Override
-    public void onHit(Bullet bullet) {
+    public void onHit() {
         if(health > 0){
             health -= 25;
         }
         System.out.println(health);
     }
-//
-//    public void jump(){
-//        body.applyLinearImpulse(new Vector2(-1,2),body.getWorldCenter(),true);
-//    }
 
     @Override
     public void update(float dt){
-
-        if(!behindPlayer){
-            soldierstate=1;
-        body.setLinearVelocity(new Vector2(-1,body.getLinearVelocity().y));
-
-
-        }
-        else if (behindPlayer){
-            soldierstate=0;
-            body.setLinearVelocity(new Vector2(1,body.getLinearVelocity().y));
-        }
+        if(!behindPlayer){ velocity = new Vector2(-1,body.getLinearVelocity().y); }
+        else if (behindPlayer){ velocity = new Vector2(1,body.getLinearVelocity().y);}
 
         if(body.getPosition().x + 1.5f <= screen.player.body.getPosition().x){
             behindPlayer = true;
@@ -140,28 +127,7 @@ public class Soldier extends Enemy {
             behindPlayer = false;
         }
 
-        redbar.setSize(health/3/MagicWorld.PPM,8/MagicWorld.PPM);
-
-        screen.batch.begin();
-       redbar.setPosition( body.getPosition().x-0.15f, body.getPosition().y+0.3f);
-          redbar.draw(screen.batch);
-
-        if( soldierstate==1) {
-            screen.batch.draw( soldierleft.getKeyFrame(statetime * 0.4f, true),
-                    body.getPosition().x - 0.16f,
-                    body.getPosition().y - 0.32f, 0.35f, 0.65f);
-        }
-        else if( soldierstate==0)
-        {
-          screen.batch.draw( soldierright.getKeyFrame(statetime * 0.4f, true),
-                     body.getPosition().x - 0.16f,
-                     body.getPosition().y - 0.32f, 0.35f, 0.65f);
-        }
-
-
-
-          screen.batch.end();
-        statetime+=dt;
+        body.setLinearVelocity(velocity);
 
 
     }

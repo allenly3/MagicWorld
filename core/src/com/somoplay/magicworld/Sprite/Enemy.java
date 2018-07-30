@@ -19,7 +19,7 @@ public abstract class Enemy extends Sprite{
 
         setPosition(x, y);
         defineEnemy();
-
+        velocity = new Vector2(-1, 0);
         body.setActive(false);
     }
 
@@ -33,6 +33,6 @@ public abstract class Enemy extends Sprite{
     }
 
     protected abstract void defineEnemy();
-    public abstract void onHit(Bullet bullet);
+    public abstract void onHit();
     public abstract void update(float dt);
 }

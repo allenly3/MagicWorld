@@ -7,8 +7,12 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.somoplay.magicworld.Screens.PlayScreen;
+import com.somoplay.magicworld.Sprite.Ally;
+import com.somoplay.magicworld.Sprite.AllyBullet;
 import com.somoplay.magicworld.Sprite.Bullet;
 import com.somoplay.magicworld.Sprite.Enemy;
+import com.somoplay.magicworld.Sprite.EnemyBullet;
+import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
 import com.somoplay.magicworld.Sprite.Soldier;
 
@@ -47,15 +51,60 @@ public class WorldContactListener implements ContactListener {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 
-            ((Enemy)b.getUserData()).onHit((Bullet)a.getUserData());
+            ((Enemy)b.getUserData()).onHit();
             ((Bullet) a.getUserData()).setToDestroy();
 
         } else if(contact.getFixtureA().getUserData() instanceof Soldier && contact.getFixtureB().getUserData() instanceof Bullet) {
             a = contact.getFixtureB();
             b = contact.getFixtureA();
 
-            ((Enemy)b.getUserData()).onHit((Bullet)a.getUserData());
+            ((Enemy)b.getUserData()).onHit();
             ((Bullet) a.getUserData()).setToDestroy();
+
+
+        } else if(contact.getFixtureA().getUserData() instanceof AllyBullet && contact.getFixtureB().getUserData() instanceof Soldier) {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((AllyBullet) a.getUserData()).setToDestroy();
+
+        } else if(contact.getFixtureA().getUserData() instanceof Soldier && contact.getFixtureB().getUserData() instanceof AllyBullet) {
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((AllyBullet) a.getUserData()).setToDestroy();
+
+
+        } else if(contact.getFixtureA().getUserData() instanceof Bullet && contact.getFixtureB().getUserData() instanceof Gunner) {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((Bullet) a.getUserData()).setToDestroy();
+
+        } else if(contact.getFixtureA().getUserData() instanceof Gunner && contact.getFixtureB().getUserData() instanceof Bullet) {
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((Bullet) a.getUserData()).setToDestroy();
+
+
+        } else if(contact.getFixtureA().getUserData() instanceof AllyBullet && contact.getFixtureB().getUserData() instanceof Gunner) {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((AllyBullet) a.getUserData()).setToDestroy();
+
+        } else if(contact.getFixtureA().getUserData() instanceof Gunner && contact.getFixtureB().getUserData() instanceof AllyBullet) {
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((AllyBullet) a.getUserData()).setToDestroy();
 
 
         } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() instanceof Soldier){
@@ -72,7 +121,7 @@ public class WorldContactListener implements ContactListener {
 
             ((Player)a.getUserData()).onHit(50);
             ((Soldier)b.getUserData()).hitPlayer();
-            //screen.setHealth(0.5f);
+
         } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "NextLevelLoader") {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
@@ -93,36 +142,34 @@ public class WorldContactListener implements ContactListener {
             a = contact.getFixtureB();
             b = contact.getFixtureA();
 
-            ((Player)a.getUserData()).onHit(20);
-        } else if(contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "leftSide") {
+            ((Player)a.getUserData()).onHit(100);
+        } else if((contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "SoldierLeftSide") ||
+                (contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "SoldierRightSide")) {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
-
-            if(b.getBody().getLinearVelocity().y == 0) {
-                b.getBody().applyLinearImpulse(new Vector2(-1, 6), b.getBody().getWorldCenter(), true);
+            if(b.getUserData() == "SoldierLeftSide") {
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(-1, 6), b.getBody().getWorldCenter(), true);
+                }
+            } else{
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(1, 6), b.getBody().getWorldCenter(), true);
+                }
             }
-        } else if(contact.getFixtureA().getUserData() == "leftSide" && contact.getFixtureB().getUserData() == "Ground") {
+        } else if((contact.getFixtureA().getUserData() == "SoldierLeftSide" && contact.getFixtureB().getUserData() == "Ground") ||
+                (contact.getFixtureA().getUserData() == "SoldierRightSide" && contact.getFixtureB().getUserData() == "Ground")){
             a = contact.getFixtureB();
             b = contact.getFixtureA();
 
-            if(b.getBody().getLinearVelocity().y == 0) {
-                b.getBody().applyLinearImpulse(new Vector2(-1, 6), b.getBody().getWorldCenter(), true);
+            if(b.getUserData() == "SoldierLeftSide") {
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(-1, 6), b.getBody().getWorldCenter(), true);
+                }
+            } else{
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(1, 6), b.getBody().getWorldCenter(), true);
+                }
             }
-        } else if(contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "rightSide") {
-            a = contact.getFixtureA();
-            b = contact.getFixtureB();
-
-            if(b.getBody().getLinearVelocity().y == 0) {
-                b.getBody().applyLinearImpulse(new Vector2(1, 6), b.getBody().getWorldCenter(), true);
-            }
-        } else if(contact.getFixtureA().getUserData() == "rightSide" && contact.getFixtureB().getUserData() == "Ground") {
-            a = contact.getFixtureB();
-            b = contact.getFixtureA();
-
-            if(b.getBody().getLinearVelocity().y == 0) {
-                b.getBody().applyLinearImpulse(new Vector2(1, 6), b.getBody().getWorldCenter(), true);
-            }
-
         } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() =="HealthUp") {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
@@ -137,10 +184,81 @@ public class WorldContactListener implements ContactListener {
             screen.getCell(b.getBody()).setTile(null);
             b.setUserData(null);
             ((Player)a.getUserData()).addHealth(50);
-        }
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() instanceof EnemyBullet){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
 
 
-        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
+            ((Player)a.getUserData()).onHit(50);
+            ((EnemyBullet)b.getUserData()).setToDestroy();
+
+        } else if(contact.getFixtureA().getUserData() instanceof EnemyBullet && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Player)a.getUserData()).onHit(50);
+            ((EnemyBullet)b.getUserData()).setToDestroy();
+        } else if((contact.getFixtureA().getUserData() == "GunnerLeftSide" && contact.getFixtureB().getUserData() == "Ground") ||
+        (contact.getFixtureA().getUserData() == "GunnerRightSide" && contact.getFixtureB().getUserData() == "Ground")){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Gunner)b.getBody().getUserData()).reverseVelocity(true,false);
+
+        } else if((contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "GunnerLeftSide") ||
+        (contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "GunnerRightSide")){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Gunner) b.getBody().getUserData()).reverseVelocity(true,false);
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() instanceof Ally){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Ally)b.getUserData()).follow();
+        } else if(contact.getFixtureA().getUserData() instanceof Ally && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Ally)b.getUserData()).follow();
+        } else if((contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "AllyLeftSide") ||
+                (contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "AllyRightSide")) {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+            if(b.getUserData() == "AllyLeftSide") {
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(-1, 4.5f), b.getBody().getWorldCenter(), true);
+                }
+            } else{
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(1, 4.5f), b.getBody().getWorldCenter(), true);
+                }
+            }
+        } else if((contact.getFixtureA().getUserData() == "AllyLeftSide" && contact.getFixtureB().getUserData() == "Ground") ||
+                (contact.getFixtureA().getUserData() == "AllyRightSide" && contact.getFixtureB().getUserData() == "Ground")){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            if(b.getUserData() == "AllyLeftSide") {
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(-1, 4.5f), b.getBody().getWorldCenter(), true);
+                }
+            } else{
+                if (b.getBody().getLinearVelocity().y == 0) {
+                    b.getBody().applyLinearImpulse(new Vector2(1, 4.5f), b.getBody().getWorldCenter(), true);
+                }
+            }
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "CeilingTrap"){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Player)a.getUserData()).onHit(100);
+        } else if(contact.getFixtureA().getUserData() == "CeilingTrap" && contact.getFixtureB().getUserData() instanceof Player) {
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Player)a.getUserData()).onHit(100);
+        }else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 
@@ -198,7 +316,11 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-
+        if(contact.getFixtureA().getUserData() instanceof Gunner && contact.getFixtureB().getUserData() instanceof Soldier){
+            contact.setEnabled(false);
+        } else if(contact.getFixtureA().getUserData() instanceof Soldier && contact.getFixtureB().getUserData() instanceof Gunner){
+            contact.setEnabled(false);
+        }
     }
 
     @Override

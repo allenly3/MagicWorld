@@ -31,9 +31,14 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Resource.LoadResource;
+import com.somoplay.magicworld.Sprite.Ally;
+import com.somoplay.magicworld.Sprite.AllyBullet;
 import com.somoplay.magicworld.Sprite.Bullet;
+import com.somoplay.magicworld.Sprite.EnemyBullet;
+import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
 import com.somoplay.magicworld.Sprite.Soldier;
+import com.somoplay.magicworld.Stats;
 import com.somoplay.magicworld.WorldContactListener;
 import com.somoplay.magicworld.WorldCreator;
 
@@ -54,7 +59,6 @@ public class PlayScreen implements Screen {
 
 
 
-
     public static int level=1;
 
     private MagicWorld game;
@@ -68,16 +72,21 @@ public class PlayScreen implements Screen {
     public Player player;
     boolean movingR,movingL,jumping,firing;
     private ArrayList<Bullet> bullets;
+    private ArrayList<EnemyBullet> enemyBullets;
+    private ArrayList<AllyBullet> allyBullets;
     private WorldCreator creator;
 
     private LoadResource loadResource;
     private Music music;
-    // private HUD hud;
+    private Stats stats;
     private float deathTimer = 0;
+    private float elapsedTime = 0;
+    private int trapIndex = 0;
 
     private float statetime;
     private float timeSinceLastFire = 1.5f;
     private Bullet bullet;
+    private ArrayList<Float> ceilingTrapHeights;
 
     Texture tbg,btLeft,btRight,btA,btB;
     Image background;
@@ -87,8 +96,6 @@ public class PlayScreen implements Screen {
     public Stage controlStage;
     Label label;
 
-
-    //private HealthBar healthBar;
 
     public PlayScreen(MagicWorld game){
         this.game = game;
@@ -110,8 +117,15 @@ public class PlayScreen implements Screen {
         player = new Player(this);
 
         bullets = new ArrayList<Bullet>();
+        enemyBullets = new ArrayList<EnemyBullet>();
+        allyBullets = new ArrayList<AllyBullet>();
+
         loadResource = new LoadResource();
 
+        ceilingTrapHeights = new ArrayList<Float>();
+        for(Body ct: creator.getCeilingTraps()){
+            ceilingTrapHeights.add(ct.getPosition().y);
+        }
 
         tbg= LoadResource.assetManager.get("images/bg1.png");
         background=new Image(tbg);
@@ -124,6 +138,8 @@ public class PlayScreen implements Screen {
         stage = new Stage();
         stage.addActor(background);
         stage.addActor(label);
+
+        stats = new Stats(game.batch);
 
 
 
@@ -142,9 +158,8 @@ public class PlayScreen implements Screen {
 
         controlStage.addActor(buttonLeft);
         //button right------------
-         up=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][0]);
-         down=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][1]);
-
+        up=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][0]);
+        down=new TextureRegionDrawable(TextureRegion.split(btRight,99,150)[0][1]);
         buttonRight=new ImageButton(up,down);
         buttonRight.setPosition(screenWidth*0.02f+90,screenHeight*0.01f);
         controlStage.addActor(buttonRight);
@@ -259,7 +274,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-//        update(Gdx.graphics.getDeltaTime());
+
         handleInput(delta);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -286,8 +301,9 @@ public class PlayScreen implements Screen {
 
         game.batch.end();
         statetime=statetime+delta;
-        player.render(game.batch,statetime);
-
+        if(!player.isDestroyed()) {
+            player.render(game.batch, statetime);
+        }
 
 
 
@@ -297,51 +313,53 @@ public class PlayScreen implements Screen {
 
     public void handleInput(float delta) {
 
+        if(!player.isDestroyed()) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || movingL) {//--movingL
+                player.state = 3;
+                player.getBody().setLinearVelocity(-(velocity - friction), player.getBody().getLinearVelocity().y);
+            }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)||movingL) {//--movingL
-            player.state = 3;
-            player.getBody().setLinearVelocity(-(velocity-friction), player.getBody().getLinearVelocity().y);
-        }
 
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || movingR) {//---nmovingR
+                player.state = 1;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)||movingR) {//---nmovingR
-            player.state = 1;
+                player.getBody().setLinearVelocity((velocity - friction), player.getBody().getLinearVelocity().y);
+            }
 
-            player.getBody().setLinearVelocity((velocity-friction), player.getBody().getLinearVelocity().y);
-        }
+            if ((Gdx.input.isKeyPressed(Input.Keys.UP) || jumping) && player.getBody().getLinearVelocity().y == 0) {// --jumping
 
-        if ((Gdx.input.isKeyPressed(Input.Keys.UP)||jumping)&& player.getBody().getLinearVelocity().y == 0) {// --jumping
+                player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
+            }
 
-            player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
-        }
+            if (firing && timeSinceLastFire >= 0.3f) {
 
-        if (firing && timeSinceLastFire >= 0.3f) {
-
-            if(player.isDestroyed() == false) {
-                bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y) );
-                bullets.add(bullet);
-                timeSinceLastFire = 0;
+                if (player.isDestroyed() == false) {
+                    bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y));
+                    bullets.add(bullet);
+                    for (Ally ally : creator.getAllies()) {
+                        ally.fire();
+                    }
+                    timeSinceLastFire = 0;
+                }
             }
         }
 
-
         timeSinceLastFire += delta;
-//        System.out.println(delta);
+
     }
-
-
 
     public void update(float dt){
 
         world.step(1/60f, 6, 2);
-        cam.position.set(player.body.getPosition().x,player.body.getPosition().y ,0 );
-        cam.update();
+        if(!player.isDestroyed()) {
+            cam.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
+            cam.update();
+        }
 
-        // if it touches a ground tile, then dissappear, if it touches a enemy, dissappear and apply damage.
+        // if it touches a ground tile, then disappear, if it touches a enemy, disappears and apply damage.
         // get the size of it correct and the spawn location right as well.
         for(Bullet bullet: bullets){
             if(bullet.destroyed == false) {
-
 
                 if (bullet.getBody().getPosition().x - player.body.getPosition().x > 3 || bullet.getBody().getPosition().x - player.body.getPosition().x < -3) {
 
@@ -352,6 +370,29 @@ public class PlayScreen implements Screen {
             }
         }
 
+        for(EnemyBullet eb: enemyBullets){
+            if(eb.destroyed == false) {
+
+                if (Math.abs(eb.getBody().getPosition().x - player.getPosition().x) >= 3) {
+
+                    eb.setToDestroy();
+                }
+
+                eb.update(dt);
+            }
+        }
+
+        for(AllyBullet ab: allyBullets){
+            if(ab.destroyed == false) {
+
+                if (Math.abs(ab.getBody().getPosition().x - player.getPosition().x) >= 3) {
+
+                    ab.setToDestroy();
+                }
+
+                ab.update(dt);
+            }
+        }
         for (Soldier soldier: creator.getSoldiers()){
             if(soldier.health <= 0 && !soldier.destroyed){
                 world.destroyBody(soldier.body);
@@ -368,26 +409,62 @@ public class PlayScreen implements Screen {
             }
 
         }
-        deathTimer += dt;
 
+        for (Gunner gunner: creator.getGunners()){
+            if(gunner.health <= 0 && !gunner.destroyed){
+                world.destroyBody(gunner.body);
+                gunner.destroyed = true;
+            }
+
+            if(gunner.destroyed == false){
+                gunner.update(dt);
+                if(gunner.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
+                    gunner.body.setActive(true);
+                }
+            }
+
+        }
+
+        for(Ally ally: creator.getAllies()){
+            ally.update(dt);
+        }
+
+        for(Body ct : creator.getCeilingTraps()){
+
+            if(ct.getPosition().y <= (ceilingTrapHeights.get(trapIndex) - 96/MagicWorld.PPM)){
+                ct.setLinearVelocity(0,0.7f);
+                trapIndex++;
+            } else if (ct.getPosition().y >= ceilingTrapHeights.get(trapIndex)){
+                ct.setLinearVelocity(0,-0.7f);
+                trapIndex++;
+            }
+        }
+        trapIndex = 0;
+        deathTimer += dt;
+        if(!player.isDestroyed()) {
+            elapsedTime += dt;
+        }
         if(player.getHealth() <= 0 && !player.isDestroyed()){
             world.destroyBody(player.body);
             player.setDestroyed(true);
             deathTimer = 0;
-            WorldContactListener.score=0;
+            //WorldContactListener.score=0;
         }
 
         if(player.body.getPosition().y < - 0.175 && !player.isDestroyed()){
             world.destroyBody(player.body);
             player.setDestroyed(true);
             deathTimer = 1;
-            WorldContactListener.score=0;
+            //WorldContactListener.score=0;
         }
 
         if(deathTimer >= 1.5 && player.isDestroyed()){
-            game.setScreen(new MenuScreen(game));
+            //game.setScreen(new MenuScreen(game));
+            stats.setScoreLabel(WorldContactListener.score);
+            stats.setTimeLabel(elapsedTime);
+            displayStats();
             music.stop();
-            dispose();
+            //dispose();
         }
         mapRenderer.setView(cam);
     }
@@ -417,6 +494,7 @@ public class PlayScreen implements Screen {
     public void dispose() {
         map.dispose();
         music.dispose();
+        world.dispose();
     }
 
     public World getWorld() {
@@ -433,5 +511,18 @@ public class PlayScreen implements Screen {
     public void nextLevel(){
         game.setScreen(new MenuScreen(game));
         dispose();
+    }
+
+    public ArrayList<EnemyBullet> getEnemyBullets() {
+        return enemyBullets;
+    }
+
+    public ArrayList<AllyBullet> getAllyBullets() {
+        return allyBullets;
+    }
+
+    public void displayStats(){
+        game.batch.setProjectionMatrix(stats.stage.getCamera().combined);
+        stats.stage.draw();
     }
 }

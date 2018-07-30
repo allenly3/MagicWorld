@@ -19,6 +19,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
+import com.somoplay.magicworld.Sprite.Ally;
+import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Soldier;
 
 import java.util.ArrayList;
@@ -26,34 +28,20 @@ import java.util.ArrayList;
 public class WorldCreator {
 
     ArrayList<Soldier> soldiers;
-    Sprite door;
-    float doorX,doorY;
-    ParticleEffect effect;
-    PlayScreen screen;
-
-
-
+    ArrayList<Gunner> gunners;
+    ArrayList<Body> ceilingTraps;
+    ArrayList<Ally> allies;
 
 
     public WorldCreator(PlayScreen screen){
         World world = screen.getWorld();
         Map map = screen.getMap();
-        this.screen=screen;
-        Texture tx=LoadResource.assetManager.get("images/door.jpg");
-        door=new Sprite(tx);
-        door.setSize(35/MagicWorld.PPM,55/MagicWorld.PPM);
-
-        effect=new ParticleEffect();
-        effect.load(Gdx.files.internal("images/purplefire.p"),Gdx.files.internal("images/"));
-        effect.scaleEffect(0.002f);
-
-
-
-
-
 
 
         soldiers = new ArrayList<Soldier>();
+        gunners = new ArrayList<Gunner>();
+        allies = new ArrayList<Ally>();
+        ceilingTraps = new ArrayList<Body>();
 
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -112,8 +100,21 @@ public class WorldCreator {
         for (MapObject object : map.getLayers().get("Soldier").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             soldiers.add(new Soldier(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
-            //getX() : the x-coordinate of the bottom left corner
-            //getY();the y-coordinate of the bottom left corner
+
+        }
+
+        //Create Gunner
+        for (MapObject object : map.getLayers().get("Gunner").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            gunners.add(new Gunner(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
+
+        }
+
+        //Create Ally
+        for (MapObject object : map.getLayers().get("Ally").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            allies.add(new Ally(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
+
         }
 
         //Create NextLevelLoader
@@ -121,24 +122,16 @@ public class WorldCreator {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            doorX= rect.getX() / MagicWorld.PPM;
-            doorY=  rect.getY() / MagicWorld.PPM;
             bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
 
             body = world.createBody(bdef);
 
             shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
-
             fdef.shape = shape;
             Fixture fixture = body.createFixture(fdef);
 
             fixture.setUserData("NextLevelLoader");
             fixture.setSensor(true);
-
-
-
-
-
 
 
         }
@@ -163,52 +156,41 @@ public class WorldCreator {
             fixture.setUserData("Spike");
             fixture.setSensor(true);
         }
+try {
+    //Create Ceiling Trap
+    for (MapObject object : map.getLayers().get("CeilingTrap").getObjects().getByType(RectangleMapObject.class)) {
+        Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
+        bdef.type = BodyDef.BodyType.KinematicBody;
+        bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
 
-            for (MapObject object : map.getLayers().get("Slider").getObjects().getByType(RectangleMapObject.class)) {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
-                bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
-                body = world.createBody(bdef);
+        body = world.createBody(bdef);
 
-                shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
-                fdef.shape = shape;
-                Fixture fixture = body.createFixture(fdef);
-                fixture.setUserData("Slider");
-                fixture.setSensor(true);
+        shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
+        fdef.shape = shape;
+        Fixture fixture = body.createFixture(fdef);
+        fixture.setUserData("CeilingTrap");
 
-
-        }
-        for(MapObject object:map.getLayers().get("Ladder").getObjects().getByType(RectangleMapObject.class))
-        {
-            Rectangle rect =((RectangleMapObject) object).getRectangle();
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
-            body=world.createBody(bdef);
-            shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
-            fdef.shape=shape;
-            Fixture fixture=body.createFixture(fdef);
-            fixture.setUserData("Ladder");
-            fixture.setSensor(true);
-        }
+        ceilingTraps.add(body);
 
     }
 
-    public void creatorrender()
-    {
-        door.setPosition(doorX,doorY);
-        screen.batch.begin();
-        door.draw(screen.batch);
-
-        effect.setPosition(doorX+0.08f,doorY+0.02f);
-        effect.draw(screen.batch,Gdx.graphics.getDeltaTime());
-        screen.batch.end();
-
-
-
+} catch (Exception e){}
     }
 
 
 
     public ArrayList<Soldier> getSoldiers() {
         return soldiers;
+    }
+
+    public ArrayList<Gunner> getGunners() { return gunners; }
+
+    public ArrayList<Body> getCeilingTraps() {
+        return ceilingTraps;
+    }
+
+    public ArrayList<Ally> getAllies() {
+        return allies;
     }
 }

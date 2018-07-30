@@ -493,7 +493,7 @@ public class PlayScreen implements Screen {
     public void dispose() {
         map.dispose();
         music.dispose();
-        world.dispose();
+       //world.dispose();
     }
 
     public World getWorld() {

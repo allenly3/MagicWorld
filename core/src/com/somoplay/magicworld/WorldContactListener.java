@@ -147,6 +147,7 @@ public class WorldContactListener implements ContactListener {
                 (contact.getFixtureA().getUserData() == "Ground" && contact.getFixtureB().getUserData() == "SoldierRightSide")) {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
+
             if(b.getUserData() == "SoldierLeftSide") {
                 if (b.getBody().getLinearVelocity().y == 0) {
                     b.getBody().applyLinearImpulse(new Vector2(-1, 6), b.getBody().getWorldCenter(), true);
@@ -258,7 +259,7 @@ public class WorldContactListener implements ContactListener {
             b = contact.getFixtureA();
 
             ((Player)a.getUserData()).onHit(100);
-        }else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 

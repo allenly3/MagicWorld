@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -16,6 +17,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
+
+import javax.management.remote.SubjectDelegationPermission;
 
 
 public class Soldier extends Enemy {
@@ -81,18 +84,19 @@ public class Soldier extends Enemy {
         BodyDef bdef = new BodyDef();
 
         bdef.position.set(getX(), getY());
-        //System.out.println(getX()+" "+getY());
+
         bdef.type = BodyDef.BodyType.DynamicBody;
 
         body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(16/ MagicWorld.PPM,32/MagicWorld.PPM);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(19/MagicWorld.PPM);
         fdef.shape = shape;
 
-        Fixture fixture = body.createFixture(fdef);
-        fixture.setUserData(this);
+        body.createFixture(fdef).setUserData(this);
+        shape.setPosition(new Vector2(0,19/MagicWorld.PPM));
+        body.createFixture(fdef).setUserData(this);
 
         EdgeShape leftSide = new EdgeShape();
         leftSide.set(new Vector2(-18/MagicWorld.PPM,-10/MagicWorld.PPM), new Vector2(-18/MagicWorld.PPM,20/MagicWorld.PPM));

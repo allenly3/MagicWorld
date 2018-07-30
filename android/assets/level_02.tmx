@@ -7,7 +7,7 @@
   </data>
  </layer>
  <objectgroup name="Soldier">
-  <object id="22" x="1056" y="320" width="32" height="32"/>
+  <object id="22" x="1056" y="288" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Coin"/>
  <objectgroup name="NextLevelLoader">

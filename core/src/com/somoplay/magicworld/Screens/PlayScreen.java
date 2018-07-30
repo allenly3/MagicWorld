@@ -287,8 +287,9 @@ public class PlayScreen implements Screen {
 
         mapRenderer.render();
         renderer.render(world, cam.combined);
-        creator.creatorrender();
+
         update(delta);
+        creator.creatorrender();
         controlStage.draw();
         controlStage.act();
 
@@ -494,7 +495,7 @@ public class PlayScreen implements Screen {
     public void dispose() {
         map.dispose();
         music.dispose();
-        world.dispose();
+        //world.dispose();
     }
 
     public World getWorld() {

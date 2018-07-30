@@ -46,7 +46,7 @@ public class Soldier extends Enemy {
 
     public void defineAnimation()
     {
-        batch=new SpriteBatch();
+        batch=screen.batch;
         txright=new Texture[11];
         txright[0]= LoadResource.assetManager.get("enemy/Walking_000.png");
         txright[1]= LoadResource.assetManager.get("enemy/Walking_003.png");
@@ -117,16 +117,49 @@ public class Soldier extends Enemy {
 
     @Override
     public void update(float dt){
-        if(!behindPlayer){ velocity = new Vector2(-1,body.getLinearVelocity().y); }
-        else if (behindPlayer){ velocity = new Vector2(1,body.getLinearVelocity().y);}
 
-        if(body.getPosition().x + 1.5f <= screen.player.body.getPosition().x){
+
+        if(body.getPosition().x + 1.5f <= screen.player.body.getPosition().x)
+        {
             behindPlayer = true;
 
-        } else if (body.getPosition().x >= screen.player.body.getPosition().x + 1.5f){
+        } else if (body.getPosition().x >= screen.player.body.getPosition().x + 1.5f)
+        {
             behindPlayer = false;
         }
+        if(!behindPlayer)
+        {
+            soldierstate=1;
+            velocity = new Vector2(-1,body.getLinearVelocity().y);
 
+        }
+        else if (behindPlayer)
+        {
+            soldierstate=0;
+            velocity = new Vector2(1,body.getLinearVelocity().y);
+        }
+
+        redbar.setSize(health/3/MagicWorld.PPM,8/MagicWorld.PPM);
+        screen.batch.begin();
+        redbar.setPosition( body.getPosition().x-0.15f, body.getPosition().y+0.3f);
+        redbar.draw(screen.batch);
+
+        if( soldierstate==1) {
+            screen.batch.draw( soldierleft.getKeyFrame(statetime * 0.4f, true),
+                    body.getPosition().x - 0.16f,
+                    body.getPosition().y - 0.32f, 0.35f, 0.65f);
+        }
+        else if( soldierstate==0)
+        {
+            screen.batch.draw( soldierright.getKeyFrame(statetime * 0.4f, true),
+                    body.getPosition().x - 0.16f,
+                    body.getPosition().y - 0.32f, 0.35f, 0.65f);
+        }
+
+
+
+        screen.batch.end();
+        statetime+=dt;
         body.setLinearVelocity(velocity);
 
 

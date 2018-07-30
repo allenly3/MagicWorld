@@ -24,23 +24,18 @@
   <object id="18" x="1696" y="320" width="32" height="32"/>
   <object id="19" x="2080" y="320" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="3" name="Coin"/>
- <objectgroup id="4" name="Spike"/>
- <objectgroup id="5" name="Soldier">
-  <object id="22" x="1568" y="320" width="32" height="32"/>
+ <objectgroup name="Coin"/>
+ <objectgroup name="Spike"/>
+ <objectgroup name="Soldier">
+  <object id="22" x="1568" y="288" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="6" name="Gunner">
-  <object id="23" x="1856" y="320" width="32" height="32"/>
+ <objectgroup name="Gunner">
+  <object id="23" x="1856" y="288" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="7" name="HealthUp"/>
- <objectgroup id="8" name="CeilingTrap"/>
- <objectgroup id="9" name="NextLevelLoader">
-  <object id="24" x="2079" y="260" width="35" height="58"/>
- </objectgroup>
- <objectgroup id="11" name="Slider">
-  <object id="26" x="316" y="347" width="102" height="36"/>
- </objectgroup>
- <objectgroup id="10" name="Ally">
-  <object id="21" x="768" y="320" width="32" height="32"/>
+ <objectgroup name="HealthUp"/>
+ <objectgroup name="CeilingTrap"/>
+ <objectgroup name="NextLevelLoader"/>
+ <objectgroup name="Ally">
+  <object id="21" x="768" y="288" width="32" height="32"/>
  </objectgroup>
 </map>

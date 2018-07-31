@@ -70,7 +70,7 @@ public class PlayScreen implements Screen {
     private OrthogonalTiledMapRenderer mapRenderer;
 
     public Player player;
-    boolean movingR,movingL,jumping,firing;
+    public boolean movingR,movingL,jumping,firing;
     private ArrayList<Bullet> bullets;
     private ArrayList<EnemyBullet> enemyBullets;
     private ArrayList<AllyBullet> allyBullets;
@@ -91,6 +91,10 @@ public class PlayScreen implements Screen {
     Texture tbg,btLeft,btRight,btA,btB;
     Image background;
     public ImageButton buttonLeft,buttonRight,buttonA,buttonB;
+    public InputListener AL,BL;
+
+
+
 
     public Stage stage;
     public Stage controlStage;
@@ -229,7 +233,7 @@ public class PlayScreen implements Screen {
         });
 
         //---------------------------------button A----
-        buttonA.addListener(new InputListener(){
+        buttonA.addListener(AL=new InputListener(){
             public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
 
@@ -245,7 +249,7 @@ public class PlayScreen implements Screen {
 
         });
 //---------------------------button B----------------------
-        buttonB.addListener(new InputListener(){
+        buttonB.addListener(BL=new InputListener(){
             public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
 
@@ -375,7 +379,7 @@ public class PlayScreen implements Screen {
             if(eb.destroyed == false) {
 
                 if (Math.abs(eb.getBody().getPosition().x - player.getPosition().x) >= 3) {
-
+                //绝对值
                     eb.setToDestroy();
                 }
 

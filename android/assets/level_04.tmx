@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="2018.06.01" orientation="orthogonal" renderorder="right-down" width="120" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="27">
+<map version="1.0" tiledversion="2018.06.01" orientation="orthogonal" renderorder="right-down" width="120" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="22" nextobjectid="32">
  <tileset firstgid="1" source="JnRTiles.tsx"/>
  <tileset firstgid="19" name="snow ground" tilewidth="32" tileheight="32" tilecount="140" columns="14">
   <image source="C:/Users/Administrator/Desktop/imglib/input/snow ground.jpg" width="450" height="325"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="119" duration="111"/>
+    <frame tileid="120" duration="111"/>
+    <frame tileid="121" duration="111"/>
+    <frame tileid="122" duration="111"/>
+    <frame tileid="123" duration="111"/>
+    <frame tileid="124" duration="111"/>
+    <frame tileid="125" duration="111"/>
+   </animation>
+  </tile>
+  <tile id="118">
+   <animation>
+    <frame tileid="124" duration="111"/>
+    <frame tileid="123" duration="111"/>
+    <frame tileid="122" duration="111"/>
+    <frame tileid="121" duration="111"/>
+    <frame tileid="120" duration="111"/>
+    <frame tileid="119" duration="111"/>
+    <frame tileid="118" duration="111"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="159" name="ladder" tilewidth="32" tileheight="32" tilecount="3" columns="1">
+  <image source="C:/Users/Administrator/Desktop/ladder.png" width="32" height="103"/>
  </tileset>
  <layer id="1" name="Background" width="120" height="12">
   <data encoding="base64" compression="zlib">
-   eJzt0kEKgDAMBMDm9+qr7UEQAoLR9qDMwNLSQxpCWgMAAABglDiS79UanN7MI9I56/9K/Sd78eediJtZetaeLb1XalxlVI8ze/iqHU5lAd8=
+   eJzt1G0KgCAQRVGn79p5q9B26vsRJIKg0ijFO3ApgnQIyRgiIiIias0iQQMa0YRmtKAVbWhHR/RezTvUnus9AKm6eg9AqmzvAUiVa7SP3MX3pWvQI+d7pP7PEl219i9Zv+Zc/PlMSGZnUPi8ZI1Ub82oOcNXeeMdBg0=
   </data>
  </layer>
  <objectgroup id="2" name="Ground">
@@ -23,19 +48,29 @@
   <object id="17" x="1664" y="288" width="32" height="64"/>
   <object id="18" x="1696" y="320" width="32" height="32"/>
   <object id="19" x="2080" y="320" width="32" height="32"/>
+  <object id="29" x="319" y="158" width="321" height="34"/>
+  <object id="30" x="735" y="158" width="320" height="31"/>
  </objectgroup>
- <objectgroup name="Coin"/>
- <objectgroup name="Spike"/>
- <objectgroup name="Soldier">
+ <objectgroup id="21" name="Ladder">
+  <object id="31" x="285" y="156" width="35" height="194"/>
+ </objectgroup>
+ <objectgroup id="12" name="Coin"/>
+ <objectgroup id="13" name="Spike"/>
+ <objectgroup id="14" name="Soldier">
   <object id="22" x="1568" y="288" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="Gunner">
+ <objectgroup id="15" name="Gunner">
   <object id="23" x="1856" y="288" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="HealthUp"/>
- <objectgroup name="CeilingTrap"/>
- <objectgroup name="NextLevelLoader"/>
- <objectgroup name="Ally">
+ <objectgroup id="16" name="HealthUp"/>
+ <objectgroup id="17" name="CeilingTrap"/>
+ <objectgroup id="18" name="NextLevelLoader">
+  <object id="27" x="2079" y="260" width="35" height="57"/>
+ </objectgroup>
+ <objectgroup id="20" name="Slider">
+  <object id="28" x="318" y="347" width="99" height="34"/>
+ </objectgroup>
+ <objectgroup id="19" name="Ally">
   <object id="21" x="768" y="288" width="32" height="32"/>
  </objectgroup>
 </map>

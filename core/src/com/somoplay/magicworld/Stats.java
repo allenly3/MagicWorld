@@ -39,6 +39,7 @@ public class Stats implements Disposable{
         table.add(timeLabel).expandX();
         table.add(scoreLabel).expandX();
 
+
         stage.addActor(table);
     }
 

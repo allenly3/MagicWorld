@@ -287,7 +287,9 @@ public class PlayScreen implements Screen {
 
         mapRenderer.render();
         renderer.render(world, cam.combined);
+
         update(delta);
+        creator.creatorrender();
         controlStage.draw();
         controlStage.act();
 

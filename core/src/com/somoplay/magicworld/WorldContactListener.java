@@ -278,6 +278,18 @@ public class WorldContactListener implements ContactListener {
 
 
         }
+        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Ladder"){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+            System.out.println("touched ladder2");
+
+
+        } else if(contact.getFixtureA().getUserData() == "Ladder" && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+            System.out.println("touched ladder1");
+
+        }
 
 
 
@@ -299,9 +311,6 @@ public class WorldContactListener implements ContactListener {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
             PlayScreen.friction=0;
-
-
-
 
         }
     }

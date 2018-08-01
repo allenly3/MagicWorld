@@ -363,6 +363,7 @@ public class WorldContactListener implements ContactListener {
             b = contact.getFixtureB();
 
             screen.player.getBody().setGravityScale(1);
+            screen.player.getBody().setLinearVelocity(0,0);
             screen.buttonA.removeListener(A);
             screen.buttonB.removeListener(B);
 

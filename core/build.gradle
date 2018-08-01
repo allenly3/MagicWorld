@@ -12,4 +12,5 @@ eclipse.project {
 
 dependencies {
     implementation 'com.badlogicgames.gdx:gdx-tools:1.9.8'
+    implementation 'com.badlogicgames.gdx:gdx-tools:1.9.8'
 }

@@ -39,7 +39,7 @@ public class Stats implements Disposable{
     TextButton playAgain;
     PlayScreen screen;
 
-    public Stats (SpriteBatch batch){
+    public Stats (SpriteBatch batch, final PlayScreen screen){
 
         Skin skin = new Skin();
         skin.add("menu",new Texture("images/scoreui.png"));
@@ -61,7 +61,7 @@ public class Stats implements Disposable{
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 System.out.print("Work");
-                screen.nextLevel();
+               screen.nextLevel();
             }
         });
 
@@ -83,7 +83,7 @@ public class Stats implements Disposable{
         timeTextLabel = new Label(String.format("Time", 0), new Label.LabelStyle(font, Color.BLUE));
         scoreTextLabel = new Label(String.format("Score", 0), new Label.LabelStyle(font, Color.BLUE));
 
-        globalTable.add(table);
+
         table.padTop(64);
         table.add(timeTextLabel).padRight(50);
         table.add(scoreTextLabel).padRight(112);
@@ -91,12 +91,13 @@ public class Stats implements Disposable{
         table.add(timeLabel).padRight(50);
         table.add(scoreLabel).padRight(112);
         table.row();
+        table.addActor(playAgain);
         table.add(playAgain).size(200,80).padTop(180).padLeft(196);
         globalTable.setBackground(menuImage);
-
+        globalTable.addActor(table);
         //table.setDebug(true);
         stage.addActor(globalTable);
-        Gdx.input.setInputProcessor(stage);
+       // Gdx.input.setInputProcessor(stage);
     }
 
 

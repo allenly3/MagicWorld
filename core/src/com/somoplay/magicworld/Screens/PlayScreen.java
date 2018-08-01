@@ -143,7 +143,7 @@ public class PlayScreen implements Screen {
         stage.addActor(background);
         stage.addActor(label);
 
-        stats = new Stats(game.batch);
+        stats = new Stats(game.batch, this);
 
 
 
@@ -296,6 +296,7 @@ public class PlayScreen implements Screen {
         creator.creatorrender();
         controlStage.draw();
         controlStage.act();
+
 
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
@@ -469,6 +470,8 @@ public class PlayScreen implements Screen {
             //game.setScreen(new MenuScreen(game));
             stats.setScoreLabel(WorldContactListener.score);
             stats.setTimeLabel(elapsedTime);
+            controlStage.clear();
+
             displayStats();
             music.stop();
             //dispose();
@@ -530,7 +533,9 @@ public class PlayScreen implements Screen {
 
     public void displayStats(){
         game.batch.setProjectionMatrix(stats.stage.getCamera().combined);
+        Gdx.input.setInputProcessor(stats.stage);
         stats.stage.draw();
+        stats.stage.act();
     }
 
 }

@@ -396,6 +396,7 @@ public class PlayScreen implements Screen {
             if(soldier.health <= 0 && !soldier.destroyed){
                 world.destroyBody(soldier.body);
                 soldier.destroyed = true;
+                WorldContactListener.score += 50;
             }
 
             if(soldier.destroyed == false){
@@ -413,6 +414,7 @@ public class PlayScreen implements Screen {
             if(gunner.health <= 0 && !gunner.destroyed){
                 world.destroyBody(gunner.body);
                 gunner.destroyed = true;
+                WorldContactListener.score += 75;
             }
 
             if(gunner.destroyed == false){
@@ -524,4 +526,5 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(stats.stage.getCamera().combined);
         stats.stage.draw();
     }
+
 }

@@ -98,6 +98,7 @@ public class Soldier extends Enemy {
         shape.setPosition(new Vector2(0,19/MagicWorld.PPM));
         body.createFixture(fdef).setUserData(this);
 
+
         EdgeShape leftSide = new EdgeShape();
         leftSide.set(new Vector2(-18/MagicWorld.PPM,-10/MagicWorld.PPM), new Vector2(-18/MagicWorld.PPM,20/MagicWorld.PPM));
         fdef.shape = leftSide;
@@ -145,19 +146,19 @@ public class Soldier extends Enemy {
 
         redbar.setSize(health/3/MagicWorld.PPM,8/MagicWorld.PPM);
         screen.batch.begin();
-        redbar.setPosition( body.getPosition().x-0.15f, body.getPosition().y+0.3f);
+        redbar.setPosition( body.getPosition().x-0.15f, body.getPosition().y+0.38f);
         redbar.draw(screen.batch);
 
         if( soldierstate==1) {
             screen.batch.draw( soldierleft.getKeyFrame(statetime * 0.4f, true),
                     body.getPosition().x - 0.16f,
-                    body.getPosition().y - 0.32f, 0.35f, 0.65f);
+                    body.getPosition().y - 0.22f, 0.35f, 0.65f);
         }
         else if( soldierstate==0)
         {
             screen.batch.draw( soldierright.getKeyFrame(statetime * 0.4f, true),
                     body.getPosition().x - 0.16f,
-                    body.getPosition().y - 0.32f, 0.35f, 0.65f);
+                    body.getPosition().y - 0.22f, 0.35f, 0.65f);
         }
 
 

@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.somoplay.magicworld.Screens.PlayScreen;
 import com.somoplay.magicworld.Sprite.Ally;
 import com.somoplay.magicworld.Sprite.AllyBullet;
@@ -21,6 +23,7 @@ public class WorldContactListener implements ContactListener {
 
     PlayScreen screen;
     public static int score=0;
+    InputListener A,B;
 
 
     public WorldContactListener(PlayScreen screen){
@@ -268,8 +271,6 @@ public class WorldContactListener implements ContactListener {
 
 
 
-
-
         } else if(contact.getFixtureA().getUserData() == "Slider" && contact.getFixtureB().getUserData() instanceof Player){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
@@ -281,13 +282,48 @@ public class WorldContactListener implements ContactListener {
         if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Ladder"){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
-            System.out.println("touched ladder2");
+
+
+
 
 
         } else if(contact.getFixtureA().getUserData() == "Ladder" && contact.getFixtureB().getUserData() instanceof Player){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
-            System.out.println("touched ladder1");
+
+            screen.player.getBody().setGravityScale(0);
+
+            screen.buttonA.removeListener(screen.AL);
+            screen.buttonB.removeListener(screen.BL);
+
+            screen.buttonA.addListener(A=new InputListener(){
+                public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
+                {
+                    screen.player.getBody().setLinearVelocity(0,0);
+                }
+
+                public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
+                {
+                    screen.player.getBody().setLinearVelocity(0,1);
+                    return true;
+                }
+
+            });
+            screen.buttonB.addListener(B=new InputListener(){
+                public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
+                {
+                    screen.player.getBody().setLinearVelocity(0,0);
+                }
+
+                public boolean touchDown(InputEvent event,float x,float y,int pointer,int button)
+                {
+                    screen.player.getBody().setLinearVelocity(0,-1);
+                    return true;
+                }
+
+            });
+
+
 
         }
 
@@ -299,6 +335,8 @@ public class WorldContactListener implements ContactListener {
     @Override
     public void endContact(Contact contact) {
         Fixture a, b;
+
+        //---------------slider
         if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
@@ -313,6 +351,29 @@ public class WorldContactListener implements ContactListener {
             PlayScreen.friction=0;
 
         }
+        //--------------------ladder
+        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Ladder"){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+            System.out.println("touched ladder2");
+            screen.player.getBody().setGravityScale(1);
+       }
+        else if(contact.getFixtureA().getUserData() == "Ladder" && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            screen.player.getBody().setGravityScale(1);
+            screen.buttonA.removeListener(A);
+            screen.buttonB.removeListener(B);
+
+            screen.buttonA.addListener(screen.AL);
+            screen.buttonB.addListener(screen.BL);
+
+
+        }
+
+
+
     }
 
     @Override

@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="2018.06.01" orientation="orthogonal" renderorder="right-down" width="120" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="22" nextobjectid="32">
  <tileset firstgid="1" source="JnRTiles.tsx"/>
- <tileset firstgid="19" name="snow ground" tilewidth="32" tileheight="32" tilecount="140" columns="14">
-  <image source="C:/Users/Administrator/Desktop/imglib/input/snow ground.jpg" width="450" height="325"/>
-  <tile id="0">
-   <animation>
-    <frame tileid="119" duration="111"/>
-    <frame tileid="120" duration="111"/>
-    <frame tileid="121" duration="111"/>
-    <frame tileid="122" duration="111"/>
-    <frame tileid="123" duration="111"/>
-    <frame tileid="124" duration="111"/>
-    <frame tileid="125" duration="111"/>
-   </animation>
-  </tile>
-  <tile id="118">
-   <animation>
-    <frame tileid="124" duration="111"/>
-    <frame tileid="123" duration="111"/>
-    <frame tileid="122" duration="111"/>
-    <frame tileid="121" duration="111"/>
-    <frame tileid="120" duration="111"/>
-    <frame tileid="119" duration="111"/>
-    <frame tileid="118" duration="111"/>
-   </animation>
-  </tile>
+ <tileset firstgid="19" name="ladder" tilewidth="32" tileheight="32" tilecount="3" columns="1">
+  <image source="ladder.png" width="32" height="103"/>
  </tileset>
- <tileset firstgid="159" name="ladder" tilewidth="32" tileheight="32" tilecount="3" columns="1">
-  <image source="C:/Users/Administrator/Desktop/ladder.png" width="32" height="103"/>
+ <tileset firstgid="22" name="snow ground" tilewidth="32" tileheight="32" tilecount="140" columns="14">
+  <image source="snow ground.jpg" width="450" height="325"/>
+  <tile id="114">
+   <animation>
+    <frame tileid="114" duration="200"/>
+    <frame tileid="113" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="115">
+   <animation>
+    <frame tileid="115" duration="200"/>
+    <frame tileid="114" duration="200"/>
+   </animation>
+  </tile>
+  <tile id="116">
+   <animation>
+    <frame tileid="120" duration="200"/>
+    <frame tileid="119" duration="200"/>
+   </animation>
+  </tile>
  </tileset>
  <layer id="1" name="Background" width="120" height="12">
   <data encoding="base64" compression="zlib">
-   eJzt1G0KgCAQRVGn79p5q9B26vsRJIKg0ijFO3ApgnQIyRgiIiIias0iQQMa0YRmtKAVbWhHR/RezTvUnus9AKm6eg9AqmzvAUiVa7SP3MX3pWvQI+d7pP7PEl219i9Zv+Zc/PlMSGZnUPi8ZI1Ub82oOcNXeeMdBg0=
+   eJzt1NsKgCAQRVGne71a/1x9dechCAYElUYpzoJNEWRDiM4RERERUWkeCWpQizrUowGNaEIzWtR7Oe9QeWvtAcjUVnsAMuVrD0CmSp3PcqfvU9egR8z/CJ3Poq5W309ZP2df/HlPSGQ7OtCpnqesEeqtGS1n+KoLqCACxQ==
   </data>
  </layer>
  <objectgroup id="2" name="Ground">

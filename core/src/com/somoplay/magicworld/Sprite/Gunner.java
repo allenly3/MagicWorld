@@ -1,5 +1,6 @@
 package com.somoplay.magicworld.Sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -17,6 +18,7 @@ public class Gunner extends Enemy {
 
     private static Texture texture;
     private static TextureRegion region;
+    private Texture bastion;
 
     public float health = 100;
     private float timeSinceLastFire = 0;
@@ -35,6 +37,8 @@ public class Gunner extends Enemy {
             texture = LoadResource.assetManager.get("images/blt.png");
             region = new TextureRegion(texture);
         }
+        bastion=new Texture(Gdx.files.internal("enemy/bastion.png"));
+
 
         BodyDef bdef = new BodyDef();
 
@@ -93,6 +97,8 @@ public class Gunner extends Enemy {
             behindPlayer = false;
         }
         timeSinceLastFire += dt;
+
+        screen.batch.draw(bastion,body.getPosition().x-0.15f,body.getPosition().y-0.15f,0.35f,0.35f);
     }
 
     public void fire(){

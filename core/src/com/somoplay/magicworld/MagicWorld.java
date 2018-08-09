@@ -17,7 +17,7 @@ public class MagicWorld extends Game {
 	public MenuScreen menuScreen;
 
 	public static final float PPM = 100;
-	public static SpriteBatch batch;
+	public  SpriteBatch batch;
 
 
 	public void create () {

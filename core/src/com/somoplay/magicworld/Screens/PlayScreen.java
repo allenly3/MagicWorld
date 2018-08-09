@@ -285,6 +285,7 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
+
         label.setText(Integer.toString(WorldContactListener.score));
         stage.draw();
         stage.act();
@@ -293,6 +294,7 @@ public class PlayScreen implements Screen {
         renderer.render(world, cam.combined);
 
         update(delta);
+
         creator.creatorrender();
         controlStage.draw();
         controlStage.act();
@@ -425,7 +427,9 @@ public class PlayScreen implements Screen {
             }
 
             if(gunner.destroyed == false){
+                batch.begin();
                 gunner.update(dt);
+                batch.end();
                 if(gunner.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
                     gunner.body.setActive(true);
                 }
@@ -433,9 +437,13 @@ public class PlayScreen implements Screen {
 
         }
 
+
+        game.batch.setProjectionMatrix(cam.combined);
+        game.batch.begin();
         for(Ally ally: creator.getAllies()){
-            ally.update(dt);
+            ally.update(dt,game.batch);
         }
+        game.batch.end();
 
         for(Body ct : creator.getCeilingTraps()){
 

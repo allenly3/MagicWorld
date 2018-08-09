@@ -92,7 +92,21 @@ public class WorldCreator {
             fixture.setUserData("HealthUp");
             fixture.setSensor(true);
         }
+        //Create PowerUp_Doublefire
+        for (MapObject object : map.getLayers().get("PowerUp_Doublefire").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
+            fdef.shape = shape;
+            Fixture fixture = body.createFixture(fdef);
+            fixture.setUserData("PowerUp_Doublefire");
+            fixture.setSensor(true);
+        }
         //Create Ground
         for (MapObject object : map.getLayers().get("Ground").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -171,7 +185,6 @@ public class WorldCreator {
             fixture.setUserData("Spike");
             fixture.setSensor(true);
         }
-try {
     //Create Ceiling Trap
     for (MapObject object : map.getLayers().get("CeilingTrap").getObjects().getByType(RectangleMapObject.class)) {
         Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -189,40 +202,36 @@ try {
         ceilingTraps.add(body);
 
     }
+    try {
+
+        for (MapObject object : map.getLayers().get("Slider").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
+            fdef.shape = shape;
+            Fixture fixture = body.createFixture(fdef);
+            fixture.setUserData("Slider");
+            fixture.setSensor(true);
 
 
-    for (MapObject object : map.getLayers().get("Slider").getObjects().getByType(RectangleMapObject.class)) {
-        Rectangle rect = ((RectangleMapObject) object).getRectangle();
-        bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
-        body = world.createBody(bdef);
+        }
+        for (MapObject object : map.getLayers().get("Ladder").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
+            body = world.createBody(bdef);
 
-        shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
-        fdef.shape = shape;
-        Fixture fixture = body.createFixture(fdef);
-        fixture.setUserData("Slider");
-        fixture.setSensor(true);
+            shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
+            fdef.shape = shape;
+            Fixture fixture = body.createFixture(fdef);
+            fixture.setUserData("Ladder");
+            fixture.setSensor(true);
 
-
-    }
-    for (MapObject object : map.getLayers().get("Ladder").getObjects().getByType(RectangleMapObject.class)) {
-        Rectangle rect = ((RectangleMapObject) object).getRectangle();
-        bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
-        body = world.createBody(bdef);
-
-        shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
-        fdef.shape = shape;
-        Fixture fixture = body.createFixture(fdef);
-        fixture.setUserData("Ladder");
-        fixture.setSensor(true);
-
-
-    }
-
-
-
+        }
+    } catch (Exception e){}
 }
-catch (Exception e){}
-    }
+
 
 
     public void creatorrender()
@@ -252,4 +261,13 @@ catch (Exception e){}
     public ArrayList<Ally> getAllies() {
         return allies;
     }
+
+    public void removeSoldier(int index){
+        soldiers.remove(index);
+    }
+
+    public void removeGunner(int index){
+        gunners.remove(index);
+    }
+
 }

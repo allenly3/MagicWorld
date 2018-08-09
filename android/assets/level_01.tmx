@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="120" height="30" tilewidth="32" tileheight="32" infinite="0" nextobjectid="269">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="120" height="30" tilewidth="32" tileheight="32" infinite="0" nextobjectid="290">
  <tileset firstgid="1" source="Game Boy Advance - Kirby Nightmare in Dream Land - Beam Kirby.tsx"/>
  <tileset firstgid="401" source="JnRTiles.tsx"/>
  <tileset firstgid="419" source="health.tsx"/>
  <layer name="Background" width="120" height="30">
   <data encoding="base64" compression="zlib">
-   eJzt2kEOhDAIQFG9/8or6EVduDENKhSagvkvMWkm2qEgC6vLAgAAoLev8Qdy2NaxB4B49BZQGz0M1ETvArX9tYd59q6H/RabKmutEicu2npRV7+MOcwYE/yoa6ws+cwSB2JR1/HIMVAffYwsuBf7Zc5d5tieSN8Ztr8dHesalYsZOfb8p+Xa6D1q65645dtTb4zS9e3apbEmP/dznubUzmMZa2KKqq9lnhn1lebTxvx2XnR/9I6lmL7WOOo91az3YJ55o+LSrlE79uTuBMCzfTA=
+   eJzt2QEKwiAUBuB1jW7dFeqiESWFWD3TmMr3gWDR7OnPNtBtAwAAAAAAYFanw70xj5RZa2MsMplLNC+5rkmua5LrmuS6JrkCwDy8t5/yPbnSPt3r55HXbuTa3jk/aj4WvksuA81rjzVu+c+aa3vvUdfuid9yTy0ydm+l+z7vR9Ynf160jFPTj9TUK9+acUbIt2bun37X+/74tV+q6dsc/3VOtdc5WMu4veqKzjHab1m7K0H1X/M=
   </data>
  </layer>
  <objectgroup name="Slider"/>
@@ -15,13 +15,13 @@
  <objectgroup name="Gunner">
   <object id="271" x="992" y="864" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="PowerUp_Doublefire">
+  <object id="269" x="480" y="832" width="32" height="32"/>
+ </objectgroup>
  <objectgroup name="Ground">
   <object id="103" x="0" y="928" width="384" height="32"/>
   <object id="111" x="384" y="864" width="352" height="32"/>
   <object id="113" x="736" y="928" width="416" height="32"/>
-  <object id="120" x="1504" y="736" width="32" height="32"/>
-  <object id="121" x="1568" y="800" width="32" height="32"/>
-  <object id="122" x="1632" y="864" width="32" height="32"/>
   <object id="123" x="1664" y="928" width="192" height="32"/>
   <object id="124" x="1824" y="832" width="32" height="96"/>
   <object id="125" x="1792" y="864" width="32" height="64"/>
@@ -49,15 +49,6 @@
   <object id="152" x="3520" y="896" width="160" height="32"/>
   <object id="153" x="3552" y="864" width="128" height="32"/>
   <object id="154" x="3584" y="832" width="96" height="32"/>
-  <object id="172" x="1440" y="672" width="32" height="32"/>
-  <object id="173" x="1408" y="608" width="32" height="32"/>
-  <object id="174" x="1440" y="544" width="32" height="32"/>
-  <object id="176" x="1408" y="480" width="32" height="32"/>
-  <object id="177" x="1440" y="416" width="32" height="32"/>
-  <object id="179" x="1408" y="352" width="32" height="32"/>
-  <object id="180" x="1440" y="288" width="32" height="32"/>
-  <object id="181" x="1408" y="224" width="32" height="32"/>
-  <object id="182" x="1472" y="160" width="768" height="32"/>
   <object id="183" x="2368" y="512" width="32" height="32"/>
   <object id="184" x="2432" y="640" width="32" height="32"/>
   <object id="185" x="2496" y="608" width="32" height="32"/>
@@ -69,7 +60,11 @@
   <object id="202" x="3168" y="416" width="64" height="32"/>
   <object id="246" x="352" y="896" width="64" height="32"/>
   <object id="247" x="704" y="896" width="32" height="64"/>
-  <object id="255" x="1120" y="832" width="32" height="96"/>
+  <object id="255" x="1120" y="864" width="32" height="64"/>
+  <object id="272" x="1184" y="800" width="64" height="32"/>
+  <object id="274" x="1312" y="800" width="96" height="32"/>
+  <object id="275" x="1472" y="800" width="64" height="32"/>
+  <object id="276" x="1568" y="800" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Coin">
   <object id="163" x="416" y="832" width="32" height="32"/>
@@ -80,35 +75,26 @@
   <object id="169" x="800" y="864" width="32" height="32"/>
   <object id="170" x="832" y="864" width="32" height="32"/>
   <object id="171" x="832" y="896" width="32" height="32"/>
-  <object id="203" x="1504" y="128" width="32" height="32"/>
-  <object id="204" x="1536" y="128" width="32" height="32"/>
-  <object id="205" x="1568" y="128" width="32" height="32"/>
-  <object id="206" x="1600" y="128" width="32" height="32"/>
-  <object id="207" x="1632" y="128" width="32" height="32"/>
-  <object id="208" x="1664" y="128" width="32" height="32"/>
-  <object id="209" x="1696" y="128" width="32" height="32"/>
-  <object id="210" x="1728" y="128" width="32" height="32"/>
-  <object id="211" x="1760" y="128" width="32" height="32"/>
-  <object id="212" x="1792" y="128" width="32" height="32"/>
-  <object id="213" x="1824" y="128" width="32" height="32"/>
-  <object id="215" x="1856" y="128" width="32" height="32"/>
-  <object id="216" x="1888" y="128" width="32" height="32"/>
-  <object id="217" x="1920" y="128" width="32" height="32"/>
-  <object id="218" x="1952" y="128" width="32" height="32"/>
-  <object id="219" x="1984" y="128" width="32" height="32"/>
-  <object id="220" x="2016" y="128" width="32" height="32"/>
-  <object id="221" x="2048" y="128" width="32" height="32"/>
-  <object id="222" x="2080" y="128" width="32" height="32"/>
-  <object id="224" x="2112" y="128" width="32" height="32"/>
-  <object id="225" x="2144" y="128" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="CeilingTrap"/>
  <objectgroup name="Ally"/>
  <objectgroup name="Soldier">
   <object id="258" x="1088" y="864" width="32" height="32"/>
+  <object id="277" x="2272" y="864" width="32" height="32"/>
+  <object id="278" x="2304" y="864" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="NextLevelLoader">
-  <object id="259" x="1120" y="768" width="32" height="64"/>
+  <object id="259" x="3647" y="768" width="32" height="64"/>
  </objectgroup>
- <objectgroup name="Spike"/>
+ <objectgroup name="Spike">
+  <object id="286" x="1216" y="800">
+   <polygon points="0,0 32,0 16,-32"/>
+  </object>
+  <object id="288" x="1344" y="800">
+   <polygon points="0,0 32,0 16,-32"/>
+  </object>
+  <object id="289" x="1504" y="800">
+   <polygon points="0,0 32,0 16,-32"/>
+  </object>
+ </objectgroup>
 </map>

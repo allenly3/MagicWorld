@@ -35,6 +35,9 @@ public class Player extends GameSprite {
     public Texture txRightMove, txRightStop, txLeftMove, txLeftStop;
     Animation<TextureRegion> rightMoving, rightStop, leftMoving, leftStop;
 
+    //POWER UPS
+    public boolean doubleFire = false;
+
 
     public Player(PlayScreen screen) {
         super(screen);
@@ -219,5 +222,9 @@ public class Player extends GameSprite {
 
     public void setDestroyed(boolean destroyed) {
         this.destroyed = destroyed;
+    }
+
+    public void setDoubleFire(boolean powerup) {
+        doubleFire = powerup;
     }
 }

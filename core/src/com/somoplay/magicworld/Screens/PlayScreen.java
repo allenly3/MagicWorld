@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -27,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.somoplay.magicworld.MagicWorld;
@@ -85,6 +85,7 @@ public class PlayScreen implements Screen {
 
     private float statetime;
     private float timeSinceLastFire = 1.5f;
+    private float allyFireTimer = 1.5f;
     private Bullet bullet;
     private ArrayList<Float> ceilingTrapHeights;
 
@@ -93,7 +94,8 @@ public class PlayScreen implements Screen {
     public ImageButton buttonLeft,buttonRight,buttonA,buttonB;
     public InputListener AL,BL;
 
-
+    private ArrayList<Integer> tobeDestroyedSoldier;
+    private ArrayList<Integer> tobeDestroyedGunner;
 
 
     public Stage stage;
@@ -123,6 +125,8 @@ public class PlayScreen implements Screen {
         bullets = new ArrayList<Bullet>();
         enemyBullets = new ArrayList<EnemyBullet>();
         allyBullets = new ArrayList<AllyBullet>();
+        tobeDestroyedSoldier = new ArrayList<Integer>();
+        tobeDestroyedGunner = new ArrayList<Integer>();
 
         loadResource = new LoadResource();
 
@@ -142,6 +146,8 @@ public class PlayScreen implements Screen {
         stage = new Stage();
         stage.addActor(background);
         stage.addActor(label);
+
+        WorldContactListener.score = 0;
 
         stats = new Stats(game.batch, this);
 
@@ -311,9 +317,6 @@ public class PlayScreen implements Screen {
             player.render(game.batch, statetime);
         }
 
-
-
-
     }
 
 
@@ -337,13 +340,18 @@ public class PlayScreen implements Screen {
                 player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 5);
             }
 
-            if (firing && timeSinceLastFire >= 0.3f) {
+            if (firing && timeSinceLastFire >= 0.6f) {
 
                 if (player.isDestroyed() == false) {
-                    bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y));
-                    bullets.add(bullet);
-                    for (Ally ally : creator.getAllies()) {
-                        ally.fire();
+
+                    firePlayerBullet();
+                    if(player.doubleFire){
+                        Timer.schedule(new Timer.Task(){
+                            @Override
+                            public void run() {
+                                firePlayerBullet();
+                            }
+                        }, 0.1f);
                     }
                     timeSinceLastFire = 0;
                 }
@@ -399,11 +407,17 @@ public class PlayScreen implements Screen {
                 ab.update(dt);
             }
         }
+
         for (Soldier soldier: creator.getSoldiers()){
             if(soldier.health <= 0 && !soldier.destroyed){
                 world.destroyBody(soldier.body);
                 soldier.destroyed = true;
                 WorldContactListener.score += 50;
+            }
+
+            if(soldier.body.getPosition().y < -0.175 && !soldier.destroyed){
+                world.destroyBody(soldier.body);
+                soldier.destroyed = true;
             }
 
             if(soldier.destroyed == false){
@@ -415,6 +429,17 @@ public class PlayScreen implements Screen {
                 }
             }
 
+            if(soldier.destroyed){
+                tobeDestroyedSoldier.add(creator.getSoldiers().indexOf(soldier));
+            }
+
+        }
+
+        if(tobeDestroyedSoldier.size() != 0){
+            for(int i: tobeDestroyedSoldier){
+                creator.removeSoldier(i);
+            }
+            tobeDestroyedSoldier.clear();;
         }
 
         for (Gunner gunner: creator.getGunners()){
@@ -424,6 +449,11 @@ public class PlayScreen implements Screen {
                 WorldContactListener.score += 75;
             }
 
+            if(gunner.body.getPosition().y < - 0.175 && !gunner.destroyed){
+                world.destroyBody(gunner.body);
+                gunner.destroyed = true;
+            }
+
             if(gunner.destroyed == false){
                 gunner.update(dt);
                 if(gunner.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
@@ -431,12 +461,61 @@ public class PlayScreen implements Screen {
                 }
             }
 
+            if(gunner.destroyed){
+                tobeDestroyedGunner.add(creator.getGunners().indexOf(gunner));
+            }
+
+        }
+
+        if(tobeDestroyedGunner.size() != 0){
+            for(int i: tobeDestroyedGunner){
+                creator.removeGunner(i);
+            }
+            tobeDestroyedGunner.clear();
         }
 
         for(Ally ally: creator.getAllies()){
-            ally.update(dt);
-        }
 
+            if(ally.health <= 0 && !ally.destroyed){
+                world.destroyBody(ally.body);
+                ally.destroyed = true;
+                WorldContactListener.score += 50;
+            }
+
+            if(!ally.destroyed) {
+                ally.update(dt);
+                for (Gunner gunner : creator.getGunners()) {
+                    // if enemy is to the right fire to the right
+                    if (gunner.body.getPosition().x > ally.body.getPosition().x && gunner.body.getPosition().x - ally.body.getPosition().x <= 480 / MagicWorld.PPM) {
+                        if (allyFireTimer >= 1f) {
+                            ally.fireRight();
+                            allyFireTimer = 0;
+                        }
+                    } else if (gunner.body.getPosition().x < ally.body.getPosition().x && ally.body.getPosition().x - gunner.body.getPosition().x <= 480 / MagicWorld.PPM) {
+                        if (allyFireTimer >= 1f) {
+                            ally.fireLeft();
+                            allyFireTimer = 0;
+                        }
+                    }
+                }
+
+                for (Soldier soldier : creator.getSoldiers()) {
+                    // if enemy is to the right fire to the right
+                    if (soldier.body.getPosition().x > ally.body.getPosition().x && soldier.body.getPosition().x - ally.body.getPosition().x <= 480 / MagicWorld.PPM) {
+                        if (allyFireTimer >= 1f) {
+                            ally.fireRight();
+                            allyFireTimer = 0;
+                        }
+                    } else if (soldier.body.getPosition().x < ally.body.getPosition().x && ally.body.getPosition().x - soldier.body.getPosition().x <= 480 / MagicWorld.PPM) {
+                        if (allyFireTimer >= 1f) {
+                            ally.fireLeft();
+                            allyFireTimer = 0;
+                        }
+                    }
+                }
+            }
+        }
+        allyFireTimer += dt;
         for(Body ct : creator.getCeilingTraps()){
 
             if(ct.getPosition().y <= (ceilingTrapHeights.get(trapIndex) - 96/MagicWorld.PPM)){
@@ -474,7 +553,7 @@ public class PlayScreen implements Screen {
 
             displayStats();
             music.stop();
-            //dispose();
+            dispose();
         }
         mapRenderer.setView(cam);
     }
@@ -536,6 +615,13 @@ public class PlayScreen implements Screen {
         Gdx.input.setInputProcessor(stats.stage);
         stats.stage.draw();
         stats.stage.act();
+
+        //player.setDoubleFire(false);
+    }
+
+    public void firePlayerBullet(){
+        bullet = new Bullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y));
+        bullets.add(bullet);
     }
 
 }

@@ -305,6 +305,9 @@ public class PlayScreen implements Screen {
         for(Bullet bullet : bullets) {
             bullet.render(game.batch);
         }
+        for(AllyBullet bullet : allyBullets) {
+            bullet.render(game.batch);
+        }
 
 
         game.batch.end();

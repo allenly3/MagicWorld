@@ -349,7 +349,7 @@ public class PlayScreen implements Screen {
 
                 if (player.isDestroyed() == false) {
 
-                    // TODO use switch for each powerup case
+                    // TODO use switch for each powerup case, callback to know when collison happens and able to shoot next tracking
                     if(!player.tracking) {
                         firePlayerBullet();
                         if (player.doubleFire) {

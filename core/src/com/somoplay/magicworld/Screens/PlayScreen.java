@@ -34,10 +34,12 @@ import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Sprite.Ally;
 import com.somoplay.magicworld.Sprite.AllyBullet;
 import com.somoplay.magicworld.Sprite.Bullet;
+import com.somoplay.magicworld.Sprite.Enemy;
 import com.somoplay.magicworld.Sprite.EnemyBullet;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
 import com.somoplay.magicworld.Sprite.Soldier;
+import com.somoplay.magicworld.Sprite.TrackingBullet;
 import com.somoplay.magicworld.Stats;
 import com.somoplay.magicworld.WorldContactListener;
 import com.somoplay.magicworld.WorldCreator;
@@ -57,8 +59,6 @@ public class PlayScreen implements Screen {
     public static float velocity=2.5f;
     public static float friction=0;
 
-
-
     public static int level=1;
 
     private MagicWorld game;
@@ -72,6 +72,7 @@ public class PlayScreen implements Screen {
     public Player player;
     public boolean movingR,movingL,jumping,firing;
     private ArrayList<Bullet> bullets;
+    public ArrayList<TrackingBullet> trackingBullets;
     private ArrayList<EnemyBullet> enemyBullets;
     private ArrayList<AllyBullet> allyBullets;
     private WorldCreator creator;
@@ -87,6 +88,7 @@ public class PlayScreen implements Screen {
     private float timeSinceLastFire = 1.5f;
     private float allyFireTimer = 1.5f;
     private Bullet bullet;
+    private TrackingBullet trackingBullet;
     private ArrayList<Float> ceilingTrapHeights;
 
     Texture tbg,btLeft,btRight,btA,btB;
@@ -123,6 +125,7 @@ public class PlayScreen implements Screen {
         player = new Player(this);
 
         bullets = new ArrayList<Bullet>();
+        trackingBullets = new ArrayList<TrackingBullet>();
         enemyBullets = new ArrayList<EnemyBullet>();
         allyBullets = new ArrayList<AllyBullet>();
         tobeDestroyedSoldier = new ArrayList<Integer>();
@@ -303,13 +306,15 @@ public class PlayScreen implements Screen {
         controlStage.draw();
         controlStage.act();
 
-
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
         for(Bullet bullet : bullets) {
             bullet.render(game.batch);
         }
 
+        for(TrackingBullet tb: trackingBullets){
+            tb.render(game.batch);
+        }
 
         game.batch.end();
         statetime=statetime+delta;
@@ -344,16 +349,25 @@ public class PlayScreen implements Screen {
 
                 if (player.isDestroyed() == false) {
 
-                    firePlayerBullet();
-                    if(player.doubleFire){
-                        Timer.schedule(new Timer.Task(){
-                            @Override
-                            public void run() {
-                                firePlayerBullet();
-                            }
-                        }, 0.1f);
+                    // TODO use switch for each powerup case
+                    if(!player.tracking) {
+                        firePlayerBullet();
+                        if (player.doubleFire) {
+                            Timer.schedule(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    firePlayerBullet();
+                                }
+                            }, 0.1f);
+                        }
+                        timeSinceLastFire = 0;
+                    } else{
+                        if(getNearestEnemy() != null && timeSinceLastFire > 1.5f){
+                            trackingBullet = new TrackingBullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y), getNearestEnemy());
+                            trackingBullets.add(trackingBullet);
+                            timeSinceLastFire = 0;
+                        }
                     }
-                    timeSinceLastFire = 0;
                 }
             }
         }
@@ -382,6 +396,10 @@ public class PlayScreen implements Screen {
 
                 bullet.update(dt);
             }
+        }
+
+        for(TrackingBullet tb: trackingBullets){
+            tb.update(dt);
         }
 
         for(EnemyBullet eb: enemyBullets){
@@ -624,4 +642,23 @@ public class PlayScreen implements Screen {
         bullets.add(bullet);
     }
 
+    public Enemy getNearestEnemy(){
+        float x = 100;
+        ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+        enemies.addAll(creator.getGunners());
+        enemies.addAll(creator.getSoldiers());
+        Enemy enemy = null;
+
+        for(Enemy e: enemies){
+            if(e.body.isActive()) {
+                float distance = (Math.abs(e.body.getPosition().x - player.body.getPosition().x)
+                        + Math.abs(e.body.getPosition().y - player.body.getPosition().y));
+                if (distance < x) {
+                    x = distance;
+                    enemy = e;
+                }
+            }
+        }
+        return enemy;
+    }
 }

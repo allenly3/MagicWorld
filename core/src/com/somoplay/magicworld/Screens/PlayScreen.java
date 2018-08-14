@@ -90,6 +90,7 @@ public class PlayScreen implements Screen {
     private Bullet bullet;
     private TrackingBullet trackingBullet;
     private ArrayList<Float> ceilingTrapHeights;
+    public boolean trackingResolved = true;
 
     Texture tbg,btLeft,btRight,btA,btB;
     Image background;
@@ -362,10 +363,11 @@ public class PlayScreen implements Screen {
                         }
                         timeSinceLastFire = 0;
                     } else{
-                        if(getNearestEnemy() != null && timeSinceLastFire > 1.5f){
+                        if(getNearestEnemy() != null && trackingResolved){
                             trackingBullet = new TrackingBullet(this, new Vector2(player.body.getPosition().x, player.body.getPosition().y), getNearestEnemy());
                             trackingBullets.add(trackingBullet);
                             timeSinceLastFire = 0;
+                            trackingResolved = false;
                         }
                     }
                 }

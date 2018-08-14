@@ -17,6 +17,7 @@ import com.somoplay.magicworld.Sprite.EnemyBullet;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
 import com.somoplay.magicworld.Sprite.Soldier;
+import com.somoplay.magicworld.Sprite.TrackingBullet;
 
 
 public class WorldContactListener implements ContactListener {
@@ -63,7 +64,6 @@ public class WorldContactListener implements ContactListener {
 
             ((Enemy)b.getUserData()).onHit();
             ((Bullet) a.getUserData()).setToDestroy();
-
 
         } else if(contact.getFixtureA().getUserData() instanceof AllyBullet && contact.getFixtureB().getUserData() instanceof Soldier) {
             a = contact.getFixtureA();
@@ -373,6 +373,15 @@ public class WorldContactListener implements ContactListener {
     public void endContact(Contact contact) {
         Fixture a, b;
 
+        if(contact.getFixtureA().getUserData() instanceof Bullet && contact.getFixtureB().getUserData() instanceof Soldier) {
+            screen.trackingResolved = true;
+        } else if(contact.getFixtureA().getUserData() instanceof Soldier && contact.getFixtureB().getUserData() instanceof Bullet) {
+            screen.trackingResolved = true;
+        } else if(contact.getFixtureA().getUserData() instanceof Bullet && contact.getFixtureB().getUserData() instanceof Gunner) {
+            screen.trackingResolved = true;
+        } else if(contact.getFixtureA().getUserData() instanceof Gunner && contact.getFixtureB().getUserData() instanceof Bullet) {
+            screen.trackingResolved = true;
+        }
         //---------------slider
         if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "Slider"){
             a = contact.getFixtureA();
@@ -407,10 +416,7 @@ public class WorldContactListener implements ContactListener {
             screen.buttonA.addListener(screen.AL);
             screen.buttonB.addListener(screen.BL);
 
-
         }
-
-
 
     }
 

@@ -35,7 +35,7 @@ public class EnemyBullet {
 
         world = screen.getWorld();
         if(texture == null){
-            texture = LoadResource.assetManager.get("images/blt.png");
+            texture = LoadResource.assetManager.get("Sball.png");
             region = new TextureRegion(texture );
         }
 

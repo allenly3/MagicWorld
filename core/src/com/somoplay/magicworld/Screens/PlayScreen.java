@@ -88,7 +88,7 @@ public class PlayScreen implements Screen {
     private Bullet bullet;
     private ArrayList<Float> ceilingTrapHeights;
 
-    Texture tbg,btLeft,btRight,btA,btB;
+    Texture tbg,btLeft,btRight,btA,btB,ceilingtraps;
     Image background;
     public ImageButton buttonLeft,buttonRight,buttonA,buttonB;
     public InputListener AL,BL;
@@ -104,7 +104,7 @@ public class PlayScreen implements Screen {
     public PlayScreen(MagicWorld game){
         this.game = game;
         cam = new OrthographicCamera();
-
+        ceilingtraps=LoadResource.assetManager.get("traps.jpg");
 
         this.batch=game.batch;
         viewport = new FitViewport(screenWidth/MagicWorld.PPM, screenHeight/MagicWorld.PPM, cam);
@@ -305,6 +305,14 @@ public class PlayScreen implements Screen {
         for(Bullet bullet : bullets) {
             bullet.render(game.batch);
         }
+        for(AllyBullet bullet: allyBullets)
+        {
+            bullet.render(game.batch);
+        }
+        for(EnemyBullet bullet:enemyBullets)
+        {
+            bullet.render(game.batch);
+        }
 
 
         game.batch.end();
@@ -443,7 +451,7 @@ public class PlayScreen implements Screen {
         for(Ally ally: creator.getAllies()){
             ally.update(dt,game.batch);
         }
-        game.batch.end();
+
 
         for(Body ct : creator.getCeilingTraps()){
 
@@ -454,7 +462,11 @@ public class PlayScreen implements Screen {
                 ct.setLinearVelocity(0,-0.7f);
                 trapIndex++;
             }
+            game.batch.draw(ceilingtraps,ct.getPosition().x-0.8f,ct.getPosition().y-0.2f,1.6f,0.5f);
         }
+
+        game.batch.end();
+
         trapIndex = 0;
         deathTimer += dt;
         if(!player.isDestroyed()) {

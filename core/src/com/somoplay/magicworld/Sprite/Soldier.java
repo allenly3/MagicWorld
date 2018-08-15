@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
@@ -27,15 +28,23 @@ public class Soldier extends Enemy {
     public float health = 100;
     public boolean destroyed = false;
     private boolean behindPlayer = false;
-    public float x,y;
+    public float x, y;
     float statetime;
+    int attackormove=0;//0 means moving ,1 means attacking
+    float duration=0;
+    public static boolean touch=false;
 
-
-    Texture bar,txright[];
+    Texture bar,txright[],idleright[],attacking[];
     public Sprite redbar;
-    public Animation<Texture> soldierright;
-    public Animation<TextureRegion>  soldierleft;
+    public Animation<Texture> soldierright,stopright;
+    public Animation<TextureRegion>  soldierleft,stopleft;
     public int soldierstate=0;// 0 left,   1 right
+
+
+
+
+    float move=0;
+    Body hand;
 
     public Soldier(PlayScreen screen, float x, float y){
         super(screen, x, y);
@@ -44,12 +53,12 @@ public class Soldier extends Enemy {
 
         defineAnimation();
 
-
     }
 
     public void defineAnimation()
     {
         batch=screen.batch;
+        //-----------run    right
         txright=new Texture[11];
         txright[0]= LoadResource.assetManager.get("enemy/Walking_000.png");
         txright[1]= LoadResource.assetManager.get("enemy/Walking_003.png");
@@ -65,12 +74,33 @@ public class Soldier extends Enemy {
 
         soldierright=new Animation<Texture>(Gdx.graphics.getDeltaTime(),txright);
         TextureRegion tx[]=new TextureRegion[11];
+        //--------------runleft
         for(int i=0;i<11;i++)
         {
             tx[i]=new TextureRegion(txright[i]);
             tx[i].flip(true,false);
         }
         soldierleft=new Animation<TextureRegion>(Gdx.graphics.getDeltaTime(),tx);
+
+        //-------idleright
+        idleright=new Texture[5];
+        idleright[0]=new Texture(Gdx.files.internal("enemy/Attacking_000.png"));
+        idleright[1]=new Texture(Gdx.files.internal("enemy/Attacking_003.png"));
+        idleright[2]=new Texture(Gdx.files.internal("enemy/Attacking_006.png"));
+        idleright[3]=new Texture(Gdx.files.internal("enemy/Attacking_008.png"));
+        idleright[4]=new Texture(Gdx.files.internal("enemy/Attacking_013.png"));
+
+        stopright=new Animation<Texture>(Gdx.graphics.getDeltaTime(),idleright);
+        //-----idleleft
+        TextureRegion tr[]=new TextureRegion[5];
+        for(int i=0;i<5;i++)
+        {
+            tr[i]=new TextureRegion(idleright[i]);
+            tr[i].flip(true,false);
+        }
+        stopleft=new Animation<TextureRegion>(Gdx.graphics.getDeltaTime(),tr);
+
+
 
         bar= LoadResource.assetManager.get("images/empty.jpg");
         redbar=new Sprite(new TextureRegion(bar));
@@ -82,21 +112,28 @@ public class Soldier extends Enemy {
     @Override
     protected void defineEnemy() {
         BodyDef bdef = new BodyDef();
-
         bdef.position.set(getX(), getY());
-
         bdef.type = BodyDef.BodyType.DynamicBody;
-
         body = world.createBody(bdef);
+
+        bdef.gravityScale=0;
+        hand=  world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(19/MagicWorld.PPM);
         fdef.shape = shape;
+        body.createFixture(fdef).setUserData(this);// body----part1
 
-        body.createFixture(fdef).setUserData(this);
         shape.setPosition(new Vector2(0,19/MagicWorld.PPM));
-        body.createFixture(fdef).setUserData(this);
+        body.createFixture(fdef).setUserData(this);// ------body-----part2
+
+
+        //------hand----
+        shape.setRadius(5/MagicWorld.PPM);
+        fdef.shape=shape;
+        fdef.isSensor=true;
+        hand.createFixture(fdef).setUserData("hand");
 
 
         EdgeShape leftSide = new EdgeShape();
@@ -110,6 +147,8 @@ public class Soldier extends Enemy {
         fdef.shape = rightSide;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("SoldierRightSide");
+
+
     }
 
     @Override
@@ -123,25 +162,32 @@ public class Soldier extends Enemy {
     @Override
     public void update(float dt){
 
+        if(attackormove==0)
+        {
+            if (body.getPosition().x + 1.5f <= screen.player.body.getPosition().x) {
+                behindPlayer = true;
 
-        if(body.getPosition().x + 1.5f <= screen.player.body.getPosition().x)
-        {
-            behindPlayer = true;
+            } else if (body.getPosition().x >= screen.player.body.getPosition().x + 1.5f) {
+                behindPlayer = false;
+            }
+            if (!behindPlayer) {
+                soldierstate = 1;
+                if (Math.abs(body.getPosition().x - screen.player.getPosition().x) > 0.41f) {
+                    velocity = new Vector2(-1, body.getLinearVelocity().y);
+                } else {
+                    soldierstate = 2;
+                    velocity = new Vector2(0, body.getLinearVelocity().y);
+                }
 
-        } else if (body.getPosition().x >= screen.player.body.getPosition().x + 1.5f)
-        {
-            behindPlayer = false;
-        }
-        if(!behindPlayer)
-        {
-            soldierstate=1;
-            velocity = new Vector2(-1,body.getLinearVelocity().y);
-
-        }
-        else if (behindPlayer)
-        {
-            soldierstate=0;
-            velocity = new Vector2(1,body.getLinearVelocity().y);
+            } else if (behindPlayer) {
+                soldierstate = 0;
+                if (Math.abs(body.getPosition().x - screen.player.getPosition().x) > 0.41f) {
+                    velocity = new Vector2(1, body.getLinearVelocity().y);
+                } else {
+                    soldierstate = 3;
+                    velocity = new Vector2(0, body.getLinearVelocity().y);
+                }
+            }
         }
 
         redbar.setSize(health/3/MagicWorld.PPM,8/MagicWorld.PPM);
@@ -149,16 +195,80 @@ public class Soldier extends Enemy {
         redbar.setPosition( body.getPosition().x-0.15f, body.getPosition().y+0.38f);
         redbar.draw(screen.batch);
 
-        if( soldierstate==1) {
-            screen.batch.draw( soldierleft.getKeyFrame(statetime * 0.4f, true),
-                    body.getPosition().x - 0.16f,
-                    body.getPosition().y - 0.22f, 0.35f, 0.65f);
-        }
-        else if( soldierstate==0)
+
+
+            if (soldierstate == 1) {
+                screen.batch.draw(soldierleft.getKeyFrame(statetime * 0.4f, true),
+                        body.getPosition().x - 0.16f,
+                        body.getPosition().y - 0.22f, 0.35f, 0.65f);
+                hand.setTransform(body.getPosition().x, body.getPosition().y-0.05f, 0);
+            } else if (soldierstate == 0) {
+                screen.batch.draw(soldierright.getKeyFrame(statetime * 0.4f, true),
+                        body.getPosition().x - 0.16f,
+                        body.getPosition().y - 0.22f, 0.35f, 0.65f);
+                hand.setTransform(body.getPosition().x, body.getPosition().y-0.05f, 0);
+            }
+
+
+
+          else if(soldierstate==2)
         {
-            screen.batch.draw( soldierright.getKeyFrame(statetime * 0.4f, true),
+            attackormove=1;
+            screen.batch.draw( stopleft.getKeyFrame(statetime * 0.1f, true),
+                    body.getPosition().x - 0.25f,
+                    body.getPosition().y - 0.22f, 0.47f, 0.68f);
+
+            if(hand.getPosition().x-screen.player.getPosition().x>0.12f)
+            {
+                hand.setLinearVelocity(-0.38f,0);
+
+                if(this.body.getPosition().x-hand.getPosition().x>=0.217f)
+                 {
+                    hand.setTransform(body.getPosition().x,body.getPosition().y-0.05f,0);
+                    if(!touch)
+                    {
+                        System.out.println("MISS");
+                    }
+                 }
+            }
+            duration+=Gdx.graphics.getDeltaTime();
+            if(duration>= 0.8)
+            {
+
+                attackormove=0;
+                duration=0;
+                touch=false;
+            }
+
+        }
+        else if(soldierstate==3)
+        {
+            attackormove=1;
+            screen.batch.draw( stopright.getKeyFrame(statetime * 0.1f, true),
                     body.getPosition().x - 0.16f,
-                    body.getPosition().y - 0.22f, 0.35f, 0.65f);
+                    body.getPosition().y - 0.22f, 0.47f, 0.68f);
+
+            if(screen.player.getPosition().x-hand.getPosition().x>0.12f)
+            {
+                hand.setLinearVelocity( 0.38f,0);
+
+                 if(hand.getPosition().x-this.body.getPosition().x>=0.217f)
+                {
+
+                    hand.setTransform(body.getPosition().x,body.getPosition().y-0.05f,0);
+                    if(!touch)
+                    {
+                        System.out.println("MISS");
+                    }
+                }
+            }
+            duration+=Gdx.graphics.getDeltaTime();
+            if(duration>= 0.8)
+            {
+                attackormove=0;
+                duration=0;
+                touch=false;
+            }
         }
 
 
@@ -169,6 +279,7 @@ public class Soldier extends Enemy {
 
 
     }
+
 
     public void hitPlayer(){
         //body.applyLinearImpulse(60f,0,body.getWorldCenter().x,body.getWorldCenter().y,true);

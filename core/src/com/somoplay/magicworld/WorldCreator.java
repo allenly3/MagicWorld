@@ -33,6 +33,9 @@ public class WorldCreator {
     ArrayList<Gunner> gunners;
     ArrayList<Body> ceilingTraps;
     ArrayList<Ally> allies;
+    ArrayList<Body> spikes;
+
+    Texture img_spike;
 
     Sprite door;
     float doorX,doorY;
@@ -44,6 +47,7 @@ public class WorldCreator {
         World world = screen.getWorld();
         Map map = screen.getMap();
         this.screen=screen;
+        img_spike=LoadResource.assetManager.get("spike.jpg");
         Texture tx=LoadResource.assetManager.get("images/door.jpg");
         door=new Sprite(tx);
         door.setSize(35/MagicWorld.PPM,55/MagicWorld.PPM);
@@ -55,6 +59,7 @@ public class WorldCreator {
         gunners = new ArrayList<Gunner>();
         allies = new ArrayList<Ally>();
         ceilingTraps = new ArrayList<Body>();
+        spikes=new ArrayList<Body>();
 
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -159,6 +164,7 @@ public class WorldCreator {
             bdef.position.set((polygon.getX() + polygon.getBoundingRectangle().getWidth() / 2) / MagicWorld.PPM - 0.16f, (polygon.getY() + polygon.getBoundingRectangle().getHeight() / 2) / MagicWorld.PPM - 0.16f);
 
             body = world.createBody(bdef);
+
             float[] points = polygon.getVertices();
             for(int i = 0; i < points.length; i++){
                 points[i] = points[i] / 100;
@@ -170,6 +176,11 @@ public class WorldCreator {
 
             fixture.setUserData("Spike");
             fixture.setSensor(true);
+
+            spikes.add(body);
+
+
+
         }
 try {
     //Create Ceiling Trap
@@ -233,6 +244,14 @@ catch (Exception e){}
 
         effect.setPosition(doorX+0.08f,doorY+0.02f);
         effect.draw(screen.batch,Gdx.graphics.getDeltaTime());
+
+        for(Body spk:spikes)
+        {
+             screen.batch.draw(img_spike,spk.getPosition().x,spk.getPosition().y,0.33f,0.34f);
+        }
+
+
+
         screen.batch.end();
 
 

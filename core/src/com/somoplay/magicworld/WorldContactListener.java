@@ -83,7 +83,7 @@ public class WorldContactListener implements ContactListener {
             if(screen.player.freezing){
                 ((Enemy)b.getUserData()).setSlowed(true);
             }
-//
+
         } else if(contact.getFixtureA().getUserData() instanceof Bat && contact.getFixtureB().getUserData() instanceof Bullet) {
             a = contact.getFixtureB();
             b = contact.getFixtureA();

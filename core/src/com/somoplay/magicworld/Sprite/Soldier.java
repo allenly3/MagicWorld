@@ -176,7 +176,10 @@ public class Soldier extends Enemy {
             if (!behindPlayer) {
                 soldierstate = 1;
                 if (Math.abs(body.getPosition().x - screen.player.getPosition().x) > 0.41f) {
-                    velocity = new Vector2(-1, body.getLinearVelocity().y);
+                    if(slowed) {
+                        velocity = new Vector2(-0.5f, body.getLinearVelocity().y);
+                        slowedTimer += dt;
+                    } else{ velocity = new Vector2(-1, body.getLinearVelocity().y);}
                 } else {
                     soldierstate = 2;
                     velocity = new Vector2(0, body.getLinearVelocity().y);
@@ -185,7 +188,10 @@ public class Soldier extends Enemy {
             } else if (behindPlayer) {
                 soldierstate = 0;
                 if (Math.abs(body.getPosition().x - screen.player.getPosition().x) > 0.41f) {
-                    velocity = new Vector2(1, body.getLinearVelocity().y);
+                    if(slowed) {
+                        velocity = new Vector2(0.5f, body.getLinearVelocity().y);
+                        slowedTimer += dt;
+                    } else{ velocity = new Vector2(1, body.getLinearVelocity().y);}
                 } else {
                     soldierstate = 3;
                     velocity = new Vector2(0, body.getLinearVelocity().y);

@@ -13,6 +13,9 @@ public abstract class Enemy extends Sprite{
     public Body body;
     public Vector2 velocity;
 
+    public boolean slowed;
+    public float slowedTimer;
+
     public Enemy(PlayScreen screen, float x, float y){
         this.world = screen.getWorld();
         this.screen = screen;
@@ -30,6 +33,10 @@ public abstract class Enemy extends Sprite{
         if(y){
             velocity.y = -velocity.y;
         }
+    }
+
+    public void setSlowed(boolean slowed) {
+        this.slowed = slowed;
     }
 
     protected abstract void defineEnemy();

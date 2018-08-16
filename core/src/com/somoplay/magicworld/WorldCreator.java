@@ -22,6 +22,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
 import com.somoplay.magicworld.Sprite.Ally;
+import com.somoplay.magicworld.Sprite.Bat;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Soldier;
 
@@ -31,8 +32,12 @@ public class WorldCreator {
 
     ArrayList<Soldier> soldiers;
     ArrayList<Gunner> gunners;
+    ArrayList<Bat> bats;
     ArrayList<Body> ceilingTraps;
     ArrayList<Ally> allies;
+    ArrayList<Body> spikes;
+
+    Texture img_spike;
 
     Sprite door;
     float doorX,doorY;
@@ -44,6 +49,7 @@ public class WorldCreator {
         World world = screen.getWorld();
         Map map = screen.getMap();
         this.screen=screen;
+        img_spike=LoadResource.assetManager.get("spike.jpg");
         Texture tx=LoadResource.assetManager.get("images/door.jpg");
         door=new Sprite(tx);
         door.setSize(35/MagicWorld.PPM,55/MagicWorld.PPM);
@@ -53,8 +59,10 @@ public class WorldCreator {
 
         soldiers = new ArrayList<Soldier>();
         gunners = new ArrayList<Gunner>();
+        bats = new ArrayList<Bat>();
         allies = new ArrayList<Ally>();
         ceilingTraps = new ArrayList<Body>();
+        spikes=new ArrayList<Body>();
 
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -93,6 +101,21 @@ public class WorldCreator {
             fixture.setSensor(true);
         }
 
+        //Create PowerUp_Doublefire
+        for (MapObject object : map.getLayers().get("PowerUp_Doublefire").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
+            fdef.shape = shape;
+            Fixture fixture = body.createFixture(fdef);
+            fixture.setUserData("PowerUp_Doublefire");
+            fixture.setSensor(true);
+        }
         //Create Ground
         for (MapObject object : map.getLayers().get("Ground").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -120,6 +143,13 @@ public class WorldCreator {
         for (MapObject object : map.getLayers().get("Gunner").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             gunners.add(new Gunner(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
+
+        }
+
+        //Create Bat
+        for (MapObject object : map.getLayers().get("Bat").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bats.add(new Bat(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
 
         }
 
@@ -159,6 +189,7 @@ public class WorldCreator {
             bdef.position.set((polygon.getX() + polygon.getBoundingRectangle().getWidth() / 2) / MagicWorld.PPM - 0.16f, (polygon.getY() + polygon.getBoundingRectangle().getHeight() / 2) / MagicWorld.PPM - 0.16f);
 
             body = world.createBody(bdef);
+
             float[] points = polygon.getVertices();
             for(int i = 0; i < points.length; i++){
                 points[i] = points[i] / 100;
@@ -170,8 +201,12 @@ public class WorldCreator {
 
             fixture.setUserData("Spike");
             fixture.setSensor(true);
+
+            spikes.add(body);
+
+
+
         }
-try {
     //Create Ceiling Trap
     for (MapObject object : map.getLayers().get("CeilingTrap").getObjects().getByType(RectangleMapObject.class)) {
         Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -189,40 +224,36 @@ try {
         ceilingTraps.add(body);
 
     }
+    try {
+
+        for (MapObject object : map.getLayers().get("Slider").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
+            fdef.shape = shape;
+            Fixture fixture = body.createFixture(fdef);
+            fixture.setUserData("Slider");
+            fixture.setSensor(true);
 
 
-    for (MapObject object : map.getLayers().get("Slider").getObjects().getByType(RectangleMapObject.class)) {
-        Rectangle rect = ((RectangleMapObject) object).getRectangle();
-        bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
-        body = world.createBody(bdef);
+        }
+        for (MapObject object : map.getLayers().get("Ladder").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
+            body = world.createBody(bdef);
 
-        shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
-        fdef.shape = shape;
-        Fixture fixture = body.createFixture(fdef);
-        fixture.setUserData("Slider");
-        fixture.setSensor(true);
+            shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
+            fdef.shape = shape;
+            Fixture fixture = body.createFixture(fdef);
+            fixture.setUserData("Ladder");
+            fixture.setSensor(true);
 
-
-    }
-    for (MapObject object : map.getLayers().get("Ladder").getObjects().getByType(RectangleMapObject.class)) {
-        Rectangle rect = ((RectangleMapObject) object).getRectangle();
-        bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
-        body = world.createBody(bdef);
-
-        shape.setAsBox(rect.getWidth() / 2 / MagicWorld.PPM, rect.getHeight() / 2 / MagicWorld.PPM);
-        fdef.shape = shape;
-        Fixture fixture = body.createFixture(fdef);
-        fixture.setUserData("Ladder");
-        fixture.setSensor(true);
-
-
-    }
-
-
-
+        }
+    } catch (Exception e){}
 }
-catch (Exception e){}
-    }
+
 
 
     public void creatorrender()
@@ -233,6 +264,14 @@ catch (Exception e){}
 
         effect.setPosition(doorX+0.08f,doorY+0.02f);
         effect.draw(screen.batch,Gdx.graphics.getDeltaTime());
+
+        for(Body spk:spikes)
+        {
+             screen.batch.draw(img_spike,spk.getPosition().x,spk.getPosition().y,0.33f,0.34f);
+        }
+
+
+
         screen.batch.end();
 
 
@@ -245,6 +284,8 @@ catch (Exception e){}
 
     public ArrayList<Gunner> getGunners() { return gunners; }
 
+    public ArrayList<Bat> getBats() { return bats; }
+
     public ArrayList<Body> getCeilingTraps() {
         return ceilingTraps;
     }
@@ -252,4 +293,13 @@ catch (Exception e){}
     public ArrayList<Ally> getAllies() {
         return allies;
     }
+
+    public void removeSoldier(int index){
+        soldiers.remove(index);
+    }
+
+    public void removeGunner(int index){
+        gunners.remove(index);
+    }
+
 }

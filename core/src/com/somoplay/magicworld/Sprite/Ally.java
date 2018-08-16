@@ -26,6 +26,8 @@ public class Ally extends Sprite {
     public Body body;
     private boolean behindPlayer = true;
     private boolean active = false;
+    public float health = 250;
+    public boolean destroyed = false;
 
     Animation<TextureRegion> idleright,idleleft,runleft, runright;
     int allystate=1;// stands for four kinds of animation
@@ -89,6 +91,7 @@ public class Ally extends Sprite {
             }
         }
 
+        // Makes Ally follow player
         if (active) {
             if (Math.abs(body.getPosition().x - screen.getPlayer().getPosition().x) >= 80 / MagicWorld.PPM) {
                 if (behindPlayer) {
@@ -148,14 +151,21 @@ public class Ally extends Sprite {
         active = true;
     }
 
-    public void fire() {
+    public void fireRight() {
         if (active) {
             screen.getAllyBullets().add(new AllyBullet(screen, body.getPosition()));
-            if (screen.player.state == 1 || screen.player.state == 2) {
-                screen.getAllyBullets().get(screen.getAllyBullets().size() - 1).getBody().setLinearVelocity(2, 0);
-            } else if (screen.player.state == 3 || screen.player.state == 4) {
-                screen.getAllyBullets().get(screen.getAllyBullets().size() - 1).getBody().setLinearVelocity(-2, 0);
-            }
+            screen.getAllyBullets().get(screen.getAllyBullets().size() - 1).getBody().setLinearVelocity(2, 0);
+        }
+    }
+    public void fireLeft() {
+        if (active) {
+            screen.getAllyBullets().add(new AllyBullet(screen, body.getPosition()));
+            screen.getAllyBullets().get(screen.getAllyBullets().size() - 1).getBody().setLinearVelocity(-2, 0);
+        }
+    }
+    public void onHit(int value){
+        if(health > 0) {
+            health -= value;
         }
     }
 }

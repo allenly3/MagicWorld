@@ -21,17 +21,16 @@ import java.util.ArrayList;
 
 public class Bullet{
 
-    private static Texture texture;
-    private static TextureRegion region;
+    public static Texture texture;
+    public static TextureRegion region;
 
     public Vector2 position;
     public boolean destroyed = false;
     public boolean toBeDestroyed = false;
 
-    private PlayScreen screen;
-    private World world;
-    private Body bulletBody;
-
+    public PlayScreen screen;
+    public World world;
+    public Body bulletBody;
 
 
     public Bullet(PlayScreen screen, Vector2 position){
@@ -53,11 +52,9 @@ public class Bullet{
 
         if(screen.player.state==1||screen.player.state==2) {
             bdef.position.set(screen.player.body.getPosition().x + 0.16f, screen.player.body.getPosition().y + 0.10f);
-
         }
         if(screen.player.state==3||screen.player.state==4) {
             bdef.position.set(screen.player.body.getPosition().x - 0.10f, screen.player.body.getPosition().y + 0.10f);
-
         }
 
         bdef.type = BodyDef.BodyType.DynamicBody;
@@ -73,14 +70,11 @@ public class Bullet{
         bulletBody.createFixture(fdef).setUserData(this);
 
         if(screen.player.state==1||screen.player.state==2) {
-
             bulletBody.setLinearVelocity(2, 0);
         }
         if(screen.player.state==3||screen.player.state==4) {
-
             bulletBody.setLinearVelocity(-2, 0);
         }
-
 
     }
     public void render(SpriteBatch batch){
@@ -101,9 +95,6 @@ public class Bullet{
     }
 
     public void setToDestroy(){
-
         toBeDestroyed = true;
-
     }
-
 }

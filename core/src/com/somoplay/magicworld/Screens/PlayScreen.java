@@ -521,6 +521,8 @@ public class PlayScreen implements Screen {
             tobeDestroyedGunner.clear();
         }
 
+        game.batch.setProjectionMatrix(cam.combined);
+        game.batch.begin();
         for(Ally ally: creator.getAllies()){
 
             if(ally.health <= 0 && !ally.destroyed){
@@ -530,7 +532,7 @@ public class PlayScreen implements Screen {
             }
 
             if(!ally.destroyed) {
-                ally.update(dt);
+                ally.update(dt,game.batch);
                 for (Gunner gunner : creator.getGunners()) {
                     // if enemy is to the right fire to the right
                     if (gunner.body.getPosition().x > ally.body.getPosition().x && gunner.body.getPosition().x - ally.body.getPosition().x <= 480 / MagicWorld.PPM) {

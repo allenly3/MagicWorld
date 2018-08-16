@@ -157,8 +157,9 @@ public class WorldContactListener implements ContactListener {
         } else if(contact.getFixtureA().getUserData() =="hand"&& contact.getFixtureB().getUserData() instanceof Player){
             a = contact.getFixtureB();
             b = contact.getFixtureA();
-
-            ((Player)a.getUserData()).onHit(50);
+            Soldier.touch=true;
+            System.out.println("hand");
+            ((Player)a.getUserData()).onHit(2);
 
         } else if(contact.getFixtureA().getUserData() instanceof Ally && contact.getFixtureB().getUserData() instanceof Soldier){
             a = contact.getFixtureA();

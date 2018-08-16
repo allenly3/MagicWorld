@@ -93,7 +93,7 @@ public class PlayScreen implements Screen {
     private ArrayList<Float> ceilingTrapHeights;
     public boolean trackingResolved = true;
 
-    Texture tbg,btLeft,btRight,btA,btB;
+    Texture tbg,btLeft,btRight,btA,btB,ceilingtraps;
     Image background;
     public ImageButton buttonLeft,buttonRight,buttonA,buttonB;
     public InputListener AL,BL;
@@ -110,7 +110,7 @@ public class PlayScreen implements Screen {
     public PlayScreen(MagicWorld game){
         this.game = game;
         cam = new OrthographicCamera();
-
+        ceilingtraps=LoadResource.assetManager.get("traps.jpg");
 
         this.batch=game.batch;
         viewport = new FitViewport(screenWidth/MagicWorld.PPM, screenHeight/MagicWorld.PPM, cam);
@@ -296,6 +296,7 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
+
         label.setText(Integer.toString(WorldContactListener.score));
         stage.draw();
         stage.act();
@@ -304,6 +305,7 @@ public class PlayScreen implements Screen {
         renderer.render(world, cam.combined);
 
         update(delta);
+
         creator.creatorrender();
         controlStage.draw();
         controlStage.act();
@@ -311,6 +313,14 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
         for(Bullet bullet : bullets) {
+            bullet.render(game.batch);
+        }
+        for(AllyBullet bullet: allyBullets)
+        {
+            bullet.render(game.batch);
+        }
+        for(EnemyBullet bullet:enemyBullets)
+        {
             bullet.render(game.batch);
         }
 
@@ -490,7 +500,9 @@ public class PlayScreen implements Screen {
             }
 
             if(gunner.destroyed == false){
+                batch.begin();
                 gunner.update(dt);
+                batch.end();
                 if(gunner.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
                     gunner.body.setActive(true);
                 }
@@ -560,7 +572,11 @@ public class PlayScreen implements Screen {
                 ct.setLinearVelocity(0,-0.7f);
                 trapIndex++;
             }
+            game.batch.draw(ceilingtraps,ct.getPosition().x-0.8f,ct.getPosition().y-0.2f,1.6f,0.5f);
         }
+
+        game.batch.end();
+
         trapIndex = 0;
         deathTimer += dt;
         if(!player.isDestroyed()) {

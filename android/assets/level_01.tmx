@@ -3,16 +3,16 @@
  <tileset firstgid="1" source="Game Boy Advance - Kirby Nightmare in Dream Land - Beam Kirby.tsx"/>
  <tileset firstgid="401" source="JnRTiles.tsx"/>
  <tileset firstgid="419" source="health.tsx"/>
- <layer name="Background" width="120" height="30">
+ <layer id="1" name="Background" width="120" height="30">
   <data encoding="base64" compression="zlib">
    eJzt2QEKwiAUBuB1jW7dFeqiESWFWD3TmMr3gWDR7OnPNtBtAwAAAAAAYFanw70xj5RZa2MsMplLNC+5rkmua5LrmuS6JrkCwDy8t5/yPbnSPt3r55HXbuTa3jk/aj4WvksuA81rjzVu+c+aa3vvUdfuid9yTy0ydm+l+z7vR9Ynf160jFPTj9TUK9+acUbIt2bun37X+/74tV+q6dsc/3VOtdc5WMu4veqKzjHab1m7K0H1X/M=
   </data>
  </layer>
- <objectgroup name="Slider"/>
- <objectgroup name="HealthUp">
+ <objectgroup id="2" name="Slider"/>
+ <objectgroup id="3" name="HealthUp">
   <object id="268" x="704" y="832" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="Gunner">
+ <objectgroup id="4" name="Gunner">
   <object id="271" x="992" y="864" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="PowerUp_Doublefire">
@@ -66,7 +66,7 @@
   <object id="275" x="1472" y="800" width="64" height="32"/>
   <object id="276" x="1568" y="800" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="Coin">
+ <objectgroup id="6" name="Coin">
   <object id="163" x="416" y="832" width="32" height="32"/>
   <object id="164" x="576" y="832" width="32" height="32"/>
   <object id="166" x="768" y="864" width="32" height="32"/>

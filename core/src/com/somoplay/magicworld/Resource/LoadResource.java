@@ -47,6 +47,11 @@ public class LoadResource
         assetManager.load("enemy/Walking_027.png",Texture.class);
         assetManager.load("enemy/Walking_030.png",Texture.class);
 
+        assetManager.load("Sball.png",Texture.class);
+        assetManager.load("traps.jpg",Texture.class);
+        assetManager.load("spike.jpg",Texture.class);
+        assetManager.load("images/miss.png",Texture.class);
+
 
 
 

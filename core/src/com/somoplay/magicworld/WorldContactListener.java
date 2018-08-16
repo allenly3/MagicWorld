@@ -144,13 +144,17 @@ public class WorldContactListener implements ContactListener {
             ((AllyBullet) a.getUserData()).setToDestroy();
 
 
-        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() instanceof Soldier){
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData()=="hand"){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
+            Soldier.touch=true;
+            System.out.println("hand");
 
-            ((Player)a.getUserData()).onHit(50);
+            ((Player)a.getUserData()).onHit(2);
+            //((Soldier)b.getUserData()).hitPlayer();
+            //screen.setHealth(0.5f);
 
-        } else if(contact.getFixtureA().getUserData() instanceof Soldier && contact.getFixtureB().getUserData() instanceof Player){
+        } else if(contact.getFixtureA().getUserData() =="hand"&& contact.getFixtureB().getUserData() instanceof Player){
             a = contact.getFixtureB();
             b = contact.getFixtureA();
 
@@ -451,6 +455,24 @@ public class WorldContactListener implements ContactListener {
             screen.buttonB.addListener(screen.BL);
 
         }
+
+        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData()=="hand"){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+            Soldier.touch=false;
+
+
+
+        } else if(contact.getFixtureA().getUserData() =="hand"&& contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+            Soldier.touch=false;
+
+
+
+        }
+
+
 
     }
 

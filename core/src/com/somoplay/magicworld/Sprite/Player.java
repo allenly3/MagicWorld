@@ -62,6 +62,7 @@ public class Player extends GameSprite {
         fixture = body.createFixture(fixturedef);
         fixture.setUserData(this);
 
+
         init();
 
         healthbar = new HealthBar(this);

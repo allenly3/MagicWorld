@@ -11,5 +11,6 @@ public class DesktopLauncher {
 //		config.height=1600;
 
 		new LwjglApplication(new MagicWorld(), config);
+		System.out.println(arg.length);
 	}
 }

@@ -66,6 +66,7 @@ public class Stats implements Disposable{
         });
 
 
+
         viewport = new FitViewport(MagicWorld.screenWidth, MagicWorld.screenHeight, new OrthographicCamera());
         stage = new Stage(viewport, batch);
 

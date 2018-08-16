@@ -27,7 +27,6 @@ public class Soldier extends Enemy {
     public float health = 100;
     public boolean destroyed = false;
     private boolean behindPlayer = false;
-    public float x,y;
     float statetime;
 
 
@@ -39,8 +38,6 @@ public class Soldier extends Enemy {
 
     public Soldier(PlayScreen screen, float x, float y){
         super(screen, x, y);
-        this.x=x;
-        this.y=y;
 
         defineAnimation();
 
@@ -94,6 +91,7 @@ public class Soldier extends Enemy {
         shape.setRadius(19/MagicWorld.PPM);
         fdef.shape = shape;
 
+        // creates two circles used for hitboxes
         body.createFixture(fdef).setUserData(this);
         shape.setPosition(new Vector2(0,19/MagicWorld.PPM));
         body.createFixture(fdef).setUserData(this);
@@ -123,20 +121,24 @@ public class Soldier extends Enemy {
     @Override
     public void update(float dt) {
 
-
         if (body.getPosition().x + 1.5f <= screen.player.body.getPosition().x) {
             behindPlayer = true;
-
         } else if (body.getPosition().x >= screen.player.body.getPosition().x + 1.5f) {
             behindPlayer = false;
         }
         if (!behindPlayer) {
             soldierstate = 1;
-            velocity = new Vector2(-1, body.getLinearVelocity().y);
+            if(slowed){
+                velocity = new Vector2(-0.5f, body.getLinearVelocity().y);
+                slowedTimer += dt;
+            } else{velocity = new Vector2(-1, body.getLinearVelocity().y);}
 
         } else if (behindPlayer) {
             soldierstate = 0;
-            velocity = new Vector2(1, body.getLinearVelocity().y);
+            if(slowed){
+                velocity = new Vector2(0.5f, body.getLinearVelocity().y);
+                slowedTimer += dt;
+            } else{velocity = new Vector2(1, body.getLinearVelocity().y);}
         }
 
         redbar.setSize(health / 3 / MagicWorld.PPM, 8 / MagicWorld.PPM);
@@ -157,6 +159,7 @@ public class Soldier extends Enemy {
 
         screen.batch.end();
         statetime += dt;
+        if(slowedTimer >= 3f){slowed = false; slowedTimer = 0;}
         body.setLinearVelocity(velocity);
 
     }

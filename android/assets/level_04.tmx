@@ -64,6 +64,7 @@
   <object id="27" x="2079" y="260" width="35" height="57"/>
  </objectgroup>
  <objectgroup name="PowerUp_Doublefire"/>
+ <objectgroup name="Bat"/>
  <objectgroup name="Slider">
   <object id="28" x="318" y="347" width="99" height="34"/>
  </objectgroup>

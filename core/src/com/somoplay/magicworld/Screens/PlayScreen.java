@@ -33,6 +33,7 @@ import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Sprite.Ally;
 import com.somoplay.magicworld.Sprite.AllyBullet;
+import com.somoplay.magicworld.Sprite.Bat;
 import com.somoplay.magicworld.Sprite.Bullet;
 import com.somoplay.magicworld.Sprite.Enemy;
 import com.somoplay.magicworld.Sprite.EnemyBullet;
@@ -416,6 +417,20 @@ public class PlayScreen implements Screen {
             }
         }
 
+        for(Bat bat: creator.getBats()){
+            if(bat.health <= 0 && !bat.destroyed){
+                world.destroyBody(bat.body);
+                bat.destroyed = true;
+                WorldContactListener.score += 60;
+            }
+            if(!bat.destroyed) {
+                bat.update(dt);
+                if(bat.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
+                    bat.body.setActive(true);
+
+                }
+            }
+        }
         for(AllyBullet ab: allyBullets){
             if(ab.destroyed == false) {
 

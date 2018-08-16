@@ -33,7 +33,6 @@ public class Bullet{
     public Body bulletBody;
 
 
-
     public Bullet(PlayScreen screen, Vector2 position){
         this.position = position;
         this.screen = screen;
@@ -96,9 +95,6 @@ public class Bullet{
     }
 
     public void setToDestroy(){
-
         toBeDestroyed = true;
-
     }
-
 }

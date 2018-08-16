@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.somoplay.magicworld.Screens.PlayScreen;
 import com.somoplay.magicworld.Sprite.Ally;
 import com.somoplay.magicworld.Sprite.AllyBullet;
+import com.somoplay.magicworld.Sprite.Bat;
 import com.somoplay.magicworld.Sprite.Bullet;
 import com.somoplay.magicworld.Sprite.Enemy;
 import com.somoplay.magicworld.Sprite.EnemyBullet;
@@ -58,12 +59,40 @@ public class WorldContactListener implements ContactListener {
             ((Enemy)b.getUserData()).onHit();
             ((Bullet) a.getUserData()).setToDestroy();
 
+            if(screen.player.freezing){
+                ((Enemy)b.getUserData()).setSlowed(true);
+            }
+
         } else if(contact.getFixtureA().getUserData() instanceof Soldier && contact.getFixtureB().getUserData() instanceof Bullet) {
             a = contact.getFixtureB();
             b = contact.getFixtureA();
 
             ((Enemy)b.getUserData()).onHit();
             ((Bullet) a.getUserData()).setToDestroy();
+            if(screen.player.freezing){
+                ((Enemy)b.getUserData()).setSlowed(true);
+            }
+
+        } else if(contact.getFixtureA().getUserData() instanceof Bullet && contact.getFixtureB().getUserData() instanceof Bat) {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((Bullet) a.getUserData()).setToDestroy();
+
+            if(screen.player.freezing){
+                ((Enemy)b.getUserData()).setSlowed(true);
+            }
+
+        } else if(contact.getFixtureA().getUserData() instanceof Bat && contact.getFixtureB().getUserData() instanceof Bullet) {
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((Bullet) a.getUserData()).setToDestroy();
+            if(screen.player.freezing){
+                ((Enemy)b.getUserData()).setSlowed(true);
+            }
 
         } else if(contact.getFixtureA().getUserData() instanceof AllyBullet && contact.getFixtureB().getUserData() instanceof Soldier) {
             a = contact.getFixtureA();
@@ -79,13 +108,16 @@ public class WorldContactListener implements ContactListener {
             ((Enemy)b.getUserData()).onHit();
             ((AllyBullet) a.getUserData()).setToDestroy();
 
-
         } else if(contact.getFixtureA().getUserData() instanceof Bullet && contact.getFixtureB().getUserData() instanceof Gunner) {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 
             ((Enemy)b.getUserData()).onHit();
             ((Bullet) a.getUserData()).setToDestroy();
+
+            if(screen.player.freezing){
+                ((Enemy)b.getUserData()).setSlowed(true);
+            }
 
         } else if(contact.getFixtureA().getUserData() instanceof Gunner && contact.getFixtureB().getUserData() instanceof Bullet) {
             a = contact.getFixtureB();
@@ -94,7 +126,9 @@ public class WorldContactListener implements ContactListener {
             ((Enemy)b.getUserData()).onHit();
             ((Bullet) a.getUserData()).setToDestroy();
 
-
+            if(screen.player.freezing){
+                ((Enemy)b.getUserData()).setSlowed(true);
+            }
         } else if(contact.getFixtureA().getUserData() instanceof AllyBullet && contact.getFixtureB().getUserData() instanceof Gunner) {
             a = contact.getFixtureA();
             b = contact.getFixtureB();

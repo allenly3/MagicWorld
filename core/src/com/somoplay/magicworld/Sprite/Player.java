@@ -37,7 +37,8 @@ public class Player extends GameSprite {
 
     //POWER UPS
     public boolean doubleFire = false;
-    public boolean tracking = true;
+    public boolean tracking = false;
+    public boolean freezing = true;
 
 
     public Player(PlayScreen screen) {

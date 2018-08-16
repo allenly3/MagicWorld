@@ -8,6 +8,7 @@
    eJzt0bEJACAMRcE4g3O4/3o2VlYpFIncwa8TeBEAwM/66wcAgOvaGjXt/fQ8bzy4qWFeKzpyJjLmAHY=
   </data>
  </layer>
+ <objectgroup name="Bat"/>
  <objectgroup name="Ground">
   <object id="7" x="1760" y="256" width="64" height="32"/>
   <object id="8" x="1632" y="288" width="64" height="32"/>

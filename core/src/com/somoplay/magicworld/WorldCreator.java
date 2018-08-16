@@ -22,6 +22,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.Resource.LoadResource;
 import com.somoplay.magicworld.Screens.PlayScreen;
 import com.somoplay.magicworld.Sprite.Ally;
+import com.somoplay.magicworld.Sprite.Bat;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Soldier;
 
@@ -31,6 +32,7 @@ public class WorldCreator {
 
     ArrayList<Soldier> soldiers;
     ArrayList<Gunner> gunners;
+    ArrayList<Bat> bats;
     ArrayList<Body> ceilingTraps;
     ArrayList<Ally> allies;
 
@@ -53,6 +55,7 @@ public class WorldCreator {
 
         soldiers = new ArrayList<Soldier>();
         gunners = new ArrayList<Gunner>();
+        bats = new ArrayList<Bat>();
         allies = new ArrayList<Ally>();
         ceilingTraps = new ArrayList<Body>();
 
@@ -92,6 +95,7 @@ public class WorldCreator {
             fixture.setUserData("HealthUp");
             fixture.setSensor(true);
         }
+
         //Create PowerUp_Doublefire
         for (MapObject object : map.getLayers().get("PowerUp_Doublefire").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -134,6 +138,13 @@ public class WorldCreator {
         for (MapObject object : map.getLayers().get("Gunner").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             gunners.add(new Gunner(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
+
+        }
+
+        //Create Bat
+        for (MapObject object : map.getLayers().get("Bat").getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bats.add(new Bat(screen, rect.getX() / MagicWorld.PPM, rect.getY() / MagicWorld.PPM));
 
         }
 
@@ -253,6 +264,8 @@ public class WorldCreator {
     }
 
     public ArrayList<Gunner> getGunners() { return gunners; }
+
+    public ArrayList<Bat> getBats() { return bats; }
 
     public ArrayList<Body> getCeilingTraps() {
         return ceilingTraps;

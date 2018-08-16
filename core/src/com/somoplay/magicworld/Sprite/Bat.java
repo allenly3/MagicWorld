@@ -7,13 +7,17 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.somoplay.magicworld.MagicWorld;
 import com.somoplay.magicworld.Screens.PlayScreen;
 
+import java.util.Random;
+
 public class Bat extends Enemy {
 
     public float health = 100;
     public boolean destroyed = false;
+    Random random;
 
     public Bat(PlayScreen screen, float x, float y) {
         super(screen, x, y);
+        random=new Random();
     }
 
     @Override
@@ -44,8 +48,8 @@ public class Bat extends Enemy {
     @Override
     public void update(float dt) {
         if(body.getPosition().y >= getY()){
-            velocity = new Vector2(-1,-1);
-        } else if(body.getPosition().y <= (getY() - 192/MagicWorld.PPM)){ velocity = new Vector2(1,1);}
+            velocity = new Vector2(-1f*random.nextInt(2),-1f );
+        } else if(body.getPosition().y <= (screen.player.getPosition().y+0.32)){ velocity = new Vector2(1,1);}
         body.setLinearVelocity(velocity);
     }
 }

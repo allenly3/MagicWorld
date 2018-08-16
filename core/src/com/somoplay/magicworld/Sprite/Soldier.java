@@ -45,7 +45,7 @@ public class Soldier extends Enemy {
 
 
     float move=0;
-    Body hand;
+   public  Body hand;
 
     public Soldier(PlayScreen screen, float x, float y){
         super(screen, x, y);

@@ -1,5 +1,8 @@
 package com.somoplay.magicworld;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -26,10 +29,12 @@ public class WorldContactListener implements ContactListener {
     PlayScreen screen;
     public static int score=0;
     InputListener A,B;
+    ParticleEffect effect;
 
 
     public WorldContactListener(PlayScreen screen){
         this.screen = screen;
+        effect=new ParticleEffect();
 
     }
     @Override
@@ -149,6 +154,9 @@ public class WorldContactListener implements ContactListener {
             b = contact.getFixtureB();
             Soldier.touch=true;
             System.out.println("hand");
+            effect.load(Gdx.files.internal("images/blood.p"),Gdx.files.internal("images/"));
+            effect.scaleEffect(0.5f);
+            effect.setPosition(b.getBody().getPosition().x,b.getBody().getPosition().y);
 
             ((Player)a.getUserData()).onHit(2);
             //((Soldier)b.getUserData()).hitPlayer();
@@ -160,6 +168,9 @@ public class WorldContactListener implements ContactListener {
             Soldier.touch=true;
             System.out.println("hand");
             ((Player)a.getUserData()).onHit(2);
+            effect.load(Gdx.files.internal("images/blood.p"),Gdx.files.internal("images/"));
+            effect.scaleEffect(0.5f);
+            effect.setPosition(a.getBody().getPosition().x,a.getBody().getPosition().y);
 
         } else if(contact.getFixtureA().getUserData() instanceof Ally && contact.getFixtureB().getUserData() instanceof Soldier){
             a = contact.getFixtureA();
@@ -490,4 +501,11 @@ public class WorldContactListener implements ContactListener {
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
     }
+
+    public void render(SpriteBatch batch)
+    {
+
+    }
+
 }
+

@@ -295,6 +295,7 @@ public class WorldCreator {
     }
 
     public void removeSoldier(int index){
+        screen.getWorld().destroyBody(soldiers.get(index).hand);
         soldiers.remove(index);
     }
 

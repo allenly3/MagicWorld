@@ -461,6 +461,7 @@ public class PlayScreen implements Screen {
             }
 
             if(soldier.body.getPosition().y < -0.175 && !soldier.destroyed){
+                world.destroyBody(soldier.hand);
                 world.destroyBody(soldier.body);
                 soldier.destroyed = true;
             }

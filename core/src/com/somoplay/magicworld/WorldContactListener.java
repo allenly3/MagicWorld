@@ -116,7 +116,7 @@ public class WorldContactListener implements ContactListener {
             Soldier.touch=true;
             System.out.println("hand");
 
-            ((Player)a.getUserData()).onHit(10);
+            ((Player)a.getUserData()).onHit(2);
             //((Soldier)b.getUserData()).hitPlayer();
             //screen.setHealth(0.5f);
 
@@ -125,7 +125,7 @@ public class WorldContactListener implements ContactListener {
             b = contact.getFixtureA();
             System.out.println("hand");
             Soldier.touch=true;
-            ((Player)a.getUserData()).onHit(10);
+            ((Player)a.getUserData()).onHit(2);
            // ((Soldier)b.getUserData()).hitPlayer();
 
         } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() == "NextLevelLoader") {
@@ -372,6 +372,22 @@ public class WorldContactListener implements ContactListener {
 
             screen.buttonA.addListener(screen.AL);
             screen.buttonB.addListener(screen.BL);
+
+
+        }
+
+        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData()=="hand"){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+            Soldier.touch=false;
+
+
+
+        } else if(contact.getFixtureA().getUserData() =="hand"&& contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+            Soldier.touch=false;
+
 
 
         }

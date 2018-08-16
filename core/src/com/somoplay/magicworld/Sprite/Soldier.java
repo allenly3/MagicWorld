@@ -33,8 +33,10 @@ public class Soldier extends Enemy {
     int attackormove=0;//0 means moving ,1 means attacking
     float duration=0;
     public static boolean touch=false;
+    float opacity=0;
+    Sprite miss;
 
-    Texture bar,txright[],idleright[],attacking[];
+    Texture bar,txright[],idleright[] ;
     public Sprite redbar;
     public Animation<Texture> soldierright,stopright;
     public Animation<TextureRegion>  soldierleft,stopleft;
@@ -58,6 +60,8 @@ public class Soldier extends Enemy {
     public void defineAnimation()
     {
         batch=screen.batch;
+        Texture temp= (LoadResource.assetManager.get("images/miss.png"));
+        miss=new Sprite(temp);
         //-----------run    right
         txright=new Texture[11];
         txright[0]= LoadResource.assetManager.get("enemy/Walking_000.png");
@@ -197,6 +201,8 @@ public class Soldier extends Enemy {
 
 
 
+
+
             if (soldierstate == 1) {
                 screen.batch.draw(soldierleft.getKeyFrame(statetime * 0.4f, true),
                         body.getPosition().x - 0.16f,
@@ -220,7 +226,7 @@ public class Soldier extends Enemy {
 
             if(hand.getPosition().x-screen.player.getPosition().x>0.12f)
             {
-                hand.setLinearVelocity(-0.38f,0);
+                hand.setLinearVelocity(-0.30f,0);
 
                 if(this.body.getPosition().x-hand.getPosition().x>=0.217f)
                  {
@@ -228,16 +234,18 @@ public class Soldier extends Enemy {
                     if(!touch)
                     {
                         System.out.println("MISS");
+                        opacity=1;
+
                     }
                  }
             }
             duration+=Gdx.graphics.getDeltaTime();
-            if(duration>= 0.8)
+            if(duration>= 0.80f)
             {
 
                 attackormove=0;
                 duration=0;
-                touch=false;
+
             }
 
         }
@@ -250,7 +258,7 @@ public class Soldier extends Enemy {
 
             if(screen.player.getPosition().x-hand.getPosition().x>0.12f)
             {
-                hand.setLinearVelocity( 0.38f,0);
+                hand.setLinearVelocity( 0.30f,0);
 
                  if(hand.getPosition().x-this.body.getPosition().x>=0.217f)
                 {
@@ -259,17 +267,25 @@ public class Soldier extends Enemy {
                     if(!touch)
                     {
                         System.out.println("MISS");
+                        opacity=1;
+
                     }
                 }
             }
             duration+=Gdx.graphics.getDeltaTime();
-            if(duration>= 0.8)
+            if(duration>= 0.8f)
             {
                 attackormove=0;
                 duration=0;
-                touch=false;
+
             }
         }
+
+        miss.setPosition(body.getPosition().x-0.1f ,body.getPosition().y+0.3f);
+        miss.setSize(0.3f,0.3f);
+        miss.setColor(1,1,0,opacity);
+        miss.draw(screen.batch);
+      slowdown();
 
 
 
@@ -279,7 +295,13 @@ public class Soldier extends Enemy {
 
 
     }
-
+public void slowdown()
+{
+    if(opacity>0f)
+    {
+        opacity=opacity-0.05f;
+    }
+}
 
     public void hitPlayer(){
         //body.applyLinearImpulse(60f,0,body.getWorldCenter().x,body.getWorldCenter().y,true);

@@ -50,6 +50,7 @@ public class LoadResource
         assetManager.load("Sball.png",Texture.class);
         assetManager.load("traps.jpg",Texture.class);
         assetManager.load("spike.jpg",Texture.class);
+        assetManager.load("images/miss.png",Texture.class);
 
 
 

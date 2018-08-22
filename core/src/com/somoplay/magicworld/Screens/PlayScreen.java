@@ -25,6 +25,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -93,9 +95,12 @@ public class PlayScreen implements Screen {
     private ArrayList<Float> ceilingTrapHeights;
     public boolean trackingResolved = true;
 
-    Texture tbg,btLeft,btRight,btA,btB,ceilingtraps;
+    private Texture tbg,btLeft,btRight,btA,btB,ceilingtraps;
     Image background;
     public ImageButton buttonLeft,buttonRight,buttonA,buttonB;
+
+    private Drawable musicOff, musicOn;
+    private ImageButton musicButton;
     public InputListener AL,BL;
 
     private ArrayList<Integer> tobeDestroyedSoldier;
@@ -144,6 +149,26 @@ public class PlayScreen implements Screen {
         background=new Image(tbg);
         background.setSize(screenWidth,screenHeight);
 
+        musicOff = new TextureRegionDrawable(new TextureRegion((Texture) LoadResource.assetManager.get("images/button_sound_mute.png")));
+        musicOn = new TextureRegionDrawable(new TextureRegion((Texture) LoadResource.assetManager.get("images/button_sound.png")));
+        musicButton = new ImageButton(musicOn, musicOn, musicOff);
+        musicButton.setPosition(screenWidth*0.90f,screenHeight*0.87f);
+        musicButton.setSize(48, 48);
+        musicButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(musicButton.isChecked()){
+                    musicButton.setChecked(true); music.play();
+                } else{ musicButton.setChecked(false); music.pause();}
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+
         Label.LabelStyle fontstyle=new Label.LabelStyle(new BitmapFont(Gdx.files.internal("mwfont.fnt")), Color.WHITE);
         label=new Label(Integer.toString(WorldContactListener.score),fontstyle);
         label.setPosition(screenWidth*0.10f,screenHeight*0.87f);
@@ -156,9 +181,8 @@ public class PlayScreen implements Screen {
 
         stats = new Stats(game.batch, this);
 
-
-
         controlStage =new Stage();
+        controlStage.addActor(musicButton);
         //---------------setup button-----------------
         btLeft=LoadResource.assetManager.get("images/buttonLeft.png");
         btRight=LoadResource.assetManager.get("images/buttonRight.png");
@@ -190,7 +214,7 @@ public class PlayScreen implements Screen {
 
         ttt1.setScale(5);
         up=(TextureRegionDrawable) ttt1.getDrawable();
-       down=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][1]);
+        down=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][1]);
         buttonB=new ImageButton(up,down);
 
         buttonB.setPosition(screenWidth*0.70f+90,screenHeight*0.078f);
@@ -217,8 +241,7 @@ public class PlayScreen implements Screen {
             {
                 player.state = 1;
                 movingR=true;
-                // player.body.applyForce(2f,0f,0,0,true);
-//                player.bodyDef.linearVelocity.set(20f,0f);
+
                 return true;
             }
 
@@ -230,7 +253,7 @@ public class PlayScreen implements Screen {
             public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
                 player.state = 4;
-             player.getBody().setLinearVelocity(0, 0);
+                player.getBody().setLinearVelocity(0, 0);
                 movingL= false;
                 super.touchUp(event,x,y,pointer,button);
             }
@@ -400,7 +423,7 @@ public class PlayScreen implements Screen {
         // if it touches a ground tile, then disappear, if it touches a enemy, disappears and apply damage.
         // get the size of it correct and the spawn location right as well.
         for(Bullet bullet: bullets){
-            if(bullet.destroyed == false) {
+            if(!bullet.destroyed) {
 
                 if (bullet.getBody().getPosition().x - player.body.getPosition().x > 3 || bullet.getBody().getPosition().x - player.body.getPosition().x < -3) {
 
@@ -557,6 +580,21 @@ public class PlayScreen implements Screen {
                             allyFireTimer = 0;
                         }
                     } else if (soldier.body.getPosition().x < ally.body.getPosition().x && ally.body.getPosition().x - soldier.body.getPosition().x <= 480 / MagicWorld.PPM) {
+                        if (allyFireTimer >= 1f) {
+                            ally.fireLeft();
+                            allyFireTimer = 0;
+                        }
+                    }
+                }
+
+                for (Bat bat : creator.getBats()) {
+                    // if enemy is to the right fire to the right
+                    if (bat.body.getPosition().x > ally.body.getPosition().x && bat.body.getPosition().x - ally.body.getPosition().x <= 480 / MagicWorld.PPM) {
+                        if (allyFireTimer >= 1f) {
+                            ally.fireRight();
+                            allyFireTimer = 0;
+                        }
+                    } else if (bat.body.getPosition().x < ally.body.getPosition().x && ally.body.getPosition().x - bat.body.getPosition().x <= 480 / MagicWorld.PPM) {
                         if (allyFireTimer >= 1f) {
                             ally.fireLeft();
                             allyFireTimer = 0;

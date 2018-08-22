@@ -61,7 +61,7 @@ public class Stats implements Disposable{
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 System.out.print("Work");
-               screen.nextLevel();
+                screen.nextLevel();
             }
         });
 
@@ -98,7 +98,7 @@ public class Stats implements Disposable{
         globalTable.addActor(table);
         //table.setDebug(true);
         stage.addActor(globalTable);
-       // Gdx.input.setInputProcessor(stage);
+
     }
 
 

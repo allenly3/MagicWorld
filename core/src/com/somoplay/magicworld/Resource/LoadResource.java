@@ -52,6 +52,10 @@ public class LoadResource
         assetManager.load("spike.jpg",Texture.class);
         assetManager.load("images/miss.png",Texture.class);
 
+        assetManager.load("images/button_sound.png",Texture.class);
+        assetManager.load("images/button_sound_mute.png",Texture.class);
+
+
 
 
 

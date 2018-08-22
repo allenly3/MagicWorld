@@ -275,10 +275,20 @@ public class WorldContactListener implements ContactListener {
 
             ((Player)a.getUserData()).onHit(50);
             ((EnemyBullet)b.getUserData()).setToDestroy();
-        } else if(contact.getFixtureA().getUserData() instanceof Ally && contact.getFixtureB().getUserData() instanceof EnemyBullet){
+        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() instanceof Bat){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 
+            ((Player)a.getUserData()).onHit(25);
+
+        } else if(contact.getFixtureA().getUserData() instanceof Bat && contact.getFixtureB().getUserData() instanceof Player){
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Player)a.getUserData()).onHit(25);
+        } else if(contact.getFixtureA().getUserData() instanceof Ally && contact.getFixtureB().getUserData() instanceof EnemyBullet){
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
 
             ((Ally)a.getUserData()).onHit(50);
             ((EnemyBullet)b.getUserData()).setToDestroy();
@@ -357,6 +367,19 @@ public class WorldContactListener implements ContactListener {
 
 
 
+        } else if(contact.getFixtureA().getUserData() instanceof AllyBullet && contact.getFixtureB().getUserData() instanceof Bat) {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((AllyBullet) a.getUserData()).setToDestroy();
+
+        } else if(contact.getFixtureA().getUserData() instanceof Bat && contact.getFixtureB().getUserData() instanceof AllyBullet) {
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((AllyBullet) a.getUserData()).setToDestroy();
 
         } else if(contact.getFixtureA().getUserData() == "Slider" && contact.getFixtureB().getUserData() instanceof Player){
             a = contact.getFixtureA();

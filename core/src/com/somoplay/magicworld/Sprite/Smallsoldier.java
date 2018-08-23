@@ -23,7 +23,7 @@ import com.somoplay.magicworld.Screens.PlayScreen;
 import javax.management.remote.SubjectDelegationPermission;
 
 
-public class Soldier extends Enemy {
+public class Smallsoldier extends Enemy {
 
     SpriteBatch batch;
     public float health = 100;
@@ -35,8 +35,7 @@ public class Soldier extends Enemy {
     public static boolean touch=false;
     float opacity=0;
     Sprite miss;
-    ParticleEffect blood;
-    int bloodstate=0;
+
 
     Texture bar,txright[],idleright[] ;
     public Sprite redbar;
@@ -45,19 +44,10 @@ public class Soldier extends Enemy {
     public int soldierstate=0;// 0 left,   1 right
 
 
-
-
-    float move=0;
-   public  Body hand;
-
-    public Soldier(PlayScreen screen, float x, float y){
+    public Smallsoldier(PlayScreen screen, float x, float y){
         super(screen, x, y);
 
         defineAnimation();
-        blood=new ParticleEffect();
-        blood.load(Gdx.files.internal("images/blood.p"),Gdx.files.internal("images/"));
-
-        blood.scaleEffect(0.001f);
 
     }
 
@@ -68,17 +58,17 @@ public class Soldier extends Enemy {
         miss=new Sprite(temp);
         //-----------run    right
         txright=new Texture[11];
-        txright[0]= LoadResource.assetManager.get("enemy/Walking_000.png");
-        txright[1]= LoadResource.assetManager.get("enemy/Walking_003.png");
-        txright[2]= LoadResource.assetManager.get("enemy/Walking_006.png");
-        txright[3]= LoadResource.assetManager.get("enemy/Walking_009.png");
-        txright[4]= LoadResource.assetManager.get("enemy/Walking_012.png");
-        txright[5]= LoadResource.assetManager.get("enemy/Walking_015.png");
-        txright[6]= LoadResource.assetManager.get("enemy/Walking_018.png");
-        txright[7]= LoadResource.assetManager.get("enemy/Walking_021.png");
-        txright[8]= LoadResource.assetManager.get("enemy/Walking_024.png");
-        txright[9]= LoadResource.assetManager.get("enemy/Walking_027.png");
-        txright[10]= LoadResource.assetManager.get("enemy/Walking_030.png");
+        txright[0]= LoadResource.assetManager.get("enemy2/Walking_000.png");
+        txright[1]= LoadResource.assetManager.get("enemy2/Walking_003.png");
+        txright[2]= LoadResource.assetManager.get("enemy2/Walking_006.png");
+        txright[3]= LoadResource.assetManager.get("enemy2/Walking_009.png");
+        txright[4]= LoadResource.assetManager.get("enemy2/Walking_012.png");
+        txright[5]= LoadResource.assetManager.get("enemy2/Walking_015.png");
+        txright[6]= LoadResource.assetManager.get("enemy2/Walking_018.png");
+        txright[7]= LoadResource.assetManager.get("enemy2/Walking_021.png");
+        txright[8]= LoadResource.assetManager.get("enemy2/Walking_024.png");
+        txright[9]= LoadResource.assetManager.get("enemy2/Walking_027.png");
+        txright[10]= LoadResource.assetManager.get("enemy2/Walking_030.png");
 
         soldierright=new Animation<Texture>(Gdx.graphics.getDeltaTime(),txright);
         TextureRegion tx[]=new TextureRegion[11];
@@ -92,11 +82,11 @@ public class Soldier extends Enemy {
 
         //-------idleright
         idleright=new Texture[5];
-        idleright[0]=new Texture(Gdx.files.internal("enemy/Attacking_000.png"));
-        idleright[1]=new Texture(Gdx.files.internal("enemy/Attacking_003.png"));
-        idleright[2]=new Texture(Gdx.files.internal("enemy/Attacking_006.png"));
-        idleright[3]=new Texture(Gdx.files.internal("enemy/Attacking_008.png"));
-        idleright[4]=new Texture(Gdx.files.internal("enemy/Attacking_013.png"));
+        idleright[0]=new Texture(Gdx.files.internal("enemy2/Attacking_000.png"));
+        idleright[1]=new Texture(Gdx.files.internal("enemy2/Attacking_003.png"));
+        idleright[2]=new Texture(Gdx.files.internal("enemy2/Attacking_006.png"));
+        idleright[3]=new Texture(Gdx.files.internal("enemy2/Attacking_008.png"));
+        idleright[4]=new Texture(Gdx.files.internal("enemy2/Attacking_013.png"));
 
         stopright=new Animation<Texture>(Gdx.graphics.getDeltaTime(),idleright);
         //-----idleleft
@@ -125,7 +115,7 @@ public class Soldier extends Enemy {
         body = world.createBody(bdef);
 
         bdef.gravityScale=0;
-        hand=  world.createBody(bdef);
+
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
@@ -133,17 +123,6 @@ public class Soldier extends Enemy {
         fdef.shape = shape;
         body.createFixture(fdef).setUserData(this);// body----part1
 
-        // creates two circles used for hitboxes
-        body.createFixture(fdef).setUserData(this);
-        shape.setPosition(new Vector2(0,19/MagicWorld.PPM));
-        body.createFixture(fdef).setUserData(this);// ------body-----part2
-
-
-        //------hand----
-        shape.setRadius(5/MagicWorld.PPM);
-        fdef.shape=shape;
-        fdef.isSensor=true;
-        hand.createFixture(fdef).setUserData("hand");
 
 
         EdgeShape leftSide = new EdgeShape();
@@ -164,7 +143,7 @@ public class Soldier extends Enemy {
     @Override
     public void onHit() {
         if(health > 0){
-            health -= 25;
+            health -= 50;
         }
         System.out.println(health);
     }
@@ -184,9 +163,9 @@ public class Soldier extends Enemy {
                 soldierstate = 1;
                 if (Math.abs(body.getPosition().x - screen.player.getPosition().x) > 0.41f) {
                     if(slowed) {
-                        velocity = new Vector2(-0.5f, body.getLinearVelocity().y);
+                        velocity = new Vector2(-0.2f, body.getLinearVelocity().y);
                         slowedTimer += dt;
-                    } else{ velocity = new Vector2(-1, body.getLinearVelocity().y);}
+                    } else{ velocity = new Vector2(-0.5f, body.getLinearVelocity().y);}
                 } else {
                     soldierstate = 2;
                     velocity = new Vector2(0, body.getLinearVelocity().y);
@@ -196,9 +175,9 @@ public class Soldier extends Enemy {
                 soldierstate = 0;
                 if (Math.abs(body.getPosition().x - screen.player.getPosition().x) > 0.41f) {
                     if(slowed) {
-                        velocity = new Vector2(0.5f, body.getLinearVelocity().y);
+                        velocity = new Vector2(0.2f, body.getLinearVelocity().y);
                         slowedTimer += dt;
-                    } else{ velocity = new Vector2(1, body.getLinearVelocity().y);}
+                    } else{ velocity = new Vector2(0.5f, body.getLinearVelocity().y);}
                 } else {
                     soldierstate = 3;
                     velocity = new Vector2(0, body.getLinearVelocity().y);
@@ -208,116 +187,73 @@ public class Soldier extends Enemy {
 
         redbar.setSize(health / 3 / MagicWorld.PPM, 8 / MagicWorld.PPM);
         screen.batch.begin();
-        redbar.setPosition(body.getPosition().x - 0.15f, body.getPosition().y + 0.38f);
+        redbar.setPosition(body.getPosition().x - 0.15f, body.getPosition().y + 0.30f);
         redbar.draw(screen.batch);
 
 
 
 
 
-            if (soldierstate == 1) {
-                screen.batch.draw(soldierleft.getKeyFrame(statetime * 0.4f, true),
-                        body.getPosition().x - 0.16f,
-                        body.getPosition().y - 0.22f, 0.35f, 0.65f);
-                hand.setTransform(body.getPosition().x, body.getPosition().y-0.05f, 0);
-            } else if (soldierstate == 0) {
-                screen.batch.draw(soldierright.getKeyFrame(statetime * 0.4f, true),
-                        body.getPosition().x - 0.16f,
-                        body.getPosition().y - 0.22f, 0.35f, 0.65f);
-                hand.setTransform(body.getPosition().x, body.getPosition().y-0.05f, 0);
-            }
+        if (soldierstate == 1) {
+            screen.batch.draw(soldierleft.getKeyFrame(statetime * 0.4f, true),
+                    body.getPosition().x - 0.16f,
+                    body.getPosition().y - 0.22f, 0.35f, 0.43f);
+
+        } else if (soldierstate == 0) {
+            screen.batch.draw(soldierright.getKeyFrame(statetime * 0.4f, true),
+                    body.getPosition().x - 0.16f,
+                    body.getPosition().y - 0.22f, 0.35f, 0.43f);
+        }
 
 
 
-          else if(soldierstate==2)
+        else if(soldierstate==2)
         {
             attackormove=1;
-            blood.setPosition(body.getPosition().x-0.2f,body.getPosition().y+0.04f);
+
             screen.batch.draw( stopleft.getKeyFrame(statetime * 0.1f, true),
                     body.getPosition().x - 0.25f,
-                    body.getPosition().y - 0.22f, 0.47f, 0.68f);
-
-            if(hand.getPosition().x-screen.player.getPosition().x>0.12f)
-            {
-                hand.setLinearVelocity(-0.30f,0);
-
-                if(this.body.getPosition().x-hand.getPosition().x>=0.217f)
-                 {
-                    hand.setTransform(body.getPosition().x,body.getPosition().y-0.05f,0);
-                    if(!touch)
-                    {
-                        System.out.println("MISS");
-                        opacity=1;
-
-                    }
-                    else
-                    {
-                        bloodstate=1;
-                    }
-                 }
-            }
-
-            if(bloodstate==1)
-            {
-                blood.draw(screen.batch,Gdx.graphics.getDeltaTime()*2);
-            }
+                    body.getPosition().y - 0.22f, 0.47f, 0.44f);
 
 
             duration+=Gdx.graphics.getDeltaTime();
             if(duration>= 0.80f)
             {
-
+                if(Math.abs(body.getPosition().x-screen.player.getPosition().x)>0.42f)
+                {
+                    opacity=1;
+                }
+                else
+                {
+                    screen.player.onHit(2);
+                }
                 attackormove=0;
                 duration=0;
-                bloodstate=0;
-                blood.reset();
-                blood.scaleEffect(0.001f);
-
-            }
+               }
 
         }
         else if(soldierstate==3)
         {
             attackormove=1;
-            blood.setPosition(body.getPosition().x+0.2f,body.getPosition().y+0.04f);
+
             screen.batch.draw( stopright.getKeyFrame(statetime * 0.1f, true),
                     body.getPosition().x - 0.16f,
-                    body.getPosition().y - 0.22f, 0.47f, 0.68f);
+                    body.getPosition().y - 0.22f, 0.47f, 0.44f);
 
-            if(screen.player.getPosition().x-hand.getPosition().x>0.12f)
-            {
-                hand.setLinearVelocity( 0.30f,0);
-
-                 if(hand.getPosition().x-this.body.getPosition().x>=0.217f)
-                {
-
-                    hand.setTransform(body.getPosition().x,body.getPosition().y-0.05f,0);
-                    if(!touch)
-                    {
-                        System.out.println("MISS");
-                        opacity=1;
-
-                    }
-                    else
-                    {
-                        bloodstate=1;
-                    }
-                }
-            }
-
-            if(bloodstate==1)
-            {
-                blood.draw(screen.batch,Gdx.graphics.getDeltaTime()*2);
-            }
 
             duration+=Gdx.graphics.getDeltaTime();
             if(duration>= 0.8f)
             {
+                if(Math.abs(body.getPosition().x-screen.player.getPosition().x)>0.42f)
+                {
+                    opacity=1;
+                }
+                else
+                {
+                    screen.player.onHit(2);
+                }
                 attackormove=0;
                 duration=0;
-                bloodstate=0;
-                blood.reset();
-                blood.scaleEffect(0.001f);
 
             }
         }
@@ -328,7 +264,7 @@ public class Soldier extends Enemy {
         miss.draw(screen.batch);
 
 
-      slowdown();
+        slowdown();
 
 
         screen.batch.end();
@@ -338,13 +274,13 @@ public class Soldier extends Enemy {
 
 
     }
-public void slowdown()
-{
-    if(opacity>0f)
+    public void slowdown()
     {
-        opacity=opacity-0.05f;
+        if(opacity>0f)
+        {
+            opacity=opacity-0.05f;
+        }
     }
-}
 
     public void hitPlayer(){
         //body.applyLinearImpulse(60f,0,body.getWorldCenter().x,body.getWorldCenter().y,true);

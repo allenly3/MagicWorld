@@ -265,6 +265,7 @@ public class WorldCreator {
         effect.setPosition(doorX+0.08f,doorY+0.02f);
         effect.draw(screen.batch,Gdx.graphics.getDeltaTime());
 
+
         for(Body spk:spikes)
         {
              screen.batch.draw(img_spike,spk.getPosition().x,spk.getPosition().y,0.33f,0.34f);

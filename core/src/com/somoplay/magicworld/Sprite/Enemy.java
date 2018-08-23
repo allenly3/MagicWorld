@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.somoplay.magicworld.Screens.PlayScreen;
 
+// Base class for all enemies
 public abstract class Enemy extends Sprite{
     protected World world;
     protected PlayScreen screen;

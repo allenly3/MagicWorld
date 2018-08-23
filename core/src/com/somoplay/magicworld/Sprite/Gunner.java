@@ -24,12 +24,12 @@ public class Gunner extends Enemy {
     private float timeSinceLastFire = 0;
     public boolean destroyed = false;
     private boolean behindPlayer = false;
-    private boolean nearPlayer = false;
 
     public Gunner(PlayScreen screen, float x, float y) {
         super(screen, x, y);
     }
 
+    // Creates the body and fixture for gunner, the edgeshapes are used to detect and bounce off walls
     @Override
     protected void defineEnemy() {
 
@@ -70,14 +70,16 @@ public class Gunner extends Enemy {
 
     }
 
+    // Damage taken from player hits and total health of gunner can be easily changed
     @Override
     public void onHit() {
         if(health > 0){
             health -= 20;
         }
-        System.out.println(health);
     }
 
+    // Controls the movement of gunner, it will move back and forth when it hits a wall
+    // and stop to shoot the player if player gets within a certain range
     @Override
     public void update(float dt) {
 
@@ -101,6 +103,7 @@ public class Gunner extends Enemy {
         screen.batch.draw(bastion,body.getPosition().x-0.15f,body.getPosition().y-0.15f,0.35f,0.35f);
     }
 
+    // Fires bullets in the direction of the player
     public void fire(){
         screen.getEnemyBullets().add(new EnemyBullet(screen, body.getPosition()));
         if(behindPlayer){

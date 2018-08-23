@@ -37,7 +37,6 @@ public class Bullet{
         this.position = position;
         this.screen = screen;
 
-
         world = screen.getWorld();
         if(texture == null){
             texture = LoadResource.assetManager.get("images/blt.png");
@@ -47,6 +46,8 @@ public class Bullet{
         defineBullet();
 
     }
+
+    // Creates the body and fixture of the bullets that the player shoots
     public void defineBullet(){
         BodyDef bdef = new BodyDef();
 

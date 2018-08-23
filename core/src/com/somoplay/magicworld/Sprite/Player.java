@@ -35,15 +35,16 @@ public class Player extends GameSprite {
     public Texture txRightMove, txRightStop, txLeftMove, txLeftStop;
     Animation<TextureRegion> rightMoving, rightStop, leftMoving, leftStop;
 
-    //POWER UPS
+    //POWER UPS, set these variables to true if you want player to powerup.
     public boolean doubleFire = false;
     public boolean tracking = false;
-    public boolean freezing = true;
+    public boolean freezing = false;
 
 
     public Player(PlayScreen screen) {
         super(screen);
 
+        // Creates Player body and fixture
         batch = new SpriteBatch();
         bodyDef = new BodyDef();
         body = world.createBody(bodyDef);
@@ -70,6 +71,7 @@ public class Player extends GameSprite {
 
     }
 
+    // Sets the animation of the player
     public void init() {
 
         //-----------------Right side running------------------------------

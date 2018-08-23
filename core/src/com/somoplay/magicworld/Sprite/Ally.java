@@ -22,7 +22,6 @@ public class Ally extends Sprite {
     private World world;
     private PlayScreen screen;
 
-
     public Body body;
     private boolean behindPlayer = true;
     private boolean active = false;
@@ -50,6 +49,7 @@ public class Ally extends Sprite {
         defineAlly();
     }
 
+    // Creates the body and fixture of ally. The edgeshapes are used to detect wall collision so ally can jump
     public void defineAlly() {
         BodyDef bdef = new BodyDef();
 

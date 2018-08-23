@@ -22,15 +22,12 @@ public class EnemyBullet {
     public boolean destroyed = false;
     public boolean toBeDestroyed = false;
 
-    private PlayScreen screen;
     private World world;
     private Body bulletBody;
 
-
-
+    // This class represents enemy bullets that is only used by gunner to shoot at the player
     public EnemyBullet(PlayScreen screen, Vector2 position){
         this.position = position;
-        this.screen = screen;
 
 
         world = screen.getWorld();

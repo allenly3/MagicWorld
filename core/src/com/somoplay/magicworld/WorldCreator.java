@@ -224,8 +224,9 @@ public class WorldCreator {
         ceilingTraps.add(body);
 
     }
-    try {
 
+    try {
+        //Create sliders
         for (MapObject object : map.getLayers().get("Slider").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
@@ -237,8 +238,8 @@ public class WorldCreator {
             fixture.setUserData("Slider");
             fixture.setSensor(true);
 
-
         }
+        //Create ladders
         for (MapObject object : map.getLayers().get("Ladder").getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             bdef.position.set((rect.getX() + rect.getWidth() / 2) / MagicWorld.PPM, (rect.getY() + rect.getHeight() / 2) / MagicWorld.PPM);
@@ -255,7 +256,7 @@ public class WorldCreator {
 }
 
 
-
+    // Draws the door animation effects
     public void creatorrender()
     {
         door.setPosition(doorX,doorY);
@@ -270,11 +271,7 @@ public class WorldCreator {
              screen.batch.draw(img_spike,spk.getPosition().x,spk.getPosition().y,0.33f,0.34f);
         }
 
-
-
         screen.batch.end();
-
-
 
     }
 

@@ -39,6 +39,8 @@ public class Stats implements Disposable{
     TextButton playAgain;
     PlayScreen screen;
 
+
+    // This is the post game menu that pops up when you complete a level or die
     public Stats (SpriteBatch batch, final PlayScreen screen){
 
         Skin skin = new Skin();

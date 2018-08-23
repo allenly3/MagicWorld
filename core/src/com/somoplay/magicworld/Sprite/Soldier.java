@@ -120,25 +120,26 @@ public class Soldier extends Enemy {
         bdef.gravityScale=0;
         hand=  world.createBody(bdef);
 
+        // creates two circles used for hitboxes
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(19/MagicWorld.PPM);
         fdef.shape = shape;
         body.createFixture(fdef).setUserData(this);// body----part1
 
-        // creates two circles used for hitboxes
+
         body.createFixture(fdef).setUserData(this);
         shape.setPosition(new Vector2(0,19/MagicWorld.PPM));
         body.createFixture(fdef).setUserData(this);// ------body-----part2
 
 
-        //------hand----
+        //------hand---- is used to attack player
         shape.setRadius(5/MagicWorld.PPM);
         fdef.shape=shape;
         fdef.isSensor=true;
         hand.createFixture(fdef).setUserData("hand");
 
-
+        // Edgeshapes are used to determine wall collision so soldier can jump
         EdgeShape leftSide = new EdgeShape();
         leftSide.set(new Vector2(-18/MagicWorld.PPM,-10/MagicWorld.PPM), new Vector2(-18/MagicWorld.PPM,20/MagicWorld.PPM));
         fdef.shape = leftSide;
@@ -154,17 +155,19 @@ public class Soldier extends Enemy {
 
     }
 
+    // Calculates how much damage soldier will take from player hits
+    // Soldier health and damage taken can be easily adjusted
     @Override
     public void onHit() {
         if(health > 0){
             health -= 25;
         }
-        System.out.println(health);
     }
 
     @Override
     public void update(float dt) {
 
+        // Controls the speed of the soldier, if player is using freeze bullets, soldier will move slower
         if(attackormove==0)
         {
             if (body.getPosition().x + 1.5f <= screen.player.body.getPosition().x) {
@@ -199,14 +202,11 @@ public class Soldier extends Enemy {
             }
         }
 
+        // Creates the healthbar above soldier
         redbar.setSize(health / 3 / MagicWorld.PPM, 8 / MagicWorld.PPM);
         screen.batch.begin();
         redbar.setPosition(body.getPosition().x - 0.15f, body.getPosition().y + 0.38f);
         redbar.draw(screen.batch);
-
-
-
-
 
             if (soldierstate == 1) {
                 screen.batch.draw(soldierleft.getKeyFrame(statetime * 0.4f, true),
@@ -219,8 +219,6 @@ public class Soldier extends Enemy {
                         body.getPosition().y - 0.22f, 0.35f, 0.65f);
                 hand.setTransform(body.getPosition().x, body.getPosition().y-0.05f, 0);
             }
-
-
 
           else if(soldierstate==2)
         {
@@ -238,7 +236,6 @@ public class Soldier extends Enemy {
                     hand.setTransform(body.getPosition().x,body.getPosition().y-0.05f,0);
                     if(!touch)
                     {
-                        System.out.println("MISS");
                         opacity=1;
 
                     }
@@ -290,7 +287,7 @@ public class Soldier extends Enemy {
         miss.setSize(0.3f,0.3f);
         miss.setColor(1,1,0,opacity);
         miss.draw(screen.batch);
-      slowdown();
+        slowdown();
 
 
         screen.batch.end();
@@ -300,15 +297,8 @@ public class Soldier extends Enemy {
 
 
     }
-public void slowdown()
-{
-    if(opacity>0f)
-    {
-        opacity=opacity-0.05f;
+public void slowdown() {
+    if(opacity > 0f){ opacity=opacity-0.05f; }
     }
-}
 
-    public void hitPlayer(){
-        //body.applyLinearImpulse(60f,0,body.getWorldCenter().x,body.getWorldCenter().y,true);
-    }
 }

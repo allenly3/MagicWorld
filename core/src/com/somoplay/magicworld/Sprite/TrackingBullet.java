@@ -16,6 +16,7 @@ public class TrackingBullet extends Bullet{
         this.enemy = enemy;
     }
 
+    // Creates the body and fixture of the tracking bullet
     @Override
     public void defineBullet() {
         BodyDef bdef = new BodyDef();
@@ -45,6 +46,8 @@ public class TrackingBullet extends Bullet{
     @Override
     public void update(float dt) {
         super.update(dt);
+
+        // Calculates the movement based on target location so it creates the tracking effect
         if(!destroyed) {
             if (bulletBody.getPosition().x >= enemy.body.getPosition().x && bulletBody.getPosition().y > enemy.body.getPosition().y) {
                 bulletBody.setLinearVelocity(-1, -1);

@@ -22,12 +22,8 @@ public class MenuScreen implements Screen
     MagicWorld game;
     Image imageStart,imageMenu[],background;
     Stage stage;
-    Body body;
     LoadResource loadResource;
-    public static boolean debug=true;
-
-
-
+    public static boolean debug=true;// flag of whether showing the start image
 
     public MenuScreen(MagicWorld game)
     {
@@ -42,11 +38,12 @@ public class MenuScreen implements Screen
 
         viewport=new StretchViewport(game.screenWidth,game.screenHeight);
         stage=new Stage(viewport);
+
         tStart=loadResource.assetManager.get("images/start.jpg");
         tMenu=loadResource.assetManager.get("images/menu.png");
 
 
-        TextureRegion tr[][]=TextureRegion.split(tMenu,256,172);
+        TextureRegion tr[][]=TextureRegion.split(tMenu,256,172);//split the Menu into 4 pieces
 
         imageStart=new Image(tStart);
         imageStart.setSize(game.screenWidth,game.screenHeight);
@@ -63,11 +60,6 @@ public class MenuScreen implements Screen
         imageMenu[2].setPosition(game.screenWidth*0.06f,game.screenHeight*0.05f);
         imageMenu[3].setPosition(game.screenWidth/2+10,game.screenHeight*0.05f);
 
-
-//        stage.addActor(imageMenu[2]);
-//        stage.addActor(imageMenu[1]);
-//        stage.addActor(imageMenu[3]);
-//        stage.addActor(imageMenu[0]);
         tbg=loadResource.assetManager.get("images/bg1.png");
         background=new Image(tbg);
         background.setSize(game.screenWidth,game.screenHeight);
@@ -78,7 +70,7 @@ public class MenuScreen implements Screen
 
 
     }
-    public void initListener()
+    public void initListener() // Add Input Listener on the LIST IMAGES
     {
         imageStart.addListener(new ClickListener(){
 
@@ -100,8 +92,6 @@ public class MenuScreen implements Screen
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
                 Gdx.input.setInputProcessor(ps.controlStage);
-                System.out.println("level 1");
-
 
                 return  true;
             }
@@ -116,7 +106,6 @@ public class MenuScreen implements Screen
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
                 Gdx.input.setInputProcessor(ps.controlStage);
-                System.out.println("level 2");
 
                 return  true;
             }
@@ -130,7 +119,7 @@ public class MenuScreen implements Screen
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
                 Gdx.input.setInputProcessor(ps.controlStage);
-                System.out.println("level 3");
+
 
                 return  true;
             }
@@ -144,9 +133,7 @@ public class MenuScreen implements Screen
                 PlayScreen ps=new PlayScreen(game);
                 game.setScreen(ps);
                 Gdx.input.setInputProcessor(ps.controlStage);
-                System.out.println("level 4");
-
-                return  true;
+               return  true;
             }
         });
 
@@ -175,8 +162,6 @@ public class MenuScreen implements Screen
         }
         else
             {
-            //stage.getActors().clear();
-            // System.out.println(stage.getActors());
                 stage.addActor(background);
 
             for (int i = 0; i < imageMenu.length; i++) {

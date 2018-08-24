@@ -316,7 +316,7 @@ public class PlayScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        handleInput(delta);
+        handleInput(delta);  // setting Button Listener
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -326,7 +326,7 @@ public class PlayScreen implements Screen {
         stage.act();
 
         mapRenderer.render();
-        renderer.render(world, cam.combined);
+         //renderer.render(world, cam.combined);
 
         update(delta);
 
@@ -414,7 +414,7 @@ public class PlayScreen implements Screen {
 
     public void update(float dt){
 
-        world.step(1/60f, 6, 2);
+        world.step(1/60f, 6, 2);// update world
         if(!player.isDestroyed()) {
             cam.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
             cam.update();
@@ -436,9 +436,6 @@ public class PlayScreen implements Screen {
         for(TrackingBullet tb: trackingBullets){
             tb.update(dt);
         }
-
-
-
 
 
         for(EnemyBullet eb: enemyBullets){

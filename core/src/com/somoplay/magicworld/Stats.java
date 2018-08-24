@@ -62,7 +62,6 @@ public class Stats implements Disposable{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                System.out.print("Work");
                 screen.nextLevel();
             }
         });

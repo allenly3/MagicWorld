@@ -8,7 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 
 import javax.xml.soap.Text;
 
-public class LoadResource
+public class LoadResource  // This class is to load the resources before running
 {
     public static AssetManager assetManager;
 
@@ -66,14 +66,6 @@ public class LoadResource
 
         assetManager.load("images/button_sound.png",Texture.class);
         assetManager.load("images/button_sound_mute.png",Texture.class);
-
-
-
-
-
-
-
-
 
         assetManager.finishLoading();
     }

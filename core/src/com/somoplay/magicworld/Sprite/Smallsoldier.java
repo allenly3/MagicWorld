@@ -146,7 +146,6 @@ public class Smallsoldier extends Enemy {
         if(health > 0){
             health -= 25;
         }
-        System.out.println(health);
     }
 
     @Override

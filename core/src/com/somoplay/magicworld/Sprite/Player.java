@@ -25,10 +25,10 @@ import static com.somoplay.magicworld.MagicWorld.screenWidth;
 
 public class Player extends GameSprite {
 
-    public int state = 1;
+    public int state = 1; // Each state VALUE represents one player Animation
 
     public float health = 100;
-    public float healthcopy = health;
+    public float healthcopy = health;// Used to slow down the animation
     private boolean destroyed = false;
     protected HealthBar healthbar;
 
@@ -71,7 +71,7 @@ public class Player extends GameSprite {
 
     }
 
-    // Sets the animation of the player
+    // Setting the animations of the player
     public void init() {
 
         //-----------------Right side running------------------------------
@@ -211,7 +211,6 @@ public class Player extends GameSprite {
         if(healthcopy > 0) {
             healthcopy -= value;
         }
-        System.out.println("Player Health: " + healthcopy);
         healthbar.opacity=1;
     }
 

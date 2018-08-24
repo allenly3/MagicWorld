@@ -39,6 +39,8 @@ public class Stats implements Disposable{
     TextButton playAgain;
     PlayScreen screen;
 
+
+    // This is the post game menu that pops up when you complete a level or die
     public Stats (SpriteBatch batch, final PlayScreen screen){
 
         Skin skin = new Skin();
@@ -61,7 +63,7 @@ public class Stats implements Disposable{
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 System.out.print("Work");
-               screen.nextLevel();
+                screen.nextLevel();
             }
         });
 
@@ -98,7 +100,7 @@ public class Stats implements Disposable{
         globalTable.addActor(table);
         //table.setDebug(true);
         stage.addActor(globalTable);
-       // Gdx.input.setInputProcessor(stage);
+
     }
 
 

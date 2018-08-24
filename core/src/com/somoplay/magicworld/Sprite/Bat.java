@@ -20,6 +20,7 @@ public class Bat extends Enemy {
         random=new Random();
     }
 
+    // Creates body and fixture of bat
     @Override
     protected void defineEnemy() {
         BodyDef bdef = new BodyDef();
@@ -37,14 +38,15 @@ public class Bat extends Enemy {
         body.createFixture(fdef).setUserData(this);
     }
 
+    // Damage taken from player hit and total health of bat can be easily changed
     @Override
     public void onHit() {
         if(health > 0){
             health -= 50;
         }
-        System.out.println(health);
     }
 
+    // Controls the movements of bat
     @Override
     public void update(float dt) {
         if(body.getPosition().y >= getY()){

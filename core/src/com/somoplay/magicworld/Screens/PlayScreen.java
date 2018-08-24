@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -52,18 +53,17 @@ import static com.somoplay.magicworld.MagicWorld.screenWidth;
 
 public class PlayScreen implements Screen {
 
-   public static World world;
-    OrthographicCamera cam;
-    Viewport viewport;
-    Box2DDebugRenderer renderer;
+    public World world;
+    private OrthographicCamera cam;
+    private Viewport viewport;
+    private Box2DDebugRenderer renderer;
     public SpriteBatch batch;
     public static float velocity=2.5f;
     public static float friction=0;
+
     public static int level=1;
 
     private MagicWorld game;
-
-    //private Controller controller;
 
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -75,14 +75,12 @@ public class PlayScreen implements Screen {
     public ArrayList<TrackingBullet> trackingBullets;
     private ArrayList<EnemyBullet> enemyBullets;
     private ArrayList<AllyBullet> allyBullets;
-
-
     private WorldCreator creator;
 
     private LoadResource loadResource;
     private Music music;
     private Stats stats;
-    private float deathTimer = 0;
+    public float deathTimer = 0;
     private float elapsedTime = 0;
     private int trapIndex = 0;
 
@@ -90,43 +88,44 @@ public class PlayScreen implements Screen {
     private float timeSinceLastFire = 1.5f;
     private float allyFireTimer = 1.5f;
     private Bullet bullet;
-
     private TrackingBullet trackingBullet;
     private ArrayList<Float> ceilingTrapHeights;
     public boolean trackingResolved = true;
 
-    Texture tbg,btLeft,btRight,btA,btB,ceilingtraps;
+    private Texture tbg,btLeft,btRight,btA,btB,ceilingtraps;
     Image background;
     public ImageButton buttonLeft,buttonRight,buttonA,buttonB;
+
+    private Drawable musicOff, musicOn;
+    private ImageButton musicButton;
     public InputListener AL,BL;
 
     private ArrayList<Integer> tobeDestroyedSoldier;
     private ArrayList<Integer> tobeDestroyedGunner;
 
 
-    WorldContactListener wc;
     public Stage stage;
     public Stage controlStage;
-    Label label;
-
-
+    private Label label;
 
 
     public PlayScreen(MagicWorld game){
         this.game = game;
         cam = new OrthographicCamera();
-        ceilingtraps=LoadResource.assetManager.get("traps.jpg");
 
+        // Creates the game world
         this.batch=game.batch;
         viewport = new FitViewport(screenWidth/MagicWorld.PPM, screenHeight/MagicWorld.PPM, cam);
         world = new World(new Vector2(0, -10), true);
-        world.setContactListener(wc=new WorldContactListener(this));
+        world.setContactListener(new WorldContactListener(this));
         renderer = new Box2DDebugRenderer();
 
+        // Creates the map for each level based on the Tiled map file
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("level_0"+Integer.toString(level)+".tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / MagicWorld.PPM);
 
+        ceilingtraps=LoadResource.assetManager.get("traps.jpg");
 
         creator = new WorldCreator(this);
         player = new Player(this);
@@ -138,10 +137,6 @@ public class PlayScreen implements Screen {
         tobeDestroyedSoldier = new ArrayList<Integer>();
         tobeDestroyedGunner = new ArrayList<Integer>();
 
-
-
-
-
         loadResource = new LoadResource();
 
         ceilingTrapHeights = new ArrayList<Float>();
@@ -149,10 +144,33 @@ public class PlayScreen implements Screen {
             ceilingTrapHeights.add(ct.getPosition().y);
         }
 
+        // Loading background image from LoadResource
         tbg= LoadResource.assetManager.get("images/bg1.png");
         background=new Image(tbg);
         background.setSize(screenWidth,screenHeight);
 
+        // Creates the music button on top right side
+        musicOff = new TextureRegionDrawable(new TextureRegion((Texture) LoadResource.assetManager.get("images/button_sound_mute.png")));
+        musicOn = new TextureRegionDrawable(new TextureRegion((Texture) LoadResource.assetManager.get("images/button_sound.png")));
+        musicButton = new ImageButton(musicOn, musicOn, musicOff);
+        musicButton.setPosition(screenWidth*0.90f,screenHeight*0.87f);
+        musicButton.setSize(48, 48);
+        musicButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(musicButton.isChecked()){
+                    musicButton.setChecked(true); music.play();
+                } else{ musicButton.setChecked(false); music.pause();}
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+
+        // Converts font file into a compatible one with libgdx
         Label.LabelStyle fontstyle=new Label.LabelStyle(new BitmapFont(Gdx.files.internal("mwfont.fnt")), Color.WHITE);
         label=new Label(Integer.toString(WorldContactListener.score),fontstyle);
         label.setPosition(screenWidth*0.10f,screenHeight*0.87f);
@@ -165,9 +183,8 @@ public class PlayScreen implements Screen {
 
         stats = new Stats(game.batch, this);
 
-
-
         controlStage =new Stage();
+        controlStage.addActor(musicButton);
         //---------------setup button-----------------
         btLeft=LoadResource.assetManager.get("images/buttonLeft.png");
         btRight=LoadResource.assetManager.get("images/buttonRight.png");
@@ -199,7 +216,7 @@ public class PlayScreen implements Screen {
 
         ttt1.setScale(5);
         up=(TextureRegionDrawable) ttt1.getDrawable();
-       down=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][1]);
+        down=new TextureRegionDrawable(TextureRegion.split(btB,99,150)[0][1]);
         buttonB=new ImageButton(up,down);
 
         buttonB.setPosition(screenWidth*0.70f+90,screenHeight*0.078f);
@@ -226,8 +243,7 @@ public class PlayScreen implements Screen {
             {
                 player.state = 1;
                 movingR=true;
-                // player.body.applyForce(2f,0f,0,0,true);
-//                player.bodyDef.linearVelocity.set(20f,0f);
+
                 return true;
             }
 
@@ -239,7 +255,7 @@ public class PlayScreen implements Screen {
             public  void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
                 player.state = 4;
-             player.getBody().setLinearVelocity(0, 0);
+                player.getBody().setLinearVelocity(0, 0);
                 movingL= false;
                 super.touchUp(event,x,y,pointer,button);
             }
@@ -285,7 +301,6 @@ public class PlayScreen implements Screen {
 
         });
 
-
     }
     @Override
     public void show() {
@@ -305,8 +320,6 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
         label.setText(Integer.toString(WorldContactListener.score));
         stage.draw();
         stage.act();
@@ -322,7 +335,6 @@ public class PlayScreen implements Screen {
 
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
-
         for(Bullet bullet : bullets) {
             bullet.render(game.batch);
         }
@@ -338,8 +350,6 @@ public class PlayScreen implements Screen {
         for(TrackingBullet tb: trackingBullets){
             tb.render(game.batch);
         }
-
-
 
         game.batch.end();
         statetime=statetime+delta;
@@ -372,9 +382,8 @@ public class PlayScreen implements Screen {
 
             if (firing && timeSinceLastFire >= 0.6f) {
 
-                if (player.isDestroyed() == false) {
+                if (!player.isDestroyed()) {
 
-                    // TODO use switch for each powerup case, callback to know when collison happens and able to shoot next tracking
                     if(!player.tracking) {
                         firePlayerBullet();
                         if (player.doubleFire) {
@@ -402,18 +411,17 @@ public class PlayScreen implements Screen {
 
     }
 
-    public void update(float dt) {
+    public void update(float dt){
 
-        world.step(1 / 60f, 6, 2);
-        if (!player.isDestroyed()) {
+        world.step(1/60f, 6, 2);
+        if(!player.isDestroyed()) {
             cam.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
             cam.update();
         }
 
-        // if it touches a ground tile, then disappear, if it touches a enemy, disappears and apply damage.
-        // get the size of it correct and the spawn location right as well.
-        for (Bullet bullet : bullets) {
-            if (bullet.destroyed == false) {
+        // All gameobjects are kept in ArrayLists and there is a for loop in each to update each of them.
+        for(Bullet bullet: bullets){
+            if(!bullet.destroyed) {
 
                 if (bullet.getBody().getPosition().x - player.body.getPosition().x > 3 || bullet.getBody().getPosition().x - player.body.getPosition().x < -3) {
 
@@ -424,15 +432,15 @@ public class PlayScreen implements Screen {
             }
         }
 
-        for (TrackingBullet tb : trackingBullets) {
+        for(TrackingBullet tb: trackingBullets){
             tb.update(dt);
         }
 
-        for (EnemyBullet eb : enemyBullets) {
-            if (eb.destroyed == false) {
+        for(EnemyBullet eb: enemyBullets){
+            if(eb.destroyed == false) {
 
                 if (Math.abs(eb.getBody().getPosition().x - player.getPosition().x) >= 3) {
-                    //绝对值
+                //绝对值
                     eb.setToDestroy();
                 }
 
@@ -440,22 +448,22 @@ public class PlayScreen implements Screen {
             }
         }
 
-        for (Bat bat : creator.getBats()) {
-            if (bat.health <= 0 && !bat.destroyed) {
+        for(Bat bat: creator.getBats()){
+            if(bat.health <= 0 && !bat.destroyed){
                 world.destroyBody(bat.body);
                 bat.destroyed = true;
                 WorldContactListener.score += 60;
             }
-            if (!bat.destroyed) {
+            if(!bat.destroyed) {
                 bat.update(dt);
-                if (bat.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM) {
+                // Only Active once player gets close
+                if(bat.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
                     bat.body.setActive(true);
-
                 }
             }
         }
-        for (AllyBullet ab : allyBullets) {
-            if (ab.destroyed == false) {
+        for(AllyBullet ab: allyBullets){
+            if(!ab.destroyed) {
 
                 if (Math.abs(ab.getBody().getPosition().x - player.getPosition().x) >= 3) {
 
@@ -466,46 +474,41 @@ public class PlayScreen implements Screen {
             }
         }
 
-
-        for (Soldier soldier : creator.getSoldiers()) {
-            if (soldier.health <= 0 && !soldier.destroyed) {
+        for (Soldier soldier: creator.getSoldiers()){
+            if(soldier.health <= 0 && !soldier.destroyed){
                 world.destroyBody(soldier.body);
-                world.destroyBody(soldier.hand);
                 soldier.destroyed = true;
                 WorldContactListener.score += 50;
             }
 
-            if (soldier.body.getPosition().y < -0.175 && !soldier.destroyed) {
+            // If soldier falls off platform, it will also be destoryed
+            if(soldier.body.getPosition().y < -0.175 && !soldier.destroyed){
                 world.destroyBody(soldier.hand);
                 world.destroyBody(soldier.body);
                 soldier.destroyed = true;
             }
 
-
-            if (soldier.destroyed == false) {
+            if(!soldier.destroyed){
                 soldier.update(dt);
-
-                if (soldier.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM) {
+                // only active once player gets close
+                if(soldier.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
                     soldier.body.setActive(true);
 
                 }
             }
 
-            if (soldier.destroyed) {
+            if(soldier.destroyed){
                 tobeDestroyedSoldier.add(creator.getSoldiers().indexOf(soldier));
             }
+
         }
 
-//        if (tobeDestroyedSoldier.size() != 0) {
-//            for (int i : tobeDestroyedSoldier) {
-//                creator.removeSoldier(i);
-//            }
-//            tobeDestroyedSoldier.clear();
-//            ;
-//        }
-
-
-
+        if(tobeDestroyedSoldier.size() != 0){
+            for(int i: tobeDestroyedSoldier){
+                creator.removeSoldier(i);
+            }
+            tobeDestroyedSoldier.clear();;
+        }
 
         for (Gunner gunner: creator.getGunners()){
             if(gunner.health <= 0 && !gunner.destroyed){
@@ -554,7 +557,7 @@ public class PlayScreen implements Screen {
             if(!ally.destroyed) {
                 ally.update(dt,game.batch);
                 for (Gunner gunner : creator.getGunners()) {
-                    // if enemy is to the right fire to the right
+                    // if enemy is to the right fire to the right, else fire left
                     if (gunner.body.getPosition().x > ally.body.getPosition().x && gunner.body.getPosition().x - ally.body.getPosition().x <= 480 / MagicWorld.PPM) {
                         if (allyFireTimer >= 1f) {
                             ally.fireRight();
@@ -582,9 +585,26 @@ public class PlayScreen implements Screen {
                         }
                     }
                 }
+
+                for (Bat bat : creator.getBats()) {
+                    // if enemy is to the right fire to the right
+                    if (bat.body.getPosition().x > ally.body.getPosition().x && bat.body.getPosition().x - ally.body.getPosition().x <= 480 / MagicWorld.PPM) {
+                        if (allyFireTimer >= 1f) {
+                            ally.fireRight();
+                            allyFireTimer = 0;
+                        }
+                    } else if (bat.body.getPosition().x < ally.body.getPosition().x && ally.body.getPosition().x - bat.body.getPosition().x <= 480 / MagicWorld.PPM) {
+                        if (allyFireTimer >= 1f) {
+                            ally.fireLeft();
+                            allyFireTimer = 0;
+                        }
+                    }
+                }
             }
         }
         allyFireTimer += dt;
+
+        // Moves Ceiling Traps
         for(Body ct : creator.getCeilingTraps()){
 
             if(ct.getPosition().y <= (ceilingTrapHeights.get(trapIndex) - 96/MagicWorld.PPM)){
@@ -604,34 +624,24 @@ public class PlayScreen implements Screen {
         if(!player.isDestroyed()) {
             elapsedTime += dt;
         }
+
+        // Sets player death from health reaching 0
         if(player.getHealth() <= 0 && !player.isDestroyed()){
             world.destroyBody(player.body);
             player.setDestroyed(true);
-            deathTimer = 0;
-            //WorldContactListener.score=0;
+            deathTimer = 1;
         }
-
+        // Sets player death from falling off of platform
         if(player.body.getPosition().y < - 0.175 && !player.isDestroyed()){
             world.destroyBody(player.body);
             player.setDestroyed(true);
             deathTimer = 1;
-            //WorldContactListener.score=0;
         }
-
+        // If player has
         if(deathTimer >= 1.5 && player.isDestroyed()){
-            //game.setScreen(new MenuScreen(game));
-            stats.setScoreLabel(WorldContactListener.score);
-            stats.setTimeLabel(elapsedTime);
-            controlStage.clear();
-
-            displayStats();
-            music.stop();
-            dispose();
+            loadStats();
         }
-
-
         mapRenderer.setView(cam);
-
     }
 
     @Override
@@ -662,6 +672,10 @@ public class PlayScreen implements Screen {
        //world.dispose();
     }
 
+    public void nextLevel(){
+        game.setScreen(new MenuScreen(game));
+    }
+
     public World getWorld() {
         return world;
     }
@@ -673,8 +687,13 @@ public class PlayScreen implements Screen {
 
     public Player getPlayer(){return player;}
 
-    public void nextLevel(){
-        game.setScreen(new MenuScreen(game));
+    public void loadStats(){
+        stats.setScoreLabel(WorldContactListener.score);
+        stats.setTimeLabel(elapsedTime);
+        controlStage.clear();
+
+        displayStats();
+        music.stop();
         dispose();
     }
 
@@ -685,7 +704,6 @@ public class PlayScreen implements Screen {
     public ArrayList<AllyBullet> getAllyBullets() {
         return allyBullets;
     }
-
 
     public void displayStats(){
         game.batch.setProjectionMatrix(stats.stage.getCamera().combined);

@@ -70,7 +70,7 @@ public class MenuScreen implements Screen
 //        stage.addActor(imageMenu[0]);
         tbg=loadResource.assetManager.get("images/bg1.png");
         background=new Image(tbg);
-         background.setSize(game.screenWidth,game.screenHeight);
+        background.setSize(game.screenWidth,game.screenHeight);
 
 
         initListener();

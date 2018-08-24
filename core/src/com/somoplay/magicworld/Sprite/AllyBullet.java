@@ -27,7 +27,7 @@ public class AllyBullet {
     private Body bulletBody;
 
 
-
+    // A class that represents bullets that are only shot by the ally
     public AllyBullet(PlayScreen screen, Vector2 position){
         this.position = position;
         this.screen = screen;

@@ -13,7 +13,7 @@ import com.somoplay.magicworld.Screens.PlayScreen;
 
 public class MagicWorld extends Game {
 
-	public static float screenWidth,screenHeight;// get screen width and height from user device
+	public static float screenWidth,screenHeight;
 	public MenuScreen menuScreen;
 
 	public static final float PPM = 100;
@@ -23,6 +23,7 @@ public class MagicWorld extends Game {
 	public void create () {
 	    batch = new SpriteBatch();
 
+		// get screen width and height from user device
 		screenWidth=Gdx.graphics.getWidth();
 		screenHeight=Gdx.graphics.getHeight();
 

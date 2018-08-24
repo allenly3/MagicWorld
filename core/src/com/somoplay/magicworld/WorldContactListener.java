@@ -20,7 +20,6 @@ import com.somoplay.magicworld.Sprite.Enemy;
 import com.somoplay.magicworld.Sprite.EnemyBullet;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
-import com.somoplay.magicworld.Sprite.Smallsoldier;
 import com.somoplay.magicworld.Sprite.Soldier;
 import com.somoplay.magicworld.Sprite.TrackingBullet;
 
@@ -80,26 +79,7 @@ public class WorldContactListener implements ContactListener {
                 ((Enemy)b.getUserData()).setSlowed(true);
             }
 
-        }  else if(contact.getFixtureA().getUserData() instanceof Bullet && contact.getFixtureB().getUserData() instanceof Smallsoldier) {
-            a = contact.getFixtureA();
-            b = contact.getFixtureB();
 
-            ((Enemy)b.getUserData()).onHit();
-            ((Bullet) a.getUserData()).setToDestroy();
-
-            if(screen.player.freezing){
-                ((Enemy)b.getUserData()).setSlowed(true);
-            }
-
-        } else if(contact.getFixtureA().getUserData() instanceof Smallsoldier && contact.getFixtureB().getUserData() instanceof Bullet) {
-            a = contact.getFixtureB();
-            b = contact.getFixtureA();
-
-            ((Enemy)b.getUserData()).onHit();
-            ((Bullet) a.getUserData()).setToDestroy();
-            if(screen.player.freezing){
-                ((Enemy)b.getUserData()).setSlowed(true);
-            }
 
         }
 

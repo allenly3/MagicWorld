@@ -73,7 +73,7 @@ public class Gunner extends Enemy {
     @Override
     public void onHit() {
         if(health > 0){
-            health -= 20;
+            health -= 50;
         }
         System.out.println(health);
     }

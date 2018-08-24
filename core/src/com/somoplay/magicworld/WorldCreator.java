@@ -30,12 +30,14 @@ import java.util.ArrayList;
 
 public class WorldCreator {
 
-    ArrayList<Soldier> soldiers;
+    public ArrayList<Soldier> soldiers;
     ArrayList<Gunner> gunners;
     ArrayList<Bat> bats;
     ArrayList<Body> ceilingTraps;
     ArrayList<Ally> allies;
     ArrayList<Body> spikes;
+
+
 
     Texture img_spike;
 
@@ -63,6 +65,7 @@ public class WorldCreator {
         allies = new ArrayList<Ally>();
         ceilingTraps = new ArrayList<Body>();
         spikes=new ArrayList<Body>();
+
 
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -283,6 +286,7 @@ public class WorldCreator {
         return soldiers;
     }
 
+
     public ArrayList<Gunner> getGunners() { return gunners; }
 
     public ArrayList<Bat> getBats() { return bats; }
@@ -295,10 +299,10 @@ public class WorldCreator {
         return allies;
     }
 
-    public void removeSoldier(int index){
-        screen.getWorld().destroyBody(soldiers.get(index).hand);
-        soldiers.remove(index);
-    }
+//    public void removeSoldier(int index){
+//        screen.getWorld().destroyBody(soldiers.get(index).hand);
+//        soldiers.remove(index);
+//    }
 
     public void removeGunner(int index){
         gunners.remove(index);

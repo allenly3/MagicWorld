@@ -39,7 +39,6 @@ import com.somoplay.magicworld.Sprite.Enemy;
 import com.somoplay.magicworld.Sprite.EnemyBullet;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
-import com.somoplay.magicworld.Sprite.Smallsoldier;
 import com.somoplay.magicworld.Sprite.Soldier;
 import com.somoplay.magicworld.Sprite.TrackingBullet;
 import com.somoplay.magicworld.Stats;
@@ -53,14 +52,13 @@ import static com.somoplay.magicworld.MagicWorld.screenWidth;
 
 public class PlayScreen implements Screen {
 
-    World world;
+   public static World world;
     OrthographicCamera cam;
     Viewport viewport;
     Box2DDebugRenderer renderer;
     public SpriteBatch batch;
     public static float velocity=2.5f;
     public static float friction=0;
-
     public static int level=1;
 
     private MagicWorld game;
@@ -78,6 +76,7 @@ public class PlayScreen implements Screen {
     private ArrayList<EnemyBullet> enemyBullets;
     private ArrayList<AllyBullet> allyBullets;
 
+
     private WorldCreator creator;
 
     private LoadResource loadResource;
@@ -91,6 +90,7 @@ public class PlayScreen implements Screen {
     private float timeSinceLastFire = 1.5f;
     private float allyFireTimer = 1.5f;
     private Bullet bullet;
+
     private TrackingBullet trackingBullet;
     private ArrayList<Float> ceilingTrapHeights;
     public boolean trackingResolved = true;
@@ -101,15 +101,15 @@ public class PlayScreen implements Screen {
     public InputListener AL,BL;
 
     private ArrayList<Integer> tobeDestroyedSoldier;
-    private ArrayList<Integer> tobeDestroySmallsoldier;
     private ArrayList<Integer> tobeDestroyedGunner;
+
 
     WorldContactListener wc;
     public Stage stage;
     public Stage controlStage;
     Label label;
 
-    ArrayList<Smallsoldier> smsd;
+
 
 
     public PlayScreen(MagicWorld game){
@@ -137,9 +137,9 @@ public class PlayScreen implements Screen {
         allyBullets = new ArrayList<AllyBullet>();
         tobeDestroyedSoldier = new ArrayList<Integer>();
         tobeDestroyedGunner = new ArrayList<Integer>();
-        tobeDestroySmallsoldier=new ArrayList<Integer>();
 
-        smsd=new ArrayList<Smallsoldier>();
+
+
 
 
         loadResource = new LoadResource();
@@ -339,13 +339,13 @@ public class PlayScreen implements Screen {
             tb.render(game.batch);
         }
 
+
+
         game.batch.end();
         statetime=statetime+delta;
         if(!player.isDestroyed()) {
             player.render(game.batch, statetime);
         }
-
-
 
     }
 
@@ -402,18 +402,18 @@ public class PlayScreen implements Screen {
 
     }
 
-    public void update(float dt){
+    public void update(float dt) {
 
-        world.step(1/60f, 6, 2);
-        if(!player.isDestroyed()) {
+        world.step(1 / 60f, 6, 2);
+        if (!player.isDestroyed()) {
             cam.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
             cam.update();
         }
 
         // if it touches a ground tile, then disappear, if it touches a enemy, disappears and apply damage.
         // get the size of it correct and the spawn location right as well.
-        for(Bullet bullet: bullets){
-            if(bullet.destroyed == false) {
+        for (Bullet bullet : bullets) {
+            if (bullet.destroyed == false) {
 
                 if (bullet.getBody().getPosition().x - player.body.getPosition().x > 3 || bullet.getBody().getPosition().x - player.body.getPosition().x < -3) {
 
@@ -424,15 +424,15 @@ public class PlayScreen implements Screen {
             }
         }
 
-        for(TrackingBullet tb: trackingBullets){
+        for (TrackingBullet tb : trackingBullets) {
             tb.update(dt);
         }
 
-        for(EnemyBullet eb: enemyBullets){
-            if(eb.destroyed == false) {
+        for (EnemyBullet eb : enemyBullets) {
+            if (eb.destroyed == false) {
 
                 if (Math.abs(eb.getBody().getPosition().x - player.getPosition().x) >= 3) {
-                //绝对值
+                    //绝对值
                     eb.setToDestroy();
                 }
 
@@ -440,22 +440,22 @@ public class PlayScreen implements Screen {
             }
         }
 
-        for(Bat bat: creator.getBats()){
-            if(bat.health <= 0 && !bat.destroyed){
+        for (Bat bat : creator.getBats()) {
+            if (bat.health <= 0 && !bat.destroyed) {
                 world.destroyBody(bat.body);
                 bat.destroyed = true;
                 WorldContactListener.score += 60;
             }
-            if(!bat.destroyed) {
+            if (!bat.destroyed) {
                 bat.update(dt);
-                if(bat.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
+                if (bat.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM) {
                     bat.body.setActive(true);
 
                 }
             }
         }
-        for(AllyBullet ab: allyBullets){
-            if(ab.destroyed == false) {
+        for (AllyBullet ab : allyBullets) {
+            if (ab.destroyed == false) {
 
                 if (Math.abs(ab.getBody().getPosition().x - player.getPosition().x) >= 3) {
 
@@ -467,71 +467,45 @@ public class PlayScreen implements Screen {
         }
 
 
-        for (Soldier soldier: creator.getSoldiers()){
-            if(soldier.health <= 0 && !soldier.destroyed){
-                smsd.add(new Smallsoldier(this,soldier.body.getPosition().x-0.22f,soldier.body.getPosition().y+0.3f));
-                smsd.add(new Smallsoldier(this,soldier.body.getPosition().x+0.33f,soldier.body.getPosition().y+0.3f));
+        for (Soldier soldier : creator.getSoldiers()) {
+            if (soldier.health <= 0 && !soldier.destroyed) {
                 world.destroyBody(soldier.body);
                 world.destroyBody(soldier.hand);
                 soldier.destroyed = true;
                 WorldContactListener.score += 50;
             }
 
-            if(soldier.body.getPosition().y < -0.175 && !soldier.destroyed){
+            if (soldier.body.getPosition().y < -0.175 && !soldier.destroyed) {
                 world.destroyBody(soldier.hand);
                 world.destroyBody(soldier.body);
                 soldier.destroyed = true;
             }
 
 
-            if(soldier.destroyed == false){
+            if (soldier.destroyed == false) {
                 soldier.update(dt);
 
-                if(soldier.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM){
+                if (soldier.body.getPosition().x < player.body.getPosition().x + 500 / MagicWorld.PPM) {
                     soldier.body.setActive(true);
 
                 }
             }
 
-            if(soldier.destroyed){
+            if (soldier.destroyed) {
                 tobeDestroyedSoldier.add(creator.getSoldiers().indexOf(soldier));
             }
         }
 
-        if(tobeDestroyedSoldier.size() != 0){
-            for(int i: tobeDestroyedSoldier){
-                creator.removeSoldier(i);
-            }
-            tobeDestroyedSoldier.clear();;
-        }
-
-
-        for (Smallsoldier smallsoldier: smsd){
-
-            smallsoldier.body.setActive(true);
-
-            if(smallsoldier.health <= 0 && !smallsoldier.destroyed){
-                world.destroyBody(smallsoldier.body);
-                smallsoldier.destroyed = true;
-                WorldContactListener.score += 25;
-            }
-
-            if(smallsoldier.body.getPosition().y < -0.175 && !smallsoldier.destroyed){
-                world.destroyBody(smallsoldier.body);
-                smallsoldier.destroyed = true;
-            }
-
-
-            if(smallsoldier.destroyed == false){
-                smallsoldier.update(dt);
-            }
-//            else
-//            {
-//               smsd.remove(smsd.indexOf(smallsoldier));
+//        if (tobeDestroyedSoldier.size() != 0) {
+//            for (int i : tobeDestroyedSoldier) {
+//                creator.removeSoldier(i);
 //            }
+//            tobeDestroyedSoldier.clear();
+//            ;
+//        }
 
 
-        }
+
 
         for (Gunner gunner: creator.getGunners()){
             if(gunner.health <= 0 && !gunner.destroyed){
@@ -654,6 +628,8 @@ public class PlayScreen implements Screen {
             music.stop();
             dispose();
         }
+
+
         mapRenderer.setView(cam);
 
     }
@@ -709,6 +685,7 @@ public class PlayScreen implements Screen {
     public ArrayList<AllyBullet> getAllyBullets() {
         return allyBullets;
     }
+
 
     public void displayStats(){
         game.batch.setProjectionMatrix(stats.stage.getCamera().combined);

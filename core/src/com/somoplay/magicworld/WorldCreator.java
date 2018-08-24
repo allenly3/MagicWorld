@@ -296,10 +296,9 @@ public class WorldCreator {
         return allies;
     }
 
-//    public void removeSoldier(int index){
-//        screen.getWorld().destroyBody(soldiers.get(index).hand);
-//        soldiers.remove(index);
-//    }
+    public void removeSoldier(int index){
+        soldiers.remove(index);
+    }
 
     public void removeGunner(int index){
         gunners.remove(index);

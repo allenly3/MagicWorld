@@ -43,10 +43,6 @@ public class Soldier extends Enemy {
 
 
 
-
-    float move=0;
-   public  Body hand;
-
     public Soldier(PlayScreen screen, float x, float y){
         super(screen, x, y);
 
@@ -118,7 +114,7 @@ public class Soldier extends Enemy {
         body = world.createBody(bdef);
 
         bdef.gravityScale=0;
-        hand=  world.createBody(bdef);
+
 
         // creates two circles used for hitboxes
         FixtureDef fdef = new FixtureDef();
@@ -133,11 +129,6 @@ public class Soldier extends Enemy {
         body.createFixture(fdef).setUserData(this);// ------body-----part2
 
 
-        //------hand---- is used to attack player
-        shape.setRadius(5/MagicWorld.PPM);
-        fdef.shape=shape;
-        fdef.isSensor=true;
-        hand.createFixture(fdef).setUserData("hand");
 
         // Edgeshapes are used to determine wall collision so soldier can jump
         EdgeShape leftSide = new EdgeShape();
@@ -212,12 +203,12 @@ public class Soldier extends Enemy {
                 screen.batch.draw(soldierleft.getKeyFrame(statetime * 0.4f, true),
                         body.getPosition().x - 0.16f,
                         body.getPosition().y - 0.22f, 0.35f, 0.65f);
-                hand.setTransform(body.getPosition().x, body.getPosition().y-0.05f, 0);
+
             } else if (soldierstate == 0) {
                 screen.batch.draw(soldierright.getKeyFrame(statetime * 0.4f, true),
                         body.getPosition().x - 0.16f,
                         body.getPosition().y - 0.22f, 0.35f, 0.65f);
-                hand.setTransform(body.getPosition().x, body.getPosition().y-0.05f, 0);
+
             }
 
           else if(soldierstate==2)
@@ -227,24 +218,18 @@ public class Soldier extends Enemy {
                     body.getPosition().x - 0.25f,
                     body.getPosition().y - 0.22f, 0.47f, 0.68f);
 
-            if(hand.getPosition().x-screen.player.getPosition().x>0.12f)
-            {
-                hand.setLinearVelocity(-0.30f,0);
 
-                if(this.body.getPosition().x-hand.getPosition().x>=0.217f)
-                 {
-                    hand.setTransform(body.getPosition().x,body.getPosition().y-0.05f,0);
-                    if(!touch)
-                    {
-                        opacity=1;
-
-                    }
-                 }
-            }
             duration+=Gdx.graphics.getDeltaTime();
             if(duration>= 0.80f)
             {
-
+                if(Math.abs(body.getPosition().x-screen.player.getPosition().x)>0.45)
+                {
+                    opacity=1;
+                }
+                else
+                {
+                    screen.player.onHit(10);
+                }
                 attackormove=0;
                 duration=0;
 
@@ -258,25 +243,18 @@ public class Soldier extends Enemy {
                     body.getPosition().x - 0.16f,
                     body.getPosition().y - 0.22f, 0.47f, 0.68f);
 
-            if(screen.player.getPosition().x-hand.getPosition().x>0.12f)
-            {
-                hand.setLinearVelocity( 0.30f,0);
 
-                 if(hand.getPosition().x-this.body.getPosition().x>=0.217f)
-                {
-
-                    hand.setTransform(body.getPosition().x,body.getPosition().y-0.05f,0);
-                    if(!touch)
-                    {
-                        System.out.println("MISS");
-                        opacity=1;
-
-                    }
-                }
-            }
             duration+=Gdx.graphics.getDeltaTime();
             if(duration>= 0.8f)
             {
+                if(Math.abs(body.getPosition().x-screen.player.getPosition().x)>0.45)
+                {
+                    opacity=1;
+                }
+                else
+                {
+                    screen.player.onHit(10);
+                }
                 attackormove=0;
                 duration=0;
 

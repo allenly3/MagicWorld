@@ -40,6 +40,7 @@ import com.somoplay.magicworld.Sprite.Enemy;
 import com.somoplay.magicworld.Sprite.EnemyBullet;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
+import com.somoplay.magicworld.Sprite.Smallsoldier;
 import com.somoplay.magicworld.Sprite.Soldier;
 import com.somoplay.magicworld.Sprite.TrackingBullet;
 import com.somoplay.magicworld.Stats;
@@ -53,7 +54,7 @@ import static com.somoplay.magicworld.MagicWorld.screenWidth;
 
 public class PlayScreen implements Screen {
 
-    public World world;
+    World world;
     private OrthographicCamera cam;
     private Viewport viewport;
     private Box2DDebugRenderer renderer;
@@ -102,7 +103,7 @@ public class PlayScreen implements Screen {
 
     private ArrayList<Integer> tobeDestroyedSoldier;
     private ArrayList<Integer> tobeDestroyedGunner;
-
+    ArrayList<Smallsoldier> smallsoldiers;
 
     public Stage stage;
     public Stage controlStage;
@@ -136,7 +137,7 @@ public class PlayScreen implements Screen {
         allyBullets = new ArrayList<AllyBullet>();
         tobeDestroyedSoldier = new ArrayList<Integer>();
         tobeDestroyedGunner = new ArrayList<Integer>();
-
+        smallsoldiers=new ArrayList<Smallsoldier>();
         loadResource = new LoadResource();
 
         ceilingTrapHeights = new ArrayList<Float>();
@@ -436,6 +437,10 @@ public class PlayScreen implements Screen {
             tb.update(dt);
         }
 
+
+
+
+
         for(EnemyBullet eb: enemyBullets){
             if(eb.destroyed == false) {
 
@@ -476,6 +481,8 @@ public class PlayScreen implements Screen {
 
         for (Soldier soldier: creator.getSoldiers()){
             if(soldier.health <= 0 && !soldier.destroyed){
+                smallsoldiers.add(new Smallsoldier(this,soldier.body.getPosition().x-0.2f,soldier.body.getPosition().y+0.13f));
+                smallsoldiers.add(new Smallsoldier(this,soldier.body.getPosition().x+0.3f,soldier.body.getPosition().y+0.19f));
                 world.destroyBody(soldier.body);
                 soldier.destroyed = true;
                 WorldContactListener.score += 50;
@@ -483,7 +490,6 @@ public class PlayScreen implements Screen {
 
             // If soldier falls off platform, it will also be destoryed
             if(soldier.body.getPosition().y < -0.175 && !soldier.destroyed){
-                world.destroyBody(soldier.hand);
                 world.destroyBody(soldier.body);
                 soldier.destroyed = true;
             }
@@ -500,7 +506,6 @@ public class PlayScreen implements Screen {
             if(soldier.destroyed){
                 tobeDestroyedSoldier.add(creator.getSoldiers().indexOf(soldier));
             }
-
         }
 
         if(tobeDestroyedSoldier.size() != 0){
@@ -508,6 +513,25 @@ public class PlayScreen implements Screen {
                 creator.removeSoldier(i);
             }
             tobeDestroyedSoldier.clear();;
+        }
+
+        for(Smallsoldier small:smallsoldiers)
+        {
+            if(small.health <= 0 && !small.destroyed){
+                world.destroyBody(small.body);
+                small.destroyed = true;
+                WorldContactListener.score += 10;
+            }
+
+            // If soldier falls off platform, it will also be destoryed
+            if(small.body.getPosition().y < -0.175 && !small.destroyed){
+                world.destroyBody(small.body);
+                small.destroyed = true;
+            }
+
+            if(!small.destroyed){
+                small.update(dt);
+            }
         }
 
         for (Gunner gunner: creator.getGunners()){

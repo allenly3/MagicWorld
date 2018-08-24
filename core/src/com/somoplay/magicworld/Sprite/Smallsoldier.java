@@ -48,11 +48,13 @@ public class Smallsoldier extends Enemy {
         super(screen, x, y);
 
         defineAnimation();
+        body.setActive(true);
 
     }
 
     public void defineAnimation()
     {
+
         batch=screen.batch;
         Texture temp= (LoadResource.assetManager.get("images/miss.png"));
         miss=new Sprite(temp);
@@ -68,7 +70,7 @@ public class Smallsoldier extends Enemy {
         txright[7]= LoadResource.assetManager.get("enemy2/Walking_021.png");
         txright[8]= LoadResource.assetManager.get("enemy2/Walking_024.png");
         txright[9]= LoadResource.assetManager.get("enemy2/Walking_027.png");
-        txright[10]= LoadResource.assetManager.get("enem2y/Walking_030.png");
+        txright[10]= LoadResource.assetManager.get("enemy2/Walking_030.png");
 
         soldierright=new Animation<Texture>(Gdx.graphics.getDeltaTime(),txright);
         TextureRegion tx[]=new TextureRegion[11];
@@ -163,10 +165,10 @@ public class Smallsoldier extends Enemy {
                     soldierstate = 1;
                     if (Math.abs(body.getPosition().x - screen.player.getPosition().x) > 0.41f) {
                         if (slowed) {
-                            velocity = new Vector2(-0.5f, body.getLinearVelocity().y);
+                            velocity = new Vector2(-0.3f, body.getLinearVelocity().y);
                             slowedTimer += dt;
                         } else {
-                            velocity = new Vector2(-1, body.getLinearVelocity().y);
+                            velocity = new Vector2(-0.6f, body.getLinearVelocity().y);
                         }
                     } else {
                         soldierstate = 2;
@@ -177,10 +179,10 @@ public class Smallsoldier extends Enemy {
                     soldierstate = 0;
                     if (Math.abs(body.getPosition().x - screen.player.getPosition().x) > 0.41f) {
                         if (slowed) {
-                            velocity = new Vector2(0.5f, body.getLinearVelocity().y);
+                            velocity = new Vector2(0.3f, body.getLinearVelocity().y);
                             slowedTimer += dt;
                         } else {
-                            velocity = new Vector2(1, body.getLinearVelocity().y);
+                            velocity = new Vector2(0.6f, body.getLinearVelocity().y);
                         }
                     } else {
                         soldierstate = 3;
@@ -191,26 +193,26 @@ public class Smallsoldier extends Enemy {
 
             redbar.setSize(health / 3 / MagicWorld.PPM, 8 / MagicWorld.PPM);
             screen.batch.begin();
-            redbar.setPosition(body.getPosition().x - 0.15f, body.getPosition().y + 0.38f);
+            redbar.setPosition(body.getPosition().x - 0.15f, body.getPosition().y + 0.3f);
             redbar.draw(screen.batch);
 
 
             if (soldierstate == 1) {
                 screen.batch.draw(soldierleft.getKeyFrame(statetime * 0.4f, true),
                         body.getPosition().x - 0.16f,
-                        body.getPosition().y - 0.22f, 0.35f, 0.65f);
+                        body.getPosition().y - 0.22f, 0.35f, 0.45f);
 
             } else if (soldierstate == 0) {
                 screen.batch.draw(soldierright.getKeyFrame(statetime * 0.4f, true),
                         body.getPosition().x - 0.16f,
-                        body.getPosition().y - 0.22f, 0.35f, 0.65f);
+                        body.getPosition().y - 0.22f, 0.35f, 0.45f);
 
             } else if (soldierstate == 2) {
                 attackormove = 1;
 
                 screen.batch.draw(stopleft.getKeyFrame(statetime * 0.1f, true),
                         body.getPosition().x - 0.25f,
-                        body.getPosition().y - 0.22f, 0.47f, 0.68f);
+                        body.getPosition().y - 0.22f, 0.47f, 0.47f);
 
 
                 duration += Gdx.graphics.getDeltaTime();
@@ -236,7 +238,7 @@ public class Smallsoldier extends Enemy {
 
                 screen.batch.draw(stopright.getKeyFrame(statetime * 0.1f, true),
                         body.getPosition().x - 0.16f,
-                        body.getPosition().y - 0.22f, 0.47f, 0.68f);
+                        body.getPosition().y - 0.22f, 0.47f, 0.47f);
 
 
 

@@ -1,5 +1,9 @@
 package com.somoplay.magicworld.Sprite;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -13,11 +17,16 @@ public class Bat extends Enemy {
 
     public float health = 100;
     public boolean destroyed = false;
+    Animation<TextureRegion> flying;
     Random random;
 
     public Bat(PlayScreen screen, float x, float y) {
         super(screen, x, y);
         random=new Random();
+        Texture tx=new Texture(Gdx.files.internal("enemy/bat.png"));
+        TextureRegion[][] tr=TextureRegion.split(tx,16,24);
+        flying=new Animation<TextureRegion>(Gdx.graphics.getDeltaTime(),tr[0]);
+
     }
 
     // Creates body and fixture of bat
@@ -53,5 +62,14 @@ public class Bat extends Enemy {
             velocity = new Vector2(-1f*random.nextInt(2),-1f );
         } else if(body.getPosition().y <= (screen.player.getPosition().y+0.32)){ velocity = new Vector2(1,1);}
         body.setLinearVelocity(velocity);
+
+        screen.batch.begin();
+
+        screen.batch.draw(flying.getKeyFrame(5*dt),body.getPosition().x-0.22f,body.getPosition().y-0.28f,0.5f,0.5f);
+        screen.batch.end();
+
     }
+
+
+
 }

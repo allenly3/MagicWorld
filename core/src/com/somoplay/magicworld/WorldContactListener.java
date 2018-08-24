@@ -20,6 +20,7 @@ import com.somoplay.magicworld.Sprite.Enemy;
 import com.somoplay.magicworld.Sprite.EnemyBullet;
 import com.somoplay.magicworld.Sprite.Gunner;
 import com.somoplay.magicworld.Sprite.Player;
+import com.somoplay.magicworld.Sprite.Smallsoldier;
 import com.somoplay.magicworld.Sprite.Soldier;
 import com.somoplay.magicworld.Sprite.TrackingBullet;
 
@@ -80,9 +81,27 @@ public class WorldContactListener implements ContactListener {
             if(screen.player.freezing){
                 ((Enemy)b.getUserData()).setSlowed(true);
             }
+        }
+        else if(contact.getFixtureA().getUserData() instanceof Bullet && contact.getFixtureB().getUserData() instanceof Smallsoldier) {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
 
+            ((Enemy)b.getUserData()).onHit();
+            ((Bullet) a.getUserData()).setToDestroy();
 
+            if(screen.player.freezing){
+                ((Enemy)b.getUserData()).setSlowed(true);
+            }
 
+        } else if(contact.getFixtureA().getUserData() instanceof Smallsoldier && contact.getFixtureB().getUserData() instanceof Bullet) {
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((Bullet) a.getUserData()).setToDestroy();
+            if(screen.player.freezing){
+                ((Enemy)b.getUserData()).setSlowed(true);
+            }
         }
 
         else if(contact.getFixtureA().getUserData() instanceof Bullet && contact.getFixtureB().getUserData() instanceof Bat) {
@@ -156,28 +175,7 @@ public class WorldContactListener implements ContactListener {
             ((AllyBullet) a.getUserData()).setToDestroy();
 
 
-        } else if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData()=="hand"){
-            a = contact.getFixtureA();
-            b = contact.getFixtureB();
-            Soldier.touch=true;
-            System.out.println("hand");
-
-
-
-            ((Player)a.getUserData()).onHit(2);
-            //((Soldier)b.getUserData()).hitPlayer();
-            //screen.setHealth(0.5f);
-
-        } else if(contact.getFixtureA().getUserData() =="hand"&& contact.getFixtureB().getUserData() instanceof Player){
-            a = contact.getFixtureB();
-            b = contact.getFixtureA();
-            Soldier.touch=true;
-            System.out.println("hand");
-            ((Player)a.getUserData()).onHit(2);
-
-
-
-        } else if(contact.getFixtureA().getUserData() instanceof Ally && contact.getFixtureB().getUserData() instanceof Soldier){
+        }else if(contact.getFixtureA().getUserData() instanceof Ally && contact.getFixtureB().getUserData() instanceof Soldier){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 
@@ -284,13 +282,13 @@ public class WorldContactListener implements ContactListener {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 
-            ((Player)a.getUserData()).onHit(25);
+            ((Player)a.getUserData()).onHit(10);
 
         } else if(contact.getFixtureA().getUserData() instanceof Bat && contact.getFixtureB().getUserData() instanceof Player){
             a = contact.getFixtureB();
             b = contact.getFixtureA();
 
-            ((Player)a.getUserData()).onHit(25);
+            ((Player)a.getUserData()).onHit(10);
         } else if(contact.getFixtureA().getUserData() instanceof Ally && contact.getFixtureB().getUserData() instanceof EnemyBullet){
             a = contact.getFixtureA();
             b = contact.getFixtureB();
@@ -499,19 +497,6 @@ public class WorldContactListener implements ContactListener {
 
         }
 
-        if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData()=="hand"){
-            a = contact.getFixtureA();
-            b = contact.getFixtureB();
-            Soldier.touch=false;
-
-        } else if(contact.getFixtureA().getUserData() =="hand"&& contact.getFixtureB().getUserData() instanceof Player){
-            a = contact.getFixtureB();
-            b = contact.getFixtureA();
-            Soldier.touch=false;
-
-
-
-        }
 
 
 
@@ -524,6 +509,9 @@ public class WorldContactListener implements ContactListener {
         if(contact.getFixtureA().getUserData() instanceof Gunner && contact.getFixtureB().getUserData() instanceof Soldier){
             contact.setEnabled(false);
         } else if(contact.getFixtureA().getUserData() instanceof Soldier && contact.getFixtureB().getUserData() instanceof Gunner){
+            contact.setEnabled(false);
+        }
+        if(contact.getFixtureA().getUserData() instanceof Smallsoldier && contact.getFixtureB().getUserData() instanceof Smallsoldier){
             contact.setEnabled(false);
         }
     }

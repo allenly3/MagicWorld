@@ -283,7 +283,6 @@ public class WorldCreator {
         return soldiers;
     }
 
-
     public ArrayList<Gunner> getGunners() { return gunners; }
 
     public ArrayList<Bat> getBats() { return bats; }
@@ -304,4 +303,7 @@ public class WorldCreator {
         gunners.remove(index);
     }
 
+    public void removeBat(int index){
+        bats.remove(index);
+    }
 }

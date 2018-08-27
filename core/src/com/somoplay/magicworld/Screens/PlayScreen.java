@@ -607,14 +607,14 @@ public class PlayScreen implements Screen {
                     }
                 }
 
-                for (Bat bat : creator.getBats()) {
+                for (Smallsoldier smallsoldier : smallsoldiers) {
                     // if enemy is to the right fire to the right
-                    if (bat.body.getPosition().x > ally.body.getPosition().x && bat.body.getPosition().x - ally.body.getPosition().x <= 480 / MagicWorld.PPM) {
+                    if (smallsoldier.body.getPosition().x > ally.body.getPosition().x && smallsoldier.body.getPosition().x - ally.body.getPosition().x <= 480 / MagicWorld.PPM) {
                         if (allyFireTimer >= 1f) {
                             ally.fireRight();
                             allyFireTimer = 0;
                         }
-                    } else if (bat.body.getPosition().x < ally.body.getPosition().x && ally.body.getPosition().x - bat.body.getPosition().x <= 480 / MagicWorld.PPM) {
+                    } else if (smallsoldier.body.getPosition().x < ally.body.getPosition().x && ally.body.getPosition().x - smallsoldier.body.getPosition().x <= 480 / MagicWorld.PPM) {
                         if (allyFireTimer >= 1f) {
                             ally.fireLeft();
                             allyFireTimer = 0;

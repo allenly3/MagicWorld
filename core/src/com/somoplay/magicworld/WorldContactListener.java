@@ -139,7 +139,25 @@ public class WorldContactListener implements ContactListener {
             ((Enemy)b.getUserData()).onHit();
             ((AllyBullet) a.getUserData()).setToDestroy();
 
-        } else if(contact.getFixtureA().getUserData() instanceof Bullet && contact.getFixtureB().getUserData() instanceof Gunner) {
+        }
+        else if(contact.getFixtureA().getUserData() instanceof AllyBullet && contact.getFixtureB().getUserData() instanceof Smallsoldier) {
+            a = contact.getFixtureA();
+            b = contact.getFixtureB();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((AllyBullet) a.getUserData()).setToDestroy();
+
+        } else if(contact.getFixtureA().getUserData() instanceof Smallsoldier && contact.getFixtureB().getUserData() instanceof AllyBullet) {
+            a = contact.getFixtureB();
+            b = contact.getFixtureA();
+
+            ((Enemy)b.getUserData()).onHit();
+            ((AllyBullet) a.getUserData()).setToDestroy();
+
+        }
+
+
+        else if(contact.getFixtureA().getUserData() instanceof Bullet && contact.getFixtureB().getUserData() instanceof Gunner) {
             a = contact.getFixtureA();
             b = contact.getFixtureB();
 

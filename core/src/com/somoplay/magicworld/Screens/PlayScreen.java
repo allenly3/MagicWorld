@@ -57,7 +57,6 @@ public class PlayScreen implements Screen {
     World world;
     private OrthographicCamera cam;
     private Viewport viewport;
-    private Box2DDebugRenderer renderer;
     public SpriteBatch batch;
     public static float velocity=2.5f;
     public static float friction=0;
@@ -103,7 +102,9 @@ public class PlayScreen implements Screen {
 
     private ArrayList<Integer> tobeDestroyedSoldier;
     private ArrayList<Integer> tobeDestroyedGunner;
-    ArrayList<Smallsoldier> smallsoldiers;
+    private ArrayList<Integer> tobeDestroyedBat;
+    private ArrayList<Integer> tobeDestroyedSmallSoldier;
+    private ArrayList<Smallsoldier> smallsoldiers;
 
     public Stage stage;
     public Stage controlStage;
@@ -119,7 +120,6 @@ public class PlayScreen implements Screen {
         viewport = new FitViewport(screenWidth/MagicWorld.PPM, screenHeight/MagicWorld.PPM, cam);
         world = new World(new Vector2(0, -10), true);
         world.setContactListener(new WorldContactListener(this));
-        renderer = new Box2DDebugRenderer();
 
         // Creates the map for each level based on the Tiled map file
         mapLoader = new TmxMapLoader();
@@ -137,6 +137,8 @@ public class PlayScreen implements Screen {
         allyBullets = new ArrayList<AllyBullet>();
         tobeDestroyedSoldier = new ArrayList<Integer>();
         tobeDestroyedGunner = new ArrayList<Integer>();
+        tobeDestroyedBat = new ArrayList<Integer>();
+        tobeDestroyedSmallSoldier = new ArrayList<Integer>();
         smallsoldiers=new ArrayList<Smallsoldier>();
         loadResource = new LoadResource();
 
@@ -326,7 +328,6 @@ public class PlayScreen implements Screen {
         stage.act();
 
         mapRenderer.render();
-         renderer.render(world, cam.combined);
 
         update(delta);
 
@@ -463,7 +464,20 @@ public class PlayScreen implements Screen {
                     bat.body.setActive(true);
                 }
             }
+
+            if(bat.destroyed){
+                tobeDestroyedBat.add(creator.getBats().indexOf(bat));
+            }
+
         }
+
+        if(tobeDestroyedBat.size() != 0){
+            for(int i: tobeDestroyedBat){
+                creator.removeBat(i);
+            }
+            tobeDestroyedBat.clear();
+        }
+
         for(AllyBullet ab: allyBullets){
             if(!ab.destroyed) {
 
@@ -509,7 +523,7 @@ public class PlayScreen implements Screen {
             for(int i: tobeDestroyedSoldier){
                 creator.removeSoldier(i);
             }
-            tobeDestroyedSoldier.clear();;
+            tobeDestroyedSoldier.clear();
         }
 
         for(Smallsoldier small:smallsoldiers)
@@ -529,6 +543,17 @@ public class PlayScreen implements Screen {
             if(!small.destroyed){
                 small.update(dt);
             }
+
+            if(small.destroyed){
+                tobeDestroyedSmallSoldier.add(smallsoldiers.indexOf(small));
+            }
+        }
+
+        if(tobeDestroyedSmallSoldier.size() != 0){
+            for(int i: tobeDestroyedSmallSoldier){
+                smallsoldiers.remove(i);
+            }
+            tobeDestroyedSmallSoldier.clear();
         }
 
         for (Gunner gunner: creator.getGunners()){
@@ -658,7 +683,7 @@ public class PlayScreen implements Screen {
             player.setDestroyed(true);
             deathTimer = 1;
         }
-        // If player has
+        // If player has died or completed level, display status UI
         if(deathTimer >= 1.5 && player.isDestroyed()){
             loadStats();
         }
@@ -732,7 +757,6 @@ public class PlayScreen implements Screen {
         stats.stage.draw();
         stats.stage.act();
 
-        //player.setDoubleFire(false);
     }
 
     public void firePlayerBullet(){

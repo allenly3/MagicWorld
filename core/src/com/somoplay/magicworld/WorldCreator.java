@@ -41,7 +41,7 @@ public class WorldCreator {
 
     Texture img_spike;
 
-    Sprite door;
+    static Sprite door;
     float doorX,doorY;
     ParticleEffect effect;
     PlayScreen screen;

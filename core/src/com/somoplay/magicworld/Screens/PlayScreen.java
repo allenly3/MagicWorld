@@ -328,7 +328,6 @@ public class PlayScreen implements Screen {
         stage.act();
 
         mapRenderer.render();
-         //renderer.render(world, cam.combined);
 
         update(delta);
 

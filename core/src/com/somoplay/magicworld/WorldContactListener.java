@@ -528,9 +528,7 @@ public class WorldContactListener implements ContactListener {
         } else if(contact.getFixtureA().getUserData() instanceof Soldier && contact.getFixtureB().getUserData() instanceof Gunner){
             contact.setEnabled(false);
         }
-        if(contact.getFixtureA().getUserData() instanceof Smallsoldier && contact.getFixtureB().getUserData() instanceof Smallsoldier){
-            contact.setEnabled(false);
-        }
+
         if(contact.getFixtureA().getUserData() instanceof Player && contact.getFixtureB().getUserData() instanceof Ally){
             contact.setEnabled(false);
         } else if(contact.getFixtureA().getUserData() instanceof Ally && contact.getFixtureB().getUserData() instanceof Player){
